@@ -1,0 +1,41 @@
+{
+  "name": "bitexpert/disco",
+  "description": "Dependency Injection Container",
+  "version": "0.1.0-dev",
+  "minimum-stability": "stable",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Stephan Hochdörfer",
+      "email": "S.Hochdoerfer@bitExpert.de",
+      "homepage": "http://www.bitExpert.de"
+    }
+  ],
+  "require": {
+    "php": "^5.5|^7.0",
+    "container-interop/container-interop": "~1.1.0",
+    "doctrine/annotations": "v1.2.7",
+    "doctrine/cache": "~1.4.2",
+    "ocramius/proxy-manager": "~1.0.0",
+    "bitexpert/slf4psrlog": "~0.1.0",
+    "phpdocumentor/type-resolver": "^0.1.4",
+    "phpdocumentor/reflection-common": "^1.0@dev"
+  },
+  "require-dev": {
+    "phpunit/php-code-coverage": "^2.1.0",
+    "phpunit/phpunit": "^4.8",
+    "squizlabs/php_codesniffer": "^2.3",
+    "phpdocumentor/phpdocumentor": "^2.8",
+    "monolog/monolog": "^1.14.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "bitExpert\\Disco\\": "src/bitExpert/Disco"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "bitExpert\\Disco\\": "tests/bitExpert/Disco"
+    }
+  }
+}
