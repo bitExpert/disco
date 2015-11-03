@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "aa8189c860820d04b6e95731ded07a54",
-    "content-hash": "2f21542e14aa3f4d027834324b200ed9",
+    "hash": "fa74df101a1e3706e88795d256cfbc88",
+    "content-hash": "0408702f43d826157a72fed587a4fc2a",
     "packages": [
         {
             "name": "bitexpert/slf4psrlog",
@@ -150,16 +150,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.4.3",
+            "version": "v1.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "cdeb14a6feb34821a6f5fe05435ef04a68a7f147"
+                "reference": "6433826dd02c9e5be8a127320dc13e7e6625d020"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/cdeb14a6feb34821a6f5fe05435ef04a68a7f147",
-                "reference": "cdeb14a6feb34821a6f5fe05435ef04a68a7f147",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/6433826dd02c9e5be8a127320dc13e7e6625d020",
+                "reference": "6433826dd02c9e5be8a127320dc13e7e6625d020",
                 "shasum": ""
             },
             "require": {
@@ -216,7 +216,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2015-10-28 10:28:03"
+            "time": "2015-11-02 18:33:51"
         },
         {
             "name": "doctrine/lexer",
