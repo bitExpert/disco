@@ -28,7 +28,7 @@ class BeanConfigurationWithParameters
      * })
      * @return SampleService
      */
-    public function sampleServiceWithParam($test)
+    public function sampleServiceWithParam($test = '')
     {
         $service = new SampleService();
         $service->setTest($test);
@@ -42,7 +42,7 @@ class BeanConfigurationWithParameters
      * })
      * @return SampleService
      */
-    public function sampleServiceWithNestedParamKey($test)
+    public function sampleServiceWithNestedParamKey($test = '')
     {
         $service = new SampleService();
         $service->setTest($test);
@@ -56,7 +56,7 @@ class BeanConfigurationWithParameters
      * })
      * @return SampleService
      */
-    public function sampleServiceWithParamDefaultValue($test)
+    public function sampleServiceWithParamDefaultValue($test = '')
     {
         $service = new SampleService();
         $service->setTest($test);
@@ -70,7 +70,7 @@ class BeanConfigurationWithParameters
      * })
      * @return SampleService
      */
-    public function sampleServiceWithoutRequiredParam($test)
+    public function sampleServiceWithoutRequiredParam($test = '')
     {
         $service = new SampleService();
         $service->setTest($test);
