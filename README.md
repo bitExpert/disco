@@ -2,6 +2,9 @@
 This package provides a [container-interop](https://github.com/container-interop/container-interop) compatible, 
 annotation-based dependency injection container.
 
+[![Build Status](https://travis-ci.org/bitExpert/disco.svg?branch=master)](https://travis-ci.org/bitExpert/disco)
+[![Dependency Status](https://www.versioneye.com/php/bitexpert:disco/dev-master/badge.svg)](https://www.versioneye.com/php/bitexpert:disco/dev-master)
+
 Installation
 ------------
 
