@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<project name="disco" basedir="." default="security:check">
+    <import file="vendor/bitexpert/phing-securitychecker/build.xml" />
+</project>
