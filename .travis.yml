@@ -16,5 +16,6 @@ before_script:
 
 script:
     - composer validate
+    - ./vendor/bin/phing security:check
     - ./vendor/bin/phpunit
     - ./vendor/bin/phpcs --standard=PSR2 src
