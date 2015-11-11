@@ -12,11 +12,11 @@
   ],
   "require": {
     "php": "^5.5|^7.0",
-    "container-interop/container-interop": "~1.1.0",
+    "container-interop/container-interop": "^1.1.0",
     "doctrine/annotations": "v1.2.7",
-    "doctrine/cache": "~1.4.2",
-    "ocramius/proxy-manager": "~1.0.0",
-    "bitexpert/slf4psrlog": "~0.1.0",
+    "doctrine/cache": "^1.4.2",
+    "ocramius/proxy-manager": "^1.0.0",
+    "bitexpert/slf4psrlog": "^0.1.0",
     "phpdocumentor/type-resolver": "^0.1.4",
     "phpdocumentor/reflection-common": "^1.0@dev"
   },
