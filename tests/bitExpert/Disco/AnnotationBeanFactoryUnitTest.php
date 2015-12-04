@@ -224,7 +224,10 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function parameterPassedToBeanFactoryGetsInjectedInBean()
     {
-        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithParameters::class, ['test' => 'injectedValue']);
+        $this->beanFactory = new AnnotationBeanFactory(
+            BeanConfigurationWithParameters::class,
+            ['test' => 'injectedValue']
+        );
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('sampleServiceWithParam');
@@ -236,13 +239,16 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function nestedParameterKeyPassedToBeanFactoryGetsInjectedInBean()
     {
-        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithParameters::class, [
-            'test' => [
-                'nested' => [
-                    'key' => 'injectedValue'
+        $this->beanFactory = new AnnotationBeanFactory(
+            BeanConfigurationWithParameters::class,
+            [
+                'test' => [
+                    'nested' => [
+                        'key' => 'injectedValue'
+                    ]
                 ]
             ]
-        ]);
+        );
 
         BeanFactoryRegistry::register($this->beanFactory);
 
