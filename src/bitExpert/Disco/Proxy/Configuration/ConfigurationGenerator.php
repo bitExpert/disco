@@ -23,7 +23,6 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Cache\FilesystemCache;
 use Exception;
 use ProxyManager\Exception\InvalidProxiedClassException;
 use ProxyManager\ProxyGenerator\Assertion\CanProxyAssertion;
@@ -158,7 +157,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 );
             }
 
-            if (!class_exists($beanType) and !interface_exists($beanType) and !trait_exists($beanType)) {
+            if (!class_exists($beanType) && !interface_exists($beanType) && !trait_exists($beanType)) {
                 throw new InvalidProxiedClassException(
                     sprintf(
                         'Return type of method "%s" on "%s" cannot be found! Did you use the full qualified name?',
