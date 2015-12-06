@@ -15,7 +15,6 @@ use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
 
-
 /**
  * @Configuration
  */
