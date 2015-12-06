@@ -122,7 +122,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $classGenerator->addPropertyFromGenerator($parameterValuesProperty);
 
         $postProcessorMethods = [];
-        $methods = $originalClass->getMethods(ReflectionMethod::IS_PUBLIC);
+        $methods = $originalClass->getMethods(ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED);
         foreach ($methods as $method) {
             if (null !== $this->reader->getMethodAnnotation($method, BeanPostProcessor::class)) {
                 $postProcessorMethods[] = $method->getName();
