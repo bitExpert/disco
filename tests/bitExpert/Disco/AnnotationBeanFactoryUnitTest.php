@@ -15,6 +15,7 @@ use bitExpert\Disco\Config\BeanConfigurationSubclass;
 use bitExpert\Disco\Config\BeanConfigurationTrait;
 use bitExpert\Disco\Config\BeanConfigurationWithParameters;
 use bitExpert\Disco\Config\BeanConfigurationWithPostProcessor;
+use bitExpert\Disco\Config\BeanConfigurationWithProtectedMethod;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
 use ProxyManager\Proxy\ValueHolderInterface;
@@ -314,5 +315,33 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 
         $bean = $this->beanFactory->get('nonSingletonNonLazyRequestBeanInTrait');
         $this->assertInstanceOf(SampleService::class, $bean);
+    }
+
+    /**
+     * @test
+     */
+    public function protectedSingletonDependencyAlwaysReturnsSameInstance()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithProtectedMethod::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean1 = $this->beanFactory->get('masterServiceWithSingletonDependency');
+        $bean2 = $this->beanFactory->get('masterServiceWithSingletonDependency');
+
+        $this->assertSame($bean1->service, $bean2->service);
+    }
+
+    /**
+     * @test
+     */
+    public function protectedNonSingletonDependencyReturnsDifferentInstance()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithProtectedMethod::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean1 = $this->beanFactory->get('masterServiceWithNonSingletonDependency');
+        $bean2 = $this->beanFactory->get('masterServiceWithNonSingletonDependency');
+
+        $this->assertNotSame($bean1->service, $bean2->service);
     }
 }
