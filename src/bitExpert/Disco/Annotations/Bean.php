@@ -52,7 +52,7 @@ class Bean
         $this->lazy = false;
 
         if (isset($attributes['value'])) {
-            if (isset($attributes['value']['scope']) and (strtolower($attributes['value']['scope']) === 'session')) {
+            if (isset($attributes['value']['scope']) && (strtolower($attributes['value']['scope']) === 'session')) {
                 $this->scope = self::SCOPE_SESSION;
             }
 
