@@ -31,8 +31,13 @@ class MyConfiguration
 }
 ```
 
-Add a public method for each instance you want to manage. The method name will be later used in the has() or get()
-method to retrieve the instance. Each method needs the @Bean annotation as well as the @return annotation.
+Add a public or protected method for each instance you want to let Disco manage for you. Instances managed by a public
+method are accessible via the has() and get() methods of the \bitExpert\Disco\AnnotationBeanFactory class. Any instance 
+managed by a protected method is seen as a local dependency and is just accessible "inside" the container configuration. 
+This is useful for dependencies like database connectors which you most likely do not want to expose as a "real" dependency.
+
+Each method needs to be marked with an @Bean annotation as well as the @return annotation defining the type of the 
+dependency (which is mainly needed for the lazy proxy magic).
 
 ```php
 use bitExpert\Disco\Annotations\Bean;
