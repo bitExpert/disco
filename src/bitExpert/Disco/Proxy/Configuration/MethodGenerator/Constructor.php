@@ -46,7 +46,7 @@ class Constructor extends MethodGenerator
         }
 
         if (!empty($body)) {
-            $body .= '// register {@link \\bitExpert\\Disco\\BeanPostProcessor} instances' . "\n" . $body;
+            $body = '// register {@link \\bitExpert\\Disco\\BeanPostProcessor} instances' . "\n" . $body;
         }
 
         $body .= '$this->' . $parameterValuesProperty->getName() . ' = $' . $parametersParameter->getName() . ";\n";
