@@ -16,6 +16,7 @@ use bitExpert\Disco\Config\BeanConfigurationTrait;
 use bitExpert\Disco\Config\BeanConfigurationWithParameters;
 use bitExpert\Disco\Config\BeanConfigurationWithPostProcessor;
 use bitExpert\Disco\Config\BeanConfigurationWithProtectedMethod;
+use bitExpert\Disco\Helper\BeanFactoryAwareService;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
 use ProxyManager\Proxy\ValueHolderInterface;
@@ -218,6 +219,19 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 
         $bean = $this->beanFactory->get('nonSingletonLazyRequestBean');
         $this->assertEquals('postProcessed', $bean->test);
+    }
+
+    /**
+     * @test
+     */
+    public function beanFactoryPostProcessorHookRuns()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithPostProcessor::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        /** @var BeanFactoryAwareService $bean */
+        $bean = $this->beanFactory->get('beanFactoryAwareBean');
+        $this->assertInstanceOf(BeanFactory::class, $bean->getBeanFactory());
     }
 
     /**
