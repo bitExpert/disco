@@ -51,7 +51,7 @@ class BeanConfigurationWithPostProcessor
     }
 
     /**
-     * @Bean
+     * @Bean({"lazy"=true})
      * @return SampleService
      */
     public function nonSingletonLazyRequestBean()
