@@ -50,11 +50,11 @@ class GetParameter extends MethodGenerator
         $body .= '}' . "\n\n";
         $body .= 'if ($' . $requiredParameter->getName() . ' && (null === $value)) {' . "\n";
         $body .= '    if (null === $' . $defaultValueParameter->getName() . ') {' . "\n";
-        $body .= '        throw new \RuntimeException(\'Parameter is required but not defined and no default value' .
-            ' provided!\');' . "\n";
+        $body .= '        throw new \RuntimeException(\'Parameter "\' .$' . $propertyNameParameter->getName() .
+            '. \'" is required but not defined and no default value provided!\');' . "\n";
         $body .= '    }' . "\n";
-        $body .= '    throw new \RuntimeException(\'Parameter "\' . implode(\'.\', $currentPath) .
-            \'" not defined!\');' . "\n";
+        $body .= '    throw new \RuntimeException(\'Parameter "\' .$' . $propertyNameParameter->getName() .
+            '. \'" not defined!\');' . "\n";
         $body .= '}' . "\n\n";
         $body .= 'return $value;' . "\n";
 
