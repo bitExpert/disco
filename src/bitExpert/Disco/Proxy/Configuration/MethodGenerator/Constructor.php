@@ -41,7 +41,8 @@ class Constructor extends MethodGenerator
         $parametersParameter->setDefaultValue([]);
 
         $body = '// register {@link \\bitExpert\\Disco\\BeanPostProcessor} instances' . "\n";
-        $body .= '$this->' . $beanPostProcessorsProperty->getName() . '[] = new \bitExpert\Disco\BeanFactoryPostProcessor();' . "\n";
+        $body .= '$this->' . $beanPostProcessorsProperty->getName() .
+            '[] = new \bitExpert\Disco\BeanFactoryPostProcessor();' . "\n";
         foreach ($beanPostProcessorMethodNames as $methodName) {
             $body .= '$this->' . $beanPostProcessorsProperty->getName() . '[] = $this->' . $methodName . '(); ' . "\n";
         }
