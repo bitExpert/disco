@@ -10,7 +10,9 @@
  */
 namespace bitExpert\Disco\Proxy\Configuration;
 
+use bitExpert\Disco\BeanFactoryConfiguration;
 use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Cache\VoidCache;
 use ProxyManager\Configuration;
 use ProxyManager\Factory\AbstractBaseFactory;
 
@@ -27,14 +29,21 @@ class ConfigurationFactory extends AbstractBaseFactory
     /**
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\ConfigurationFactory}.
      *
-     * @param Cache $cache
-     * @param Configuration $configuration
+     * @param BeanFactoryConfiguration $config
      */
-    public function __construct(Cache $cache = null, Configuration $configuration = null)
+    public function __construct(BeanFactoryConfiguration $config = null)
     {
-        parent::__construct($configuration);
+        $proxyManagerConfiguration = null;
+        $annotationCache = new VoidCache();
+        if ($config !== null) {
+            $proxyManagerConfiguration = new Configuration();
+            $proxyManagerConfiguration->setGeneratorStrategy($config->getProxyGeneratorStrategy());
+            $proxyManagerConfiguration->setProxiesTargetDir($config->getProxyTargetDir());
+            $annotationCache = $config->getAnnotationCache();
+        }
+        parent::__construct($proxyManagerConfiguration);
 
-        $this->generator = new ConfigurationGenerator($cache);
+        $this->generator = new ConfigurationGenerator($annotationCache);
     }
 
     /**

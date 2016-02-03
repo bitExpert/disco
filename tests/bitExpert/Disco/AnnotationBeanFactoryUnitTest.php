@@ -23,7 +23,7 @@ use ProxyManager\Proxy\ValueHolderInterface;
 use ProxyManager\Proxy\VirtualProxyInterface;
 
 /**
- * Unit test for {@link \bitExpert\Disco\AnnotationBeanFactoryUnitTest}.
+ * Unit test for {@link \bitExpert\Disco\AnnotationBeanFactory}.
  */
 class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 {
