@@ -15,7 +15,7 @@ use Doctrine\Common\Cache\Cache;
 use Exception;
 
 /**
- * BeanFactory implementation
+ * {@link \bitExpert\Disco\BeanFactory} implementation.
  *
  * @api
  */
@@ -30,9 +30,9 @@ class AnnotationBeanFactory implements BeanFactory
      */
     protected $parameters;
     /**
-     * @var Cache
+     * @var BeanFactoryConfiguration
      */
-    protected $cache;
+    protected $config;
     /**
      * @var object
      */
@@ -43,13 +43,13 @@ class AnnotationBeanFactory implements BeanFactory
      *
      * @param $configClassName string
      * @param array $parameters
-     * @param Cache $cache
+     * @param BeanFactoryConfiguration $config
      */
-    public function __construct($configClassName, array $parameters = [], Cache $cache = null)
+    public function __construct($configClassName, array $parameters = [], BeanFactoryConfiguration $config = null)
     {
         $this->configClassName = $configClassName;
         $this->parameters = $parameters;
-        $this->cache = $cache;
+        $this->config = $config;
 
         $this->__wakeup();
     }
@@ -91,7 +91,7 @@ class AnnotationBeanFactory implements BeanFactory
      */
     public function __sleep()
     {
-        return ['configClassName', 'parameters', 'cache'];
+        return ['configClassName', 'parameters', 'config'];
     }
 
     /**
@@ -99,7 +99,7 @@ class AnnotationBeanFactory implements BeanFactory
      */
     public function __wakeup()
     {
-        $this->beanStore = $this->initBeanStore($this->configClassName, $this->parameters, $this->cache);
+        $this->beanStore = $this->initBeanStore($this->configClassName, $this->parameters, $this->config);
     }
 
     /**
@@ -107,12 +107,12 @@ class AnnotationBeanFactory implements BeanFactory
      *
      * @param $configClassName
      * @param array $parameters
-     * @param Cache $cache
+     * @param BeanFactoryConfiguration $config
      * @return object
      */
-    protected function initBeanStore($configClassName, array $parameters, Cache $cache = null)
+    protected function initBeanStore($configClassName, array $parameters, BeanFactoryConfiguration $config = null)
     {
-        $configFactory = new ConfigurationFactory($cache);
+        $configFactory = new ConfigurationFactory($config);
         return $configFactory->createInstance($configClassName, $parameters);
     }
 }
