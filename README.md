@@ -165,14 +165,15 @@ $beanFactory->has('mySampleService');
 $beanFactory->get('mySampleService');
 ```
 
-To enable the caching of the annotation metadata, pass an instance of \Doctrine\Common\Cache\Cache as 3rd parameter
-when creating the \bitExpert\Disco\AnnotationBeanFactory instance:
+To configure there Disco will store the generated proxy classes or the annotation metadata pass an instance of 
+\bitExpert\Disco\BeanFactoryConfiguration as 3rd parameter when creating the \bitExpert\Disco\AnnotationBeanFactory 
+instance:
 
 ```php
 $parameters = ['test' => 'This is a test.'];
-$cache = new \Doctrine\Common\Cache\FilesystemCache('/tmp/');
+$config = new \\bitExpert\Disco\BeanFactoryConfiguration('/tmp/');
 
-$beanFactory = new \bitExpert\Disco\AnnotationBeanFactory(MyConfiguration::class, $parameters, $cache);
+$beanFactory = new \bitExpert\Disco\AnnotationBeanFactory(MyConfiguration::class, $parameters, $config);
 \bitExpert\Disco\BeanFactoryRegistry::register($beanFactory);
 ```
 
