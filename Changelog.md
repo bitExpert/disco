@@ -2,10 +2,15 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.2.0 - TBD
+## 0.2.0
 
 ### Added
 
+-  [#25](https://github.com/bitExpert/disco/pull/26) Exposing proxymanager configuration
+-  [#5](https://github.com/bitExpert/disco/issues/5) Add BeanFactoryBeanPostProcessor
+-  [#22](https://github.com/bitExpert/disco/pull/23) Extended exception message thrown in getParameter() to contain property name. 
+-  [#20](https://github.com/bitExpert/disco/issues/21) Document the new "protected methods" behaviour. 
+-  [#17](https://github.com/bitExpert/disco/issues/18) Fix the issues reported by SensioLabs Insight
 -  [#14](https://github.com/bitExpert/disco/pull/14) Ported bitExpert internal Phing setup over to the disco package. 
 -  [#11](https://github.com/bitExpert/disco/pull/12) Removed PHP 7 from allow_failures configuration of Travis.
 -  [#9](https://github.com/bitExpert/disco/pull/9) Extended documentation with a link to the adroit-disco-demo project. 

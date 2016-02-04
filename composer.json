@@ -1,6 +1,7 @@
 {
   "name": "bitexpert/disco",
   "description": "Dependency Injection Container",
+  "version": "0.2.0",
   "minimum-stability": "stable",
   "license": "Apache-2.0",
   "authors": [

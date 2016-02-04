@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "585469f5c14e8a2c970919744d1d1c5d",
-    "content-hash": "c49d9cc316be644062ea3c7d748c9047",
+    "hash": "b28f0526d6c53e9d0775031edc1d93e1",
+    "content-hash": "20bd0d6d61ead071cdf12bd999c3e698",
     "packages": [
         {
             "name": "bitexpert/slf4psrlog",
@@ -345,7 +345,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/8dfc66d8a72f6741ed9f5a39227f99f78ae8d9a5",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/144c307535e82c8fdcaacbcfc1d6d8eeb896687c",
                 "reference": "8dfc66d8a72f6741ed9f5a39227f99f78ae8d9a5",
                 "shasum": ""
             },
