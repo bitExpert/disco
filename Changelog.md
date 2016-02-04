@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.2.1
+
+### Added
+
+-  [#27](https://github.com/bitExpert/disco/issues/27) Update Composer dependencies.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 0.2.0
 
 ### Added
