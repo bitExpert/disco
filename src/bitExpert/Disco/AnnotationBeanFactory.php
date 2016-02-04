@@ -11,7 +11,6 @@
 namespace bitExpert\Disco;
 
 use bitExpert\Disco\Proxy\Configuration\ConfigurationFactory;
-use Doctrine\Common\Cache\Cache;
 use Exception;
 
 /**
