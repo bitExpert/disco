@@ -9,7 +9,7 @@ project to find out how to use Disco.
 Installation
 ------------
 
-The preferred way of installation is through Composer. Simply add `bitexpert/disco` as a dependency:
+The preferred way of installing `bitexpert/disco` is through Composer. Simply add `bitexpert/disco` as a dependency:
 
 ```
 composer.phar require bitexpert/disco
