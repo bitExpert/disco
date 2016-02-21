@@ -66,7 +66,13 @@ class AnnotationBeanFactory implements BeanFactory
             try {
                 $instance = call_user_func([$this->beanStore, $id]);
             } catch (Exception $e) {
-                throw new BeanException($e->getMessage());
+                $message = sprintf(
+                    'Exception occured while instanciating "%s": %s',
+                    $id,
+                    $e->getMessage()
+                );
+
+                throw new BeanException($message, null, $e);
             }
         }
 
