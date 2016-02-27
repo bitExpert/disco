@@ -13,6 +13,7 @@ namespace bitExpert\Disco;
 use bitExpert\Disco\Config\BeanConfiguration;
 use bitExpert\Disco\Config\BeanConfigurationSubclass;
 use bitExpert\Disco\Config\BeanConfigurationTrait;
+use bitExpert\Disco\Config\BeanConfigurationWithParameterizedPostProcessor;
 use bitExpert\Disco\Config\BeanConfigurationWithParameters;
 use bitExpert\Disco\Config\BeanConfigurationWithPostProcessor;
 use bitExpert\Disco\Config\BeanConfigurationWithProtectedMethod;
@@ -21,6 +22,7 @@ use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
 use ProxyManager\Proxy\ValueHolderInterface;
 use ProxyManager\Proxy\VirtualProxyInterface;
+use stdClass;
 
 /**
  * Unit test for {@link \bitExpert\Disco\AnnotationBeanFactory}.
@@ -232,6 +234,23 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         /** @var BeanFactoryAwareService $bean */
         $bean = $this->beanFactory->get('beanFactoryAwareBean');
         $this->assertInstanceOf(BeanFactory::class, $bean->getBeanFactory());
+    }
+
+    /**
+     * @test
+     */
+    public function beanFactoryPostProcessorIsInitializedAfterParametersAreSet()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(
+            BeanConfigurationWithParameterizedPostProcessor::class,
+            ['test' => 'injectedValue']
+        );
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        /** @var SampleService $bean */
+        $bean = $this->beanFactory->get('nonSingletonNonLazyRequestBean');
+        $this->assertInstanceOf(stdClass::class, $bean->test);
+        $this->assertEquals('injectedValue', $bean->test->property);
     }
 
     /**
