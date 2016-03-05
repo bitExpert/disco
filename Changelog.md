@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.3.0
+
+### Added
+
+-  [#35](https://github.com/bitExpert/disco/issues/35) Add flag to tune ProxyManager for production.
+-  [#34](https://github.com/bitExpert/disco/pull/34) Added missing previous exception as parameter.
+-  [#32](https://github.com/bitExpert/disco/issues/32) BeanPostProcessor cannot depend on method with parameter.
+-  [#31](https://github.com/bitExpert/disco/pull/31) Enhanced exception handling for BeanExceptions in AnnotationBeanFactory.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+-  [#28](https://github.com/bitExpert/disco/issues/28) Pass GeneratorStrategy to proxyManagerConfiguration only when defined.
+
 ## 0.2.1
 
 ### Added
