@@ -72,4 +72,23 @@ class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
         $proxyGeneratorStrategy = $config->getProxyGeneratorStrategy();
         $this->assertInstanceOf(EvaluatingGeneratorStrategy::class, $proxyGeneratorStrategy);
     }
+
+    /**
+     * @test
+     * @dataProvider proxyAutoloaderFlags
+     */
+    public function configuredProxyAutoloaderFlagCanBeRetrieved($autoloadConfig)
+    {
+        $config = new BeanFactoryConfiguration(sys_get_temp_dir(), null, null, $autoloadConfig);
+
+        $this->assertSame($autoloadConfig, $config->useProxyAutoloader());
+    }
+
+    public function proxyAutoloaderFlags()
+    {
+        return [
+          [ true ],
+          [ false ]
+        ];
+    }
 }

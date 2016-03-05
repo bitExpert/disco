@@ -70,8 +70,8 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $this->fqsenResolver = new FqsenResolver();
         $this->contextFactory = new ContextFactory();
 
-        if (null !== $cache) {
-            $this->reader = new CachedReader(new AnnotationReader(), $cache);
+        if ($cache instanceof Cache) {
+            $this->reader = new CachedReader($this->reader, $cache);
         }
     }
 
