@@ -93,7 +93,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         try {
             $annotation = $this->reader->getClassAnnotation($originalClass, Configuration::class);
         } catch (Exception $e) {
-            throw new InvalidProxiedClassException($e->getMessage());
+            throw new InvalidProxiedClassException($e->getMessage(), null, $e);
         }
 
         if (null === $annotation) {
