@@ -38,9 +38,15 @@ class ConfigurationFactory extends AbstractBaseFactory
         if ($config !== null) {
             $proxyManagerConfiguration = new Configuration();
             $proxyManagerConfiguration->setProxiesTargetDir($config->getProxyTargetDir());
+
             if ($config->getProxyGeneratorStrategy() !== null) {
                 $proxyManagerConfiguration->setGeneratorStrategy($config->getProxyGeneratorStrategy());
             }
+
+            if ($config->useProxyAutoloader()) {
+                spl_autoload_register($proxyManagerConfiguration->getProxyAutoloader());
+            }
+
             $annotationCache = $config->getAnnotationCache();
         }
         parent::__construct($proxyManagerConfiguration);

@@ -377,4 +377,22 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotSame($bean1->service, $bean2->service);
     }
+
+    /**
+     * @test
+     */
+    public function enablingProxyAutoloaderRegistersAdditionalAutoloader()
+    {
+        $useProxyAutoloader = true;
+        $autoloaderFunctionsBeforeBeanFactoryInit = spl_autoload_functions();
+
+        $beanFactoryConfig = new BeanFactoryConfiguration(sys_get_temp_dir(), null, null, $useProxyAutoloader);
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfiguration::class, [], $beanFactoryConfig);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $autoloaderFunctionsAfterBeanFactoryInit = spl_autoload_functions();
+        $this->assertTrue(
+            count($autoloaderFunctionsBeforeBeanFactoryInit) + 1 === count($autoloaderFunctionsAfterBeanFactoryInit)
+        );
+    }
 }

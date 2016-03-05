@@ -213,6 +213,24 @@ class MyConfiguration
 }
 ```
 
+Performance Tuning
+------------------
+
+Since a lot of parsing and reflection logic is involved during the conversion process of the configuration code into
+its "final format" bitexpert/disco can be rather slow in production and during development, especially when running 
+in a virtual machine, e.g. with Vagrant. 
+
+Make sure to follow the hints on how to improve performance for [Doctrine Annotations](http://doctrine-orm.readthedocs.org/projects/doctrine-common/en/latest/reference/annotations.html)
+and pick a \\Doctrine\\Common\\Cache\\Cache implementation that suites your needs. To use a specific cache implementation
+pass it to \\bitExpert\\Disco\\BeanFactoryConfiguration::construct() as 3rd parameter.
+
+In addition to that the [ProxyManager](https://github.com/Ocramius/ProxyManager) needs to be configured for faster
+performance, read about the details [here](https://ocramius.github.io/ProxyManager/docs/tuning-for-production.html). To
+enable the usage of the custom autoloader simply set the 4th parameter of \\bitExpert\\Disco\\BeanFactoryConfiguration::construct()
+to true. This will massively increase the overall performance of bitexpert/disco.
+
+When enabling the caching methods make sure you regularly clean your caching folder after changing your configuration code!
+
 License
 -------
 

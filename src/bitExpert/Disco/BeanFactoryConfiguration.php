@@ -33,6 +33,10 @@ class BeanFactoryConfiguration
      * @var Cache
      */
     protected $annotationCache;
+    /**
+     * @var bool
+     */
+    protected $useProxyAutoloader;
 
     /**
      * Creates a new {@link \bitExpert\Disco\BeanFactoryConfiguration}.
@@ -40,12 +44,14 @@ class BeanFactoryConfiguration
      * @param string $proxyTargetDir
      * @param GeneratorStrategyInterface|null $proxyGeneratorStrategy
      * @param Cache|null $annotationCache
+     * @param bool $useProxyAutoloader
      * @throws \InvalidArgumentException
      */
     public function __construct(
         $proxyTargetDir,
         GeneratorStrategyInterface $proxyGeneratorStrategy = null,
-        Cache $annotationCache = null
+        Cache $annotationCache = null,
+        $useProxyAutoloader = false
     ) {
         if (!is_dir($proxyTargetDir)) {
             throw new \InvalidArgumentException(
@@ -72,6 +78,7 @@ class BeanFactoryConfiguration
         $this->proxyTargetDir = $proxyTargetDir;
         $this->proxyGeneratorStrategy = $proxyGeneratorStrategy;
         $this->annotationCache = $annotationCache;
+        $this->useProxyAutoloader = (bool) $useProxyAutoloader;
     }
 
     /**
@@ -104,5 +111,16 @@ class BeanFactoryConfiguration
     public function getAnnotationCache()
     {
         return $this->annotationCache;
+    }
+
+    /**
+     * Returns true if ProxyManager should set a custom autoloader to speed up the processing of the bean configuration.
+     * Returns false if the custom autoloader should not get loaded. Not using the autoloader will have a massive
+     * impact on performance!
+     * @return bool
+     */
+    public function useProxyAutoloader()
+    {
+        return $this->useProxyAutoloader;
     }
 }
