@@ -88,7 +88,7 @@ class AnnotationBeanFactory implements BeanFactory
      */
     public function has($id)
     {
-        return method_exists($this->beanStore, $id);
+        return is_callable([$this->beanStore, $id]);
     }
 
     /**

@@ -377,6 +377,16 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotSame($bean1->service, $bean2->service);
     }
+    /**
+     * @test
+     */
+    public function protectedDependencyNotVisibleToTheCaller()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithProtectedMethod::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $this->assertFalse($this->beanFactory->has('singletonDependency'));
+    }
 
     /**
      * @test
