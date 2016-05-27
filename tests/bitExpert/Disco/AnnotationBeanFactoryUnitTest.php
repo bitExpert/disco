@@ -17,6 +17,7 @@ use bitExpert\Disco\Config\BeanConfigurationWithParameterizedPostProcessor;
 use bitExpert\Disco\Config\BeanConfigurationWithParameters;
 use bitExpert\Disco\Config\BeanConfigurationWithPostProcessor;
 use bitExpert\Disco\Config\BeanConfigurationWithProtectedMethod;
+use bitExpert\Disco\Config\WrongReturnTypeConfiguration;
 use bitExpert\Disco\Helper\BeanFactoryAwareService;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
@@ -404,5 +405,55 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(
             count($autoloaderFunctionsBeforeBeanFactoryInit) + 1 === count($autoloaderFunctionsAfterBeanFactoryInit)
         );
+    }
+
+    /**
+     * @test
+     * @expectedException \bitExpert\Disco\BeanException
+     */
+    public function throwsExceptionIfTypeOfReturnedObjectIsNotExpectedOfNonLazyBean()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(WrongReturnTypeConfiguration::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $this->beanFactory->get('nonLazyBeanReturningSomethingWrong');
+    }
+
+    /**
+     * @test
+     * @expectedException \bitExpert\Disco\BeanException
+     */
+    public function throwsExceptionIfNonLazyBeanMethodDoesNotReturnAnything()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(WrongReturnTypeConfiguration::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $this->beanFactory->get('nonLazyBeanNotReturningAnything');
+    }
+
+    /**
+     * @test
+     * @expectedException \bitExpert\Disco\BeanException
+     */
+    public function throwsExceptionIfTypeOfReturnedObjectIsNotExpectedOfLazyBean()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(WrongReturnTypeConfiguration::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean = $this->beanFactory->get('lazyBeanReturningSomethingWrong');
+        $bean->setTest('test');
+    }
+
+    /**
+     * @test
+     * @expectedException \bitExpert\Disco\BeanException
+     */
+    public function throwsExceptionIfLazyBeanMethodDoesNotReturnAnything()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(WrongReturnTypeConfiguration::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean = $this->beanFactory->get('lazyBeanNotReturningAnything');
+        $bean->setTest('test');
     }
 }
