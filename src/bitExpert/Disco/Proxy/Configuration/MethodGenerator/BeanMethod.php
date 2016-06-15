@@ -109,9 +109,17 @@ class BeanMethod extends MethodGenerator
             $body .= $padding . '    $initializer   = null;' . "\n";
             $body .= $padding . '    $wrappedObject = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
             $body .= $padding . '    $this->initializeBean($wrappedObject, "' . $methodName . '");' . "\n";
+            $body .= $padding . '    if (!is_a($wrappedObject, \'' . $beanType . '\')) {' . "\n";
+            $body .= $padding . '        throw new \\bitExpert\\Disco\\BeanException(sprintf(' . "\n";
+            $body .= $padding . '            \'Bean "%s" has declared "%s" as return type but returned "%s"\',' . "\n";
+            $body .= $padding . '            \'' . $originalMethod->getName() . '\',' . "\n";
+            $body .= $padding . '            \'' . $beanType . '\',' . "\n";
+            $body .= $padding . '            $wrappedObject ? get_class($wrappedObject) : \'null\'' . "\n";
+            $body .= $padding . '        ));' . "\n";
+            $body .= $padding . '    }'. "\n\n";
             $body .= $padding . '    return true;' . "\n";
             $body .= $padding . '};' . "\n\n";
-            $body .= $padding . '$instance = $factory->createProxy("' . $beanType . '", $initializer);' . "\n";
+            $body .= $padding . '$instance = $factory->createProxy("' . $beanType . '", $initializer);' . "\n\n";
         } else {
             $innerpadding = $padding;
             if ($methodAnnotation->isSingleton()) {
@@ -120,7 +128,15 @@ class BeanMethod extends MethodGenerator
             }
 
             $body .= $innerpadding . '$instance = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
-            $body .= $innerpadding . '$this->initializeBean($instance, "' . $methodName . '");' . "\n";
+            $body .= $innerpadding . '$this->initializeBean($instance, "' . $methodName . '");' . "\n\n";
+            $body .= $innerpadding . 'if (!is_a($instance, \'' . $beanType . '\')) {' . "\n";
+            $body .= $innerpadding . '    throw new \\bitExpert\\Disco\\BeanException(sprintf(' . "\n";
+            $body .= $innerpadding . '        \'Bean "%s" has declared "%s" as return type but returned "%s"\',' . "\n";
+            $body .= $innerpadding . '        \'' . $originalMethod->getName() . '\',' . "\n";
+            $body .= $innerpadding . '        \'' . $beanType . '\',' . "\n";
+            $body .= $innerpadding . '        $instance ? get_class($instance) : \'null\'' . "\n";
+            $body .= $innerpadding . '    ));' . "\n";
+            $body .= $innerpadding . '}'. "\n\n";
 
             if ($methodAnnotation->isSingleton()) {
                 $body .= $padding . '}' . "\n";
