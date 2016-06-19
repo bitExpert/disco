@@ -4,7 +4,7 @@ annotation-based dependency injection container. Have a look at the [adroit-disc
 project to find out how to use Disco.
 
 [![Build Status](https://travis-ci.org/bitExpert/disco.svg?branch=v0.2.2)](https://travis-ci.org/bitExpert/disco)
-[![Dependency Status](https://www.versioneye.com/php/bitexpert:disco/0.2.2/badge?style=flat)](https://www.versioneye.com/php/bitexpert:disco/0.2.2)
+[![Dependency Status](https://www.versioneye.com/user/projects/56db061d7a6ff7002d826bc3/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56db061d7a6ff7002d826bc3)
 
 Installation
 ------------
