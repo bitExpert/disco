@@ -4,7 +4,7 @@ This package provides a [container-interop](https://github.com/container-interop
 project to find out how to use Disco.
 
 [![Build Status](https://travis-ci.org/bitExpert/disco.svg?branch=master)](https://travis-ci.org/bitExpert/disco)
-[![Dependency Status](https://www.versioneye.com/php/bitexpert:disco/dev-master/badge.svg)](https://www.versioneye.com/php/bitexpert:disco/dev-master)
+[![Dependency Status](https://www.versioneye.com/user/projects/563e5b144d415e0018000121/badge.svg?style=flat)](https://www.versioneye.com/user/projects/563e5b144d415e0018000121)
 
 ## Installation
 
