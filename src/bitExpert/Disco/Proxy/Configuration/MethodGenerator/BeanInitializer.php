@@ -36,11 +36,7 @@ class BeanInitializer extends MethodGenerator
         $beanParameter->setPassedByReference(true);
         $beanNameParameter = new ParameterGenerator('beanName');
 
-        $body = 'if ($bean instanceof \\' . FactoryBean::class . ') {' . "\n";
-        $body .= '    $bean = $bean->getObject();' . "\n";
-        $body .= '}' . "\n\n";
-
-        $body .= 'if ($bean instanceof \\' . InitializedBean::class . ') {' . "\n";
+        $body = 'if ($bean instanceof \\' . InitializedBean::class . ') {' . "\n";
         $body .= '    $bean->postInitialization();' . "\n";
         $body .= '}' . "\n\n";
 
