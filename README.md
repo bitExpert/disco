@@ -235,6 +235,10 @@ to `true`; This will significantly increase the overall performance of Disco.
 
 When enabling the caching methods, make sure you regularly clean your cache storage directory after changing your configuration code!
 
+## Resources
+
+ - sitepoint.com: [Disco with Design Patterns: A Fresh Look at Dependency Injection](https://www.sitepoint.com/disco-with-frameworks-and-design-patterns-a-fresh-look-at-dependency-injection/)
+
 ## License
 
 Disco is released under the Apache 2.0 license.
