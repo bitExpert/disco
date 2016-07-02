@@ -179,7 +179,7 @@ To configure there Disco will store the generated proxy classes or the annotatio
 <?php
 
 $parameters = ['test' => 'This is a test.'];
-$config = new \\bitExpert\Disco\BeanFactoryConfiguration('/tmp/');
+$config = new \bitExpert\Disco\BeanFactoryConfiguration('/tmp/');
 
 $beanFactory = new \bitExpert\Disco\AnnotationBeanFactory(MyConfiguration::class, $parameters, $config);
 \bitExpert\Disco\BeanFactoryRegistry::register($beanFactory);
@@ -226,11 +226,11 @@ class MyConfiguration
 Since a lot of parsing and reflection logic is involved during the conversion process of the configuration code into its "final format" Disco can be rather slow in production and during development, especially when running in a virtual machine, e.g. with Vagrant. 
 
 Make sure to follow the hints on how to improve performance for [Doctrine Annotations](http://doctrine-orm.readthedocs.org/projects/doctrine-common/en/latest/reference/annotations.html)
-and pick a `\\Doctrine\\Common\\Cache\\Cache` implementation that suites your needs. To use a specific cache implementation pass it to `\\bitExpert\\Disco\\BeanFactoryConfiguration::construct()` as the third parameter.
+and pick a `\Doctrine\Common\Cache\Cache` implementation that suites your needs. To use a specific cache implementation pass it to `\bitExpert\Disco\BeanFactoryConfiguration::construct()` as the third parameter.
 
 In addition to that, [ProxyManager](https://github.com/Ocramius/ProxyManager) needs to be configured for faster performance. Read about the details [here](https://ocramius.github.io/ProxyManager/docs/tuning-for-production.html). 
 
-To enable the usage of the custom autoloader simply set the fourth parameter of `\\bitExpert\\Disco\\BeanFactoryConfiguration::construct()`
+To enable the usage of the custom autoloader simply set the fourth parameter of `\bitExpert\Disco\BeanFactoryConfiguration::construct()`
 to `true`; This will significantly increase the overall performance of Disco.
 
 When enabling the caching methods, make sure you regularly clean your cache storage directory after changing your configuration code!
