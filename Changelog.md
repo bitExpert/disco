@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.4.0
+
+### Added
+
+-  [#40](https://github.com/bitExpert/disco/pull/40) Check bean return type against return type annotation.
+-  [#37](https://github.com/bitExpert/disco/pull/37) Editing README
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+-  [#41](https://github.com/bitExpert/disco/pull/41) Removed FactoryBean interface as it does not make sense any more.
+
+### Fixed
+
+-  [#38](https://github.com/bitExpert/disco/issues/38) has() returns true for internal dependencies.
+
 ## 0.3.0
 
 ### Added
