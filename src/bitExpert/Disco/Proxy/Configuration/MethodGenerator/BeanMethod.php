@@ -103,26 +103,27 @@ class BeanMethod extends MethodGenerator
         }
 
         if ($methodAnnotation->isLazy()) {
+            $ipadding = $padding . '    ';
             $body .= $padding . '$factory     = new \\bitExpert\\Disco\\Proxy\\LazyBean\\LazyBeanFactory("' .
                 $methodName . '");' . "\n";
             $body .= $padding . '$initializer = function (& $wrappedObject, ' .
                 '\\ProxyManager\\Proxy\\LazyLoadingInterface $proxy, $method, array $parameters, & $initializer) {' .
                 "\n";
-            $body .= $padding . '    $initializer   = null;' . "\n";
-            $body .= $padding . '    $wrappedObject = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
-            $body .= static::generateInitCode($padding . '    ', 'wrappedObject', $methodName, $beanType, $postProcessorsProperty);
-            $body .= $padding . '    return true;' . "\n";
+            $body .= $ipadding . '$initializer   = null;' . "\n";
+            $body .= $ipadding . '$wrappedObject = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
+            $body .= static::genInitCode($ipadding, 'wrappedObject', $methodName, $beanType, $postProcessorsProperty);
+            $body .= $ipadding . 'return true;' . "\n";
             $body .= $padding . '};' . "\n\n";
             $body .= $padding . '$instance = $factory->createProxy("' . $beanType . '", $initializer);' . "\n\n";
         } else {
-            $innerpadding = $padding;
+            $ipadding = $padding;
             if ($methodAnnotation->isSingleton()) {
-                $innerpadding .= $padding;
+                $ipadding .= $padding;
                 $body .= $padding . 'if ($instance === null) {' . "\n";
             }
 
-            $body .= $innerpadding . '$instance = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
-            $body .= static::generateInitCode($innerpadding, 'instance', $methodName, $beanType, $postProcessorsProperty);
+            $body .= $ipadding . '$instance = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
+            $body .= static::genInitCode($ipadding, 'instance', $methodName, $beanType, $postProcessorsProperty);
 
             if ($methodAnnotation->isSingleton()) {
                 $body .= $padding . '}' . "\n";
@@ -233,8 +234,13 @@ class BeanMethod extends MethodGenerator
      * @param BeanPostProcessorsProperty $postProcessorsProperty
      * @return string
      */
-    private static function generateInitCode($padding, $beanVar, $beanName, $beanType, BeanPostProcessorsProperty $postProcessorsProperty)
-    {
+    private static function genInitCode(
+        $padding,
+        $beanVar,
+        $beanName,
+        $beanType,
+        BeanPostProcessorsProperty $postProcessorsProperty
+    ) {
         $body = $padding . 'if ($' . $beanVar . ' instanceof \\' . InitializedBean::class . ') {' . "\n";
         $body .= $padding . '    $' . $beanVar . '->postInitialization();' . "\n";
         $body .= $padding . '}' . "\n\n";
