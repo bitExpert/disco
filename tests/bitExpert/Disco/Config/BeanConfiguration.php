@@ -15,7 +15,6 @@ use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\InitializedService;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
-use bitExpert\Disco\Helper\SampleServiceFactory;
 
 /**
  * @Configuration
@@ -92,24 +91,6 @@ class BeanConfiguration
     public function singletonLazySessionBean()
     {
         return new MasterService($this->singletonLazyRequestBean());
-    }
-
-    /**
-     * @Bean({"singleton"=false, "lazy"=false, "scope"="request"})
-     * @return SampleService
-     */
-    public function nonLazyFactoryBean()
-    {
-        return new SampleServiceFactory();
-    }
-
-    /**
-     * @Bean({"singleton"=false, "lazy"=true, "scope"="request"})
-     * @return SampleService
-     */
-    public function lazyFactoryBean()
-    {
-        return new SampleServiceFactory();
     }
 
     /**

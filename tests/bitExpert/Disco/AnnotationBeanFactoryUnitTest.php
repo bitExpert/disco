@@ -159,24 +159,6 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function factoryBeanWillReturnRealInstanceNotTheFactoryItself()
-    {
-        $bean = $this->beanFactory->get('nonLazyFactoryBean');
-        $this->assertNotInstanceOf(FactoryBean::class, $bean);
-    }
-
-    /**
-     * @test
-     */
-    public function lazyFactoryBeanWillReturnRealInstanceNotTheProxyItself()
-    {
-        $bean = $this->beanFactory->get('lazyFactoryBean');
-        $this->assertNotInstanceOf(FactoryBean::class, $bean);
-    }
-
-    /**
-     * @test
-     */
     public function initializedBeanHookGetsCalledOnlyWhenBeanGetsCreated()
     {
         $bean = $this->beanFactory->get('singletonInitializedService');

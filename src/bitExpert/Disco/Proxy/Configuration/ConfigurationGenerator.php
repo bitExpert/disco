@@ -14,7 +14,6 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\BeanPostProcessor;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Annotations\Parameters;
-use bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanInitializer;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanMethod;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\Constructor;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\MagicSleep;
@@ -177,7 +176,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 $parametersAnnotation,
                 $getParameterMethod,
                 $forceLazyInitProperty,
-                $sessionBeansProperty,
+                $postProcessorsProperty,
                 $beanType
             );
             $classGenerator->addMethodFromGenerator($proxyMethod);
@@ -196,12 +195,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             new MagicSleep(
                 $originalClass,
                 $sessionBeansProperty
-            )
-        );
-        $classGenerator->addMethodFromGenerator(
-            new BeanInitializer(
-                $originalClass,
-                $postProcessorsProperty
             )
         );
     }
