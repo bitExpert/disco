@@ -13,8 +13,9 @@ namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Parameter;
 use bitExpert\Disco\Annotations\Parameters;
+use bitExpert\Disco\InitializedBean;
+use bitExpert\Disco\Proxy\Configuration\BeanPostProcessorsProperty;
 use bitExpert\Disco\Proxy\Configuration\ForceLazyInitProperty;
-use bitExpert\Disco\Proxy\Configuration\SessionBeansProperty;
 use ProxyManager\Generator\MethodGenerator;
 use ProxyManager\Generator\ParameterGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
@@ -36,9 +37,10 @@ class BeanMethod extends MethodGenerator
      * @param Parameters $methodParameters
      * @param GetParameter $parameterValuesMethod
      * @param ForceLazyInitProperty $forceLazyInitProperty
-     * @param SessionBeansProperty $sessionBeansProperty
+     * @param BeanPostProcessorsProperty $postProcessorsProperty
      * @param $beanType
      * @return MethodGenerator|static
+     * @internal param SessionBeansProperty $sessionBeansProperty
      */
     public static function generateMethod(
         MethodReflection $originalMethod,
@@ -46,7 +48,7 @@ class BeanMethod extends MethodGenerator
         Parameters $methodParameters,
         GetParameter $parameterValuesMethod,
         ForceLazyInitProperty $forceLazyInitProperty,
-        SessionBeansProperty $sessionBeansProperty,
+        BeanPostProcessorsProperty $postProcessorsProperty,
         $beanType
     ) {
         /* @var $method self */
@@ -103,20 +105,12 @@ class BeanMethod extends MethodGenerator
         if ($methodAnnotation->isLazy()) {
             $body .= $padding . '$factory     = new \\bitExpert\\Disco\\Proxy\\LazyBean\\LazyBeanFactory("' .
                 $methodName . '");' . "\n";
-            $body .= $padding . '$initializer = function (& $wrappedObject, '.
+            $body .= $padding . '$initializer = function (& $wrappedObject, ' .
                 '\\ProxyManager\\Proxy\\LazyLoadingInterface $proxy, $method, array $parameters, & $initializer) {' .
                 "\n";
             $body .= $padding . '    $initializer   = null;' . "\n";
             $body .= $padding . '    $wrappedObject = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
-            $body .= $padding . '    $this->initializeBean($wrappedObject, "' . $methodName . '");' . "\n";
-            $body .= $padding . '    if (!is_a($wrappedObject, \'' . $beanType . '\')) {' . "\n";
-            $body .= $padding . '        throw new \\bitExpert\\Disco\\BeanException(sprintf(' . "\n";
-            $body .= $padding . '            \'Bean "%s" has declared "%s" as return type but returned "%s"\',' . "\n";
-            $body .= $padding . '            \'' . $originalMethod->getName() . '\',' . "\n";
-            $body .= $padding . '            \'' . $beanType . '\',' . "\n";
-            $body .= $padding . '            $wrappedObject ? get_class($wrappedObject) : \'null\'' . "\n";
-            $body .= $padding . '        ));' . "\n";
-            $body .= $padding . '    }'. "\n\n";
+            $body .= static::generateInitCode($padding . '    ', 'wrappedObject', $methodName, $beanType, $postProcessorsProperty);
             $body .= $padding . '    return true;' . "\n";
             $body .= $padding . '};' . "\n\n";
             $body .= $padding . '$instance = $factory->createProxy("' . $beanType . '", $initializer);' . "\n\n";
@@ -128,15 +122,7 @@ class BeanMethod extends MethodGenerator
             }
 
             $body .= $innerpadding . '$instance = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
-            $body .= $innerpadding . '$this->initializeBean($instance, "' . $methodName . '");' . "\n\n";
-            $body .= $innerpadding . 'if (!is_a($instance, \'' . $beanType . '\')) {' . "\n";
-            $body .= $innerpadding . '    throw new \\bitExpert\\Disco\\BeanException(sprintf(' . "\n";
-            $body .= $innerpadding . '        \'Bean "%s" has declared "%s" as return type but returned "%s"\',' . "\n";
-            $body .= $innerpadding . '        \'' . $originalMethod->getName() . '\',' . "\n";
-            $body .= $innerpadding . '        \'' . $beanType . '\',' . "\n";
-            $body .= $innerpadding . '        $instance ? get_class($instance) : \'null\'' . "\n";
-            $body .= $innerpadding . '    ));' . "\n";
-            $body .= $innerpadding . '}'. "\n\n";
+            $body .= static::generateInitCode($innerpadding, 'instance', $methodName, $beanType, $postProcessorsProperty);
 
             if ($methodAnnotation->isSingleton()) {
                 $body .= $padding . '}' . "\n";
@@ -161,7 +147,7 @@ class BeanMethod extends MethodGenerator
         $body .= '    }' . "\n\n";
         $body .= '    $factory     = new \\bitExpert\\Disco\\Proxy\\LazyBean\\LazyBeanFactory("' . $methodName .
             '");' . "\n";
-        $body .= '    $initializer = function (& $wrappedObject, \\ProxyManager\\Proxy\\LazyLoadingInterface '.
+        $body .= '    $initializer = function (& $wrappedObject, \\ProxyManager\\Proxy\\LazyLoadingInterface ' .
             ' $proxy, $method, array $parameters, & $initializer) use ($instance) {' . "\n";
         $body .= '        $initializer   = null;' . "\n";
         $body .= '        $wrappedObject = $instance;' . "\n";
@@ -235,5 +221,37 @@ class BeanMethod extends MethodGenerator
         }
 
         return static::VISIBILITY_PUBLIC;
+    }
+
+    /**
+     * Helper method to create the general initialization logic for a new bean instance.
+     *
+     * @param string $padding
+     * @param string $beanVar
+     * @param string $beanName
+     * @param string $beanType
+     * @param BeanPostProcessorsProperty $postProcessorsProperty
+     * @return string
+     */
+    private static function generateInitCode($padding, $beanVar, $beanName, $beanType, BeanPostProcessorsProperty $postProcessorsProperty)
+    {
+        $body = $padding . 'if ($' . $beanVar . ' instanceof \\' . InitializedBean::class . ') {' . "\n";
+        $body .= $padding . '    $' . $beanVar . '->postInitialization();' . "\n";
+        $body .= $padding . '}' . "\n\n";
+
+        $body .= $padding . 'if (!($' . $beanVar .' instanceof ' . $beanType . ')) {' . "\n";
+        $body .= $padding . '    throw new \\bitExpert\\Disco\\BeanException(sprintf(' . "\n";
+        $body .= $padding . '        \'Bean "%s" has declared "%s" as return type but returned "%s"\',' . "\n";
+        $body .= $padding . '        \'' . $beanName . '\',' . "\n";
+        $body .= $padding . '        \'' . $beanType . '\',' . "\n";
+        $body .= $padding . '        $' . $beanVar . ' ? get_class($' . $beanVar . ') : \'null\'' . "\n";
+        $body .= $padding . '    ));' . "\n";
+        $body .= $padding . '}' . "\n\n";
+
+        $body .= $padding . 'foreach ($this->' . $postProcessorsProperty->getName() . ' as $postProcessor) {' . "\n";
+        $body .= $padding . '    $postProcessor->postProcess($' . $beanVar . ', "' . $beanName . '");' . "\n";
+        $body .= $padding . '}' . "\n";
+
+        return $body;
     }
 }
