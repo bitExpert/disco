@@ -41,7 +41,7 @@ class ConfigurationGeneratorUnitTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->configGenerator = new ConfigurationGenerator();
-        $this->classGenerator = $this->getMock(ClassGenerator::class);
+        $this->classGenerator = $this->createMock(ClassGenerator::class);
     }
 
     /**

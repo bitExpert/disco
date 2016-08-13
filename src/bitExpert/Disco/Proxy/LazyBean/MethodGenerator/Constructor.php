@@ -11,9 +11,9 @@
 namespace bitExpert\Disco\Proxy\LazyBean\MethodGenerator;
 
 use ProxyManager\Generator\MethodGenerator;
-use ProxyManager\Generator\ParameterGenerator;
 use ReflectionClass;
 use ReflectionProperty;
+use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Generator\PropertyGenerator;
 
 /**

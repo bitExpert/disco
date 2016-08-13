@@ -12,7 +12,7 @@ namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
 use bitExpert\Disco\Proxy\Configuration\ParameterValuesProperty;
 use ProxyManager\Generator\MethodGenerator;
-use ProxyManager\Generator\ParameterGenerator;
+use Zend\Code\Generator\ParameterGenerator;
 use ReflectionClass;
 
 /**

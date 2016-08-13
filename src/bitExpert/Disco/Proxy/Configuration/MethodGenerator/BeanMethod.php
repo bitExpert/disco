@@ -17,7 +17,7 @@ use bitExpert\Disco\InitializedBean;
 use bitExpert\Disco\Proxy\Configuration\BeanPostProcessorsProperty;
 use bitExpert\Disco\Proxy\Configuration\ForceLazyInitProperty;
 use ProxyManager\Generator\MethodGenerator;
-use ProxyManager\Generator\ParameterGenerator;
+use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
 use Zend\Code\Reflection\MethodReflection;
 
@@ -170,7 +170,7 @@ class BeanMethod extends MethodGenerator
      *
      * {@inheritDoc}
      */
-    public static function fromReflection(MethodReflection $reflectionMethod)
+    public static function fromReflection(MethodReflection $reflectionMethod) : \ProxyManager\Generator\MethodGenerator
     {
         /* @var $method self */
         $method = new static();

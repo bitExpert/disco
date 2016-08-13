@@ -11,10 +11,10 @@
 namespace bitExpert\Disco\Proxy\Configuration;
 
 use bitExpert\Disco\BeanFactoryConfiguration;
-use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\VoidCache;
 use ProxyManager\Configuration;
 use ProxyManager\Factory\AbstractBaseFactory;
+use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 
 /**
  * Factory responsible of producing a proxy of the configuration instance.
@@ -71,7 +71,7 @@ class ConfigurationFactory extends AbstractBaseFactory
     /**
      * {@inheritDoc}
      */
-    protected function getGenerator()
+    protected function getGenerator() : ProxyGeneratorInterface
     {
         return $this->generator;
     }

@@ -26,7 +26,6 @@ class WrongReturnTypeConfiguration
      */
     public function nonLazyBeanNotReturningAnything()
     {
-
     }
 
     /**
@@ -44,7 +43,6 @@ class WrongReturnTypeConfiguration
      */
     public function lazyBeanNotReturningAnything()
     {
-
     }
 
     /**
