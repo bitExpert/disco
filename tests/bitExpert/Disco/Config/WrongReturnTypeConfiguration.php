@@ -24,34 +24,30 @@ class WrongReturnTypeConfiguration
 {
     /**
      * @Bean({"singleton"=false, "lazy"=false, "scope"="request"})
-     * @return SampleService
      */
-    public function nonLazyBeanNotReturningAnything()
+    public function nonLazyBeanNotReturningAnything() : SampleService
     {
     }
 
     /**
      * @Bean({"singleton"=false, "lazy"=false, "scope"="request"})
-     * @return SampleService
      */
-    public function nonLazyBeanReturningSomethingWrong()
+    public function nonLazyBeanReturningSomethingWrong() : SampleService
     {
         return new MasterService(new SampleService());
     }
 
     /**
      * @Bean({"singleton"=false, "lazy"=true, "scope"="request"})
-     * @return SampleService
      */
-    public function lazyBeanNotReturningAnything()
+    public function lazyBeanNotReturningAnything() : SampleService
     {
     }
 
     /**
      * @Bean({"singleton"=false, "lazy"=true, "scope"="request"})
-     * @return SampleService
      */
-    public function lazyBeanReturningSomethingWrong()
+    public function lazyBeanReturningSomethingWrong() : SampleService
     {
         return new MasterService(new SampleService());
     }

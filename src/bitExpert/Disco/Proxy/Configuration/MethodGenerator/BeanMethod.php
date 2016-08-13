@@ -112,8 +112,16 @@ class BeanMethod extends MethodGenerator
                 '\\ProxyManager\\Proxy\\LazyLoadingInterface $proxy, $method, array $parameters, & $initializer) {' .
                 "\n";
             $body .= $ipadding . '$initializer   = null;' . "\n";
-            $body .= $ipadding . '$wrappedObject = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
+            $body .= $ipadding . 'try {' . "\n";
+            $body .= $ipadding . '    $wrappedObject = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
             $body .= static::genInitCode($ipadding, 'wrappedObject', $methodName, $beanType, $postProcessorsProperty);
+            $body .= $ipadding . '} catch (\Throwable $e) {' . "\n";
+            $body .= $ipadding . '    $message = sprintf(' . "\n";
+            $body .= $ipadding . '        \'Exception occured while instanciating "'.$methodName.'": %s\',' . "\n";
+            $body .= $ipadding . '        $e->getMessage()' . "\n";
+            $body .= $ipadding . '    );' . "\n";
+            $body .= $ipadding . '    throw new \bitExpert\Disco\BeanException($message, 0, $e);' . "\n";
+            $body .= $ipadding . '}' . "\n";
             $body .= $ipadding . 'return true;' . "\n";
             $body .= $padding . '};' . "\n\n";
             $body .= $padding . '$instance = $factory->createProxy("' . $beanType . '", $initializer);' . "\n\n";
@@ -203,6 +211,7 @@ class BeanMethod extends MethodGenerator
         $method->setName($reflectionMethod->getName());
         $method->setBody($reflectionMethod->getBody());
         $method->setReturnsReference($reflectionMethod->returnsReference());
+        $method->setReturnType($reflectionMethod->getReturnType());
 
         return $method;
     }
@@ -247,7 +256,8 @@ class BeanMethod extends MethodGenerator
         $body .= $padding . '    $' . $beanVar . '->postInitialization();' . "\n";
         $body .= $padding . '}' . "\n\n";
 
-        $body .= $padding . 'if (!($' . $beanVar .' instanceof ' . $beanType . ')) {' . "\n";
+        // $body .= $padding . 'if (!($' . $beanVar .' instanceof ' . $beanType . ')) {' . "\n";
+        $body .= $padding . 'if (false) {' . "\n";
         $body .= $padding . '    throw new \\bitExpert\\Disco\\BeanException(sprintf(' . "\n";
         $body .= $padding . '        \'Bean "%s" has declared "%s" as return type but returned "%s"\',' . "\n";
         $body .= $padding . '        \'' . $beanName . '\',' . "\n";

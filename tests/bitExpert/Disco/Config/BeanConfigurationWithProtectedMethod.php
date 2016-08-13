@@ -24,36 +24,32 @@ class BeanConfigurationWithProtectedMethod
 {
     /**
      * @Bean({"singleton"=true})
-     * @return SampleService
      */
-    protected function singletonDependency()
+    protected function singletonDependency() : SampleService
     {
         return new SampleService();
     }
 
     /**
      * @Bean({"singleton"=false})
-     * @return MasterService
      */
-    public function masterServiceWithSingletonDependency()
+    public function masterServiceWithSingletonDependency() : MasterService
     {
         return new MasterService($this->singletonDependency());
     }
 
     /**
      * @Bean({"singleton"=false})
-     * @return SampleService
      */
-    protected function nonSingletonDependency()
+    protected function nonSingletonDependency() : SampleService
     {
         return new SampleService();
     }
 
     /**
      * @Bean({"singleton"=false})
-     * @return MasterService
      */
-    public function masterServiceWithNonSingletonDependency()
+    public function masterServiceWithNonSingletonDependency() : MasterService
     {
         return new MasterService($this->nonSingletonDependency());
     }

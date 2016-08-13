@@ -28,9 +28,8 @@ class BeanConfigurationWithParameters
      * @Parameters({
      *  @Parameter({"name" = "test"})
      * })
-     * @return SampleService
      */
-    public function sampleServiceWithParam($test = '')
+    public function sampleServiceWithParam($test = '') : SampleService
     {
         $service = new SampleService();
         $service->setTest($test);
@@ -42,9 +41,8 @@ class BeanConfigurationWithParameters
      * @Parameters({
      *  @Parameter({"name" = "test.nested.key"})
      * })
-     * @return SampleService
      */
-    public function sampleServiceWithNestedParamKey($test = '')
+    public function sampleServiceWithNestedParamKey($test = '') : SampleService
     {
         $service = new SampleService();
         $service->setTest($test);
@@ -56,9 +54,8 @@ class BeanConfigurationWithParameters
      * @Parameters({
      *  @Parameter({"name" = "test", "default" = "myDefaultValue"})
      * })
-     * @return SampleService
      */
-    public function sampleServiceWithParamDefaultValue($test = '')
+    public function sampleServiceWithParamDefaultValue($test = '') : SampleService
     {
         $service = new SampleService();
         $service->setTest($test);
@@ -70,9 +67,8 @@ class BeanConfigurationWithParameters
      * @Parameters({
      *  @Parameter({"name" = "test", "required" = false})
      * })
-     * @return SampleService
      */
-    public function sampleServiceWithoutRequiredParam($test = '')
+    public function sampleServiceWithoutRequiredParam($test = '') : SampleService
     {
         $service = new SampleService();
         $service->setTest($test);

@@ -23,9 +23,8 @@ class BeanConfigurationSubclass extends BeanConfiguration
 {
     /**
      * @Bean({"singleton"=true, "lazy"=false, "scope"="session"})
-     * @return MasterService
      */
-    public function singletonNonLazySessionBeanInSubclass()
+    public function singletonNonLazySessionBeanInSubclass() : MasterService
     {
         return new MasterService($this->singletonNonLazyRequestBean());
     }

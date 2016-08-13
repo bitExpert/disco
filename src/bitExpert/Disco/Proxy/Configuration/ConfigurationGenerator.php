@@ -32,8 +32,6 @@ use ReflectionClass;
 use ReflectionMethod;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Reflection\MethodReflection;
-use phpDocumentor\Reflection\FqsenResolver;
-use phpDocumentor\Reflection\Types\ContextFactory;
 
 /**
  * Generator for configuration classes.
@@ -44,14 +42,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
      * @var AnnotationReader
      */
     protected $reader;
-    /**
-     * @var FqsenResolver
-     */
-    protected $fqsenResolver;
-    /**
-     * @var ContextFactory
-     */
-    protected $contextFactory;
 
     /**
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\ConfigurationGenerator}.
@@ -68,8 +58,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Parameter.php');
 
         $this->reader = new AnnotationReader();
-        $this->fqsenResolver = new FqsenResolver();
-        $this->contextFactory = new ContextFactory();
 
         if ($cache instanceof Cache) {
             $this->reader = new CachedReader($this->reader, $cache);
@@ -94,7 +82,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         try {
             $annotation = $this->reader->getClassAnnotation($originalClass, Configuration::class);
         } catch (Exception $e) {
-            throw new InvalidProxiedClassException($e->getMessage(), null, $e);
+            throw new InvalidProxiedClassException($e->getMessage(), 0, $e);
         }
 
         if (null === $annotation) {
@@ -147,17 +135,18 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 $parametersAnnotation = new Parameters();
             }
 
-            $beanType = $this->getBeanType($method);
-            if (false === $beanType) {
+            $beanType = $method->getReturnType();
+            if (null === $beanType) {
                 throw new InvalidProxiedClassException(
                     sprintf(
-                        'MethodGenerator "%s" on "%s" is missing the @return annotation!',
+                        'Method "%s" on "%s" is missing the return typehint!',
                         $method->getName(),
                         $originalClass->getName()
                     )
                 );
             }
 
+            $beanType = (string) $beanType;
             if (!class_exists($beanType) && !interface_exists($beanType) && !trait_exists($beanType)) {
                 throw new InvalidProxiedClassException(
                     sprintf(
@@ -199,30 +188,5 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 $sessionBeansProperty
             )
         );
-    }
-
-
-    /**
-     * Returns the type defined by the @return annotation in the docblock comment
-     * of the given $reflectionMethod. Returns false if the @return annotation is
-     * not present.
-     *
-     * @param ReflectionMethod $reflectionMethod
-     * @return bool|string
-     */
-    protected function getBeanType(ReflectionMethod $reflectionMethod)
-    {
-        $docBlock = $reflectionMethod->getDocComment();
-        if (false !== preg_match('#@return(.+)#', $docBlock, $matches)) {
-            if (isset($matches[1])) {
-                $type = trim($matches[1]);
-
-                // type might not be a fully qualified structural element name, thus try to resolve it
-                $context = $this->contextFactory->createFromReflector($reflectionMethod->getDeclaringClass());
-                return (string) $this->fqsenResolver->resolve($type, $context);
-            }
-        }
-
-        return false;
     }
 }
