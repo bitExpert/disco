@@ -52,7 +52,7 @@ class BeanMethod extends MethodGenerator
         ForceLazyInitProperty $forceLazyInitProperty,
         BeanPostProcessorsProperty $postProcessorsProperty,
         $beanType
-    ) {
+    ) : self {
         /* @var $method self */
         $method = static::fromReflection($originalMethod);
         $methodName = $originalMethod->getName();

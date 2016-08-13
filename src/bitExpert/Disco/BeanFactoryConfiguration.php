@@ -88,7 +88,7 @@ class BeanFactoryConfiguration
      *
      * @return string
      */
-    public function getProxyTargetDir()
+    public function getProxyTargetDir() : string
     {
         return $this->proxyTargetDir;
     }
@@ -97,7 +97,7 @@ class BeanFactoryConfiguration
      * Returns the {@link \ProxyManager\GeneratorStrategy\GeneratorStrategyInterface} which the
      * ProxyManager will use the generate the proxy classes.
      *
-     * @return GeneratorStrategyInterface
+     * @return GeneratorStrategyInterface : null
      */
     public function getProxyGeneratorStrategy()
     {
@@ -110,7 +110,7 @@ class BeanFactoryConfiguration
      *
      * @return Cache
      */
-    public function getAnnotationCache()
+    public function getAnnotationCache() : Cache
     {
         return $this->annotationCache;
     }
@@ -119,9 +119,10 @@ class BeanFactoryConfiguration
      * Returns true if ProxyManager should set a custom autoloader to speed up the processing of the bean configuration.
      * Returns false if the custom autoloader should not get loaded. Not using the autoloader will have a massive
      * impact on performance!
+     *
      * @return bool
      */
-    public function useProxyAutoloader()
+    public function useProxyAutoloader() : bool
     {
         return $this->useProxyAutoloader;
     }

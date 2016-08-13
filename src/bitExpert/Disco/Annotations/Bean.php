@@ -73,7 +73,7 @@ class Bean
      *
      * @return bool
      */
-    public function isRequest()
+    public function isRequest() : bool
     {
         return $this->scope === self::SCOPE_REQUEST;
     }
@@ -83,7 +83,7 @@ class Bean
      *
      * @return bool
      */
-    public function isSession()
+    public function isSession() : bool
     {
         return $this->scope === self::SCOPE_SESSION;
     }
@@ -93,7 +93,7 @@ class Bean
      *
      * @return bool
      */
-    public function isSingleton()
+    public function isSingleton() : bool
     {
         return $this->singleton;
     }
@@ -103,7 +103,7 @@ class Bean
      *
      * @return bool
      */
-    public function isLazy()
+    public function isLazy() : bool
     {
         return $this->lazy;
     }

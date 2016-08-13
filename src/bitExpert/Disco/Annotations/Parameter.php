@@ -69,7 +69,7 @@ class Parameter
      *
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -89,7 +89,7 @@ class Parameter
      *
      * @return bool
      */
-    public function isRequired()
+    public function isRequired() : bool
     {
         return $this->required;
     }
