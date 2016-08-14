@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace bitExpert\Disco\Annotations;
 
 use Doctrine\Common\Annotations\AnnotationException;
@@ -71,7 +73,7 @@ class Bean
      *
      * @return bool
      */
-    public function isRequest()
+    public function isRequest() : bool
     {
         return $this->scope === self::SCOPE_REQUEST;
     }
@@ -81,7 +83,7 @@ class Bean
      *
      * @return bool
      */
-    public function isSession()
+    public function isSession() : bool
     {
         return $this->scope === self::SCOPE_SESSION;
     }
@@ -91,7 +93,7 @@ class Bean
      *
      * @return bool
      */
-    public function isSingleton()
+    public function isSingleton() : bool
     {
         return $this->singleton;
     }
@@ -101,7 +103,7 @@ class Bean
      *
      * @return bool
      */
-    public function isLazy()
+    public function isLazy() : bool
     {
         return $this->lazy;
     }

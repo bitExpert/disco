@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace bitExpert\Disco\Config;
 
 use bitExpert\Disco\Annotations\Bean;
@@ -22,36 +24,32 @@ class BeanConfigurationWithProtectedMethod
 {
     /**
      * @Bean({"singleton"=true})
-     * @return SampleService
      */
-    protected function singletonDependency()
+    protected function singletonDependency() : SampleService
     {
         return new SampleService();
     }
 
     /**
      * @Bean({"singleton"=false})
-     * @return MasterService
      */
-    public function masterServiceWithSingletonDependency()
+    public function masterServiceWithSingletonDependency() : MasterService
     {
         return new MasterService($this->singletonDependency());
     }
 
     /**
      * @Bean({"singleton"=false})
-     * @return SampleService
      */
-    protected function nonSingletonDependency()
+    protected function nonSingletonDependency() : SampleService
     {
         return new SampleService();
     }
 
     /**
      * @Bean({"singleton"=false})
-     * @return MasterService
      */
-    public function masterServiceWithNonSingletonDependency()
+    public function masterServiceWithNonSingletonDependency() : MasterService
     {
         return new MasterService($this->nonSingletonDependency());
     }

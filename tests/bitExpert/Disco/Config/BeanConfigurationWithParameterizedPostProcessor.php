@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace bitExpert\Disco\Config;
 
 use bitExpert\Disco\Annotations\Bean;
@@ -25,18 +27,16 @@ class BeanConfigurationWithParameterizedPostProcessor
 {
     /**
      * @BeanPostProcessor
-     * @return ParameterizedSampleServiceBeanPostProcessor
      */
-    public function sampleServiceBeanPostProcessor()
+    public function sampleServiceBeanPostProcessor() : ParameterizedSampleServiceBeanPostProcessor
     {
         return new ParameterizedSampleServiceBeanPostProcessor($this->dependency());
     }
 
     /**
      * @Bean
-     * @return SampleService
      */
-    public function nonSingletonNonLazyRequestBean()
+    public function nonSingletonNonLazyRequestBean() : SampleService
     {
         return new SampleService();
     }
@@ -46,11 +46,10 @@ class BeanConfigurationWithParameterizedPostProcessor
      * @Parameters({
      *  @Parameter({"name" = "test"})
      * })
-     * @return \stdCLass
      */
-    public function dependency($test = '')
+    public function dependency($test = '') : \stdClass
     {
-        $object = new \stdCLass();
+        $object = new \stdClass();
         $object->property = $test;
         return $object;
     }

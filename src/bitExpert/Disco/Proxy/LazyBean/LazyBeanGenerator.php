@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace bitExpert\Disco\Proxy\LazyBean;
 
 use bitExpert\Disco\Proxy\LazyBean\MethodGenerator\Constructor;
@@ -30,6 +32,7 @@ use ProxyManager\ProxyGenerator\LazyLoadingValueHolder\PropertyGenerator\Initial
 use ProxyManager\ProxyGenerator\LazyLoadingValueHolder\PropertyGenerator\ValueHolderProperty;
 use ProxyManager\ProxyGenerator\PropertyGenerator\PublicPropertiesMap;
 use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
+use ProxyManager\ProxyGenerator\Util\Properties;
 use ProxyManager\ProxyGenerator\Util\ProxiedMethodsFilter;
 use ProxyManager\ProxyGenerator\ValueHolder\MethodGenerator\GetWrappedValueHolderValue;
 use ReflectionClass;
@@ -51,7 +54,7 @@ class LazyBeanGenerator implements ProxyGeneratorInterface
         CanProxyAssertion::assertClassCanBeProxied($originalClass);
 
         $interfaces = array(VirtualProxyInterface::class);
-        $publicProperties = new PublicPropertiesMap($originalClass);
+        $publicProperties = new PublicPropertiesMap(Properties::fromReflectionClass($originalClass));
 
         if ($originalClass->isInterface()) {
             $interfaces[] = $originalClass->getName();

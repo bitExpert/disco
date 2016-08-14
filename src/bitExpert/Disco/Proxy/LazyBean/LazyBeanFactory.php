@@ -8,16 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace bitExpert\Disco\Proxy\LazyBean;
 
 use Closure;
-use ProxyManager\Factory\AbstractLazyFactory;
+use ProxyManager\Factory\AbstractBaseFactory;
 use ProxyManager\Configuration;
+use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 
 /**
  * Factory responsible of producing virtual proxy instances.
  */
-class LazyBeanFactory extends AbstractLazyFactory
+class LazyBeanFactory extends AbstractBaseFactory
 {
     /**
      * @var LazyBeanGenerator
@@ -44,7 +47,7 @@ class LazyBeanFactory extends AbstractLazyFactory
     /**
      * {@inheritDoc}
      */
-    protected function getGenerator()
+    protected function getGenerator() : ProxyGeneratorInterface
     {
         return $this->generator ?: $this->generator = new LazyBeanGenerator();
     }

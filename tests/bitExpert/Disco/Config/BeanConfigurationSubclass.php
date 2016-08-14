@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace bitExpert\Disco\Config;
 
 use bitExpert\Disco\Annotations\Bean;
@@ -21,9 +23,8 @@ class BeanConfigurationSubclass extends BeanConfiguration
 {
     /**
      * @Bean({"singleton"=true, "lazy"=false, "scope"="session"})
-     * @return MasterService
      */
-    public function singletonNonLazySessionBeanInSubclass()
+    public function singletonNonLazySessionBeanInSubclass() : MasterService
     {
         return new MasterService($this->singletonNonLazyRequestBean());
     }

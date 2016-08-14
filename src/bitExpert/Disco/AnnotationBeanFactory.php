@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace bitExpert\Disco;
 
 use bitExpert\Disco\Proxy\Configuration\ConfigurationFactory;
@@ -65,14 +67,14 @@ class AnnotationBeanFactory implements BeanFactory
         if ($this->has($id)) {
             try {
                 $instance = call_user_func([$this->beanStore, $id]);
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
                 $message = sprintf(
                     'Exception occured while instanciating "%s": %s',
                     $id,
                     $e->getMessage()
                 );
 
-                throw new BeanException($message, null, $e);
+                throw new BeanException($message, 0, $e);
             }
         }
 

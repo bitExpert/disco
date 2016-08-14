@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace bitExpert\Disco\Config;
 
 use bitExpert\Disco\Annotations\Bean;
@@ -21,9 +23,8 @@ class NonExistentReturnTypeConfiguration
 {
     /**
      * @Bean({"singleton"=false, "lazy"=false, "scope"="request"})
-     * @return \MyOtherClass
      */
-    public function nonSingletonNonLazyRequestBean()
+    public function nonSingletonNonLazyRequestBean() : \MyOtherClass
     {
         return new SampleService();
     }

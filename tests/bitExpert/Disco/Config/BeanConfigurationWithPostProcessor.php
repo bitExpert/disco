@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace bitExpert\Disco\Config;
 
 use bitExpert\Disco\Annotations\Bean;
@@ -25,45 +27,40 @@ class BeanConfigurationWithPostProcessor
 {
     /**
      * @BeanPostProcessor
-     * @return SampleServiceBeanPostProcessor
      */
-    public function sampleServiceBeanPostProcessor()
+    public function sampleServiceBeanPostProcessor() : SampleServiceBeanPostProcessor
     {
         return new SampleServiceBeanPostProcessor();
     }
 
     /**
      * @BeanPostProcessor
-     * @return BeanFactoryPostProcessor
      */
-    public function beanFactoryBeanPostProcessor()
+    public function beanFactoryBeanPostProcessor() : BeanFactoryPostProcessor
     {
         return new BeanFactoryPostProcessor();
     }
 
     /**
      * @Bean
-     * @return SampleService
      */
-    public function nonSingletonNonLazyRequestBean()
+    public function nonSingletonNonLazyRequestBean() : SampleService
     {
         return new SampleService();
     }
 
     /**
      * @Bean({"lazy"=true})
-     * @return SampleService
      */
-    public function nonSingletonLazyRequestBean()
+    public function nonSingletonLazyRequestBean() : SampleService
     {
         return new SampleService();
     }
 
     /**
      * @Bean
-     * @return BeanFactoryAwareService
      */
-    public function beanFactoryAwareBean()
+    public function beanFactoryAwareBean() : BeanFactoryAwareService
     {
         return new BeanFactoryAwareService();
     }

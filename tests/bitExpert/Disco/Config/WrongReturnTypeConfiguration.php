@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace bitExpert\Disco\Config;
 
 use bitExpert\Disco\Annotations\Bean;
@@ -22,36 +24,30 @@ class WrongReturnTypeConfiguration
 {
     /**
      * @Bean({"singleton"=false, "lazy"=false, "scope"="request"})
-     * @return SampleService
      */
-    public function nonLazyBeanNotReturningAnything()
+    public function nonLazyBeanNotReturningAnything() : SampleService
     {
-
     }
 
     /**
      * @Bean({"singleton"=false, "lazy"=false, "scope"="request"})
-     * @return SampleService
      */
-    public function nonLazyBeanReturningSomethingWrong()
+    public function nonLazyBeanReturningSomethingWrong() : SampleService
     {
         return new MasterService(new SampleService());
     }
 
     /**
      * @Bean({"singleton"=false, "lazy"=true, "scope"="request"})
-     * @return SampleService
      */
-    public function lazyBeanNotReturningAnything()
+    public function lazyBeanNotReturningAnything() : SampleService
     {
-
     }
 
     /**
      * @Bean({"singleton"=false, "lazy"=true, "scope"="request"})
-     * @return SampleService
      */
-    public function lazyBeanReturningSomethingWrong()
+    public function lazyBeanReturningSomethingWrong() : SampleService
     {
         return new MasterService(new SampleService());
     }

@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace bitExpert\Disco\Proxy\Configuration;
 
 use bitExpert\Disco\Config\BeanConfiguration;
@@ -41,7 +43,7 @@ class ConfigurationGeneratorUnitTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->configGenerator = new ConfigurationGenerator();
-        $this->classGenerator = $this->getMock(ClassGenerator::class);
+        $this->classGenerator = $this->createMock(ClassGenerator::class);
     }
 
     /**

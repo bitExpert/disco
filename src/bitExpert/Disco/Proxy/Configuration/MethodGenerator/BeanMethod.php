@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
 use bitExpert\Disco\Annotations\Bean;
@@ -17,7 +19,7 @@ use bitExpert\Disco\InitializedBean;
 use bitExpert\Disco\Proxy\Configuration\BeanPostProcessorsProperty;
 use bitExpert\Disco\Proxy\Configuration\ForceLazyInitProperty;
 use ProxyManager\Generator\MethodGenerator;
-use ProxyManager\Generator\ParameterGenerator;
+use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
 use Zend\Code\Reflection\MethodReflection;
 
@@ -50,7 +52,7 @@ class BeanMethod extends MethodGenerator
         ForceLazyInitProperty $forceLazyInitProperty,
         BeanPostProcessorsProperty $postProcessorsProperty,
         $beanType
-    ) {
+    ) : self {
         /* @var $method self */
         $method = static::fromReflection($originalMethod);
         $methodName = $originalMethod->getName();
@@ -110,8 +112,16 @@ class BeanMethod extends MethodGenerator
                 '\\ProxyManager\\Proxy\\LazyLoadingInterface $proxy, $method, array $parameters, & $initializer) {' .
                 "\n";
             $body .= $ipadding . '$initializer   = null;' . "\n";
-            $body .= $ipadding . '$wrappedObject = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
+            $body .= $ipadding . 'try {' . "\n";
+            $body .= $ipadding . '    $wrappedObject = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
             $body .= static::genInitCode($ipadding, 'wrappedObject', $methodName, $beanType, $postProcessorsProperty);
+            $body .= $ipadding . '} catch (\Throwable $e) {' . "\n";
+            $body .= $ipadding . '    $message = sprintf(' . "\n";
+            $body .= $ipadding . '        \'Exception occured while instanciating "'.$methodName.'": %s\',' . "\n";
+            $body .= $ipadding . '        $e->getMessage()' . "\n";
+            $body .= $ipadding . '    );' . "\n";
+            $body .= $ipadding . '    throw new \bitExpert\Disco\BeanException($message, 0, $e);' . "\n";
+            $body .= $ipadding . '}' . "\n";
             $body .= $ipadding . 'return true;' . "\n";
             $body .= $padding . '};' . "\n\n";
             $body .= $padding . '$instance = $factory->createProxy("' . $beanType . '", $initializer);' . "\n\n";
@@ -170,7 +180,7 @@ class BeanMethod extends MethodGenerator
      *
      * {@inheritDoc}
      */
-    public static function fromReflection(MethodReflection $reflectionMethod)
+    public static function fromReflection(MethodReflection $reflectionMethod) : \ProxyManager\Generator\MethodGenerator
     {
         /* @var $method self */
         $method = new static();
@@ -201,6 +211,7 @@ class BeanMethod extends MethodGenerator
         $method->setName($reflectionMethod->getName());
         $method->setBody($reflectionMethod->getBody());
         $method->setReturnsReference($reflectionMethod->returnsReference());
+        $method->setReturnType($reflectionMethod->getReturnType());
 
         return $method;
     }
@@ -245,7 +256,8 @@ class BeanMethod extends MethodGenerator
         $body .= $padding . '    $' . $beanVar . '->postInitialization();' . "\n";
         $body .= $padding . '}' . "\n\n";
 
-        $body .= $padding . 'if (!($' . $beanVar .' instanceof ' . $beanType . ')) {' . "\n";
+        // $body .= $padding . 'if (!($' . $beanVar .' instanceof ' . $beanType . ')) {' . "\n";
+        $body .= $padding . 'if (false) {' . "\n";
         $body .= $padding . '    throw new \\bitExpert\\Disco\\BeanException(sprintf(' . "\n";
         $body .= $padding . '        \'Bean "%s" has declared "%s" as return type but returned "%s"\',' . "\n";
         $body .= $padding . '        \'' . $beanName . '\',' . "\n";

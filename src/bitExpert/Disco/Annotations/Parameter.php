@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace bitExpert\Disco\Annotations;
 
 use Doctrine\Common\Annotations\Annotation\Attribute;
@@ -67,7 +69,7 @@ class Parameter
      *
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -87,7 +89,7 @@ class Parameter
      *
      * @return bool
      */
-    public function isRequired()
+    public function isRequired() : bool
     {
         return $this->required;
     }
