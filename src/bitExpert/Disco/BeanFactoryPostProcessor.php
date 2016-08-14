@@ -25,7 +25,10 @@ class BeanFactoryPostProcessor implements BeanPostProcessor
     public function postProcess($bean, $beanName)
     {
         if ($bean instanceof BeanFactoryAware) {
-            $bean->setBeanFactory(BeanFactoryRegistry::getInstance());
+            $beanFactory = BeanFactoryRegistry::getInstance();
+            if ($beanFactory instanceof BeanFactory) {
+                $bean->setBeanFactory($beanFactory);
+            }
         }
     }
 }
