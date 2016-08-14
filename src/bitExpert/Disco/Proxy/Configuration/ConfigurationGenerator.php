@@ -23,6 +23,7 @@ use bitExpert\Disco\Proxy\Configuration\MethodGenerator\GetParameter;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\CachedReader;
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
 use Exception;
 use ProxyManager\Exception\InvalidProxiedClassException;
@@ -39,7 +40,7 @@ use Zend\Code\Reflection\MethodReflection;
 class ConfigurationGenerator implements ProxyGeneratorInterface
 {
     /**
-     * @var AnnotationReader
+     * @var Reader
      */
     protected $reader;
 
