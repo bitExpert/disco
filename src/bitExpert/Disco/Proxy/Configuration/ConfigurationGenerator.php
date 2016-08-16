@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace bitExpert\Disco\Proxy\Configuration;
 
@@ -18,8 +18,8 @@ use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Annotations\Parameters;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanMethod;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\Constructor;
-use bitExpert\Disco\Proxy\Configuration\MethodGenerator\MagicSleep;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\GetParameter;
+use bitExpert\Disco\Proxy\Configuration\MethodGenerator\MagicSleep;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\CachedReader;
@@ -71,7 +71,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
      */
     public function generate(ReflectionClass $originalClass, ClassGenerator $classGenerator)
     {
-        CanProxyAssertion::assertClassCanBeProxied($originalClass);
+        CanProxyAssertion::assertClassCanBeProxied($originalClass, false);
 
         $annotation = null;
         $forceLazyInitProperty = new ForceLazyInitProperty();
@@ -90,15 +90,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             throw new InvalidProxiedClassException(
                 sprintf(
                     '"%s" seems not to be a valid configuration class. @Configuration annotation missing!',
-                    $originalClass->getName()
-                )
-            );
-        }
-
-        if ($originalClass->isInterface()) {
-            throw new InvalidProxiedClassException(
-                sprintf(
-                    '"%s" seems not to be a valid configuration class!',
                     $originalClass->getName()
                 )
             );
@@ -148,7 +139,10 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             }
 
             $beanType = (string) $beanType;
-            if (!class_exists($beanType) && !interface_exists($beanType) && !trait_exists($beanType)) {
+            if (!in_array($beanType, ['array', 'callable', 'bool', 'float', 'int', 'string']) &&
+                !class_exists($beanType) &&
+                !interface_exists($beanType)
+            ) {
                 throw new InvalidProxiedClassException(
                     sprintf(
                         'Return type of method "%s" on "%s" cannot be found! Did you use the full qualified name?',

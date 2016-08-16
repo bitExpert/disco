@@ -18,11 +18,14 @@ use bitExpert\Disco\Config\BeanConfigurationTrait;
 use bitExpert\Disco\Config\BeanConfigurationWithParameterizedPostProcessor;
 use bitExpert\Disco\Config\BeanConfigurationWithParameters;
 use bitExpert\Disco\Config\BeanConfigurationWithPostProcessor;
+use bitExpert\Disco\Config\BeanConfigurationWithPrimitives;
 use bitExpert\Disco\Config\BeanConfigurationWithProtectedMethod;
 use bitExpert\Disco\Config\WrongReturnTypeConfiguration;
 use bitExpert\Disco\Helper\BeanFactoryAwareService;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
+use ProxyManager\FileLocator\FileLocator;
+use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
 use ProxyManager\Proxy\ValueHolderInterface;
 use ProxyManager\Proxy\VirtualProxyInterface;
 use stdClass;
@@ -439,5 +442,90 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 
         $bean = $this->beanFactory->get('lazyBeanNotReturningAnything');
         $bean->setTest('test');
+    }
+
+    /**
+     * @test
+     */
+    public function retrievingArrayPrimitive()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithPrimitives::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean = $this->beanFactory->get('arrayPrimitive');
+        $this->assertTrue(is_array($bean));
+    }
+
+    /**
+     * @test
+     */
+    public function retrievingCallablePrimitive()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithPrimitives::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean = $this->beanFactory->get('callablePrimitive');
+        $this->assertTrue(is_callable($bean));
+    }
+
+    /**
+     * @test
+     */
+    public function retrievingBoolPrimitive()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithPrimitives::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean = $this->beanFactory->get('boolPrimitive');
+        $this->assertTrue(is_bool($bean));
+    }
+
+    /**
+     * @test
+     */
+    public function retrievingFlotPrimitive()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithPrimitives::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean = $this->beanFactory->get('floatPrimitive');
+        $this->assertTrue(is_float($bean));
+    }
+
+    /**
+     * @test
+     */
+    public function retrievingIntPrimitive()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithPrimitives::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean = $this->beanFactory->get('intPrimitive');
+        $this->assertTrue(is_int($bean));
+    }
+
+    /**
+     * @test
+     */
+    public function retrievingStringPrimitive()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithPrimitives::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean = $this->beanFactory->get('stringPrimitive');
+        $this->assertTrue(is_string($bean));
+    }
+
+    /**
+     * @test
+     */
+    public function retrievingServiceWithStringInjected()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithPrimitives::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean = $this->beanFactory->get('serviceWithStringInjected');
+        $this->assertInstanceOf(SampleService::class, $bean);
+        $this->assertTrue(is_string($bean->test));
     }
 }
