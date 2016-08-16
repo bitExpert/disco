@@ -48,11 +48,14 @@ class Constructor extends MethodGenerator
             $unsetProperties[] = '$this->' . $publicProperty->getName();
         }
 
-        $this->setDocBlock("@override constructor for lazy initialization\n\n@param \\string \$beanId".
-            "\n@param \\Closure|null \$initializer");
+        $this->setDocBlock(
+            '@override constructor for lazy initialization'. PHP_EOL . PHP_EOL
+            . '@param \string \$beanId'. PHP_EOL
+            . '@param \Closure|null \$initializer'
+        );
         $this->setBody(
-            ($unsetProperties ? 'unset(' . implode(', ', $unsetProperties) . ");\n\n" : '')
-            . '$this->' . $initializerProperty->getName() . ' = $initializer;' . "\n"
+            ($unsetProperties ? 'unset(' . implode(', ', $unsetProperties) . ');' . PHP_EOL . PHP_EOL : '')
+            . '$this->' . $initializerProperty->getName() . ' = $initializer;' . PHP_EOL
             . '$this->' . $valueHolderBeanIdProperty->getName() . ' = $beanId;'
         );
     }

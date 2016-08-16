@@ -38,27 +38,27 @@ class GetParameter extends MethodGenerator
         $defaultValueParameter = new ParameterGenerator('defaultValue');
         $defaultValueParameter->setDefaultValue(null);
 
-        $body = '$steps = explode(\'.\', $' . $propertyNameParameter->getName() . ');' . "\n";
-        $body .= '$value = $this->' . $parameterValueProperty->getName() . ';' . "\n";
-        $body .= '$currentPath = [];' . "\n";
-        $body .= 'foreach ($steps as $step) {' . "\n";
-        $body .= '    $currentPath[] = $step;' . "\n";
-        $body .= '    if (isset($value[$step])) {' . "\n";
-        $body .= '        $value = $value[$step];' . "\n";
-        $body .= '    } else {' . "\n";
-        $body .= '        $value = $' . $defaultValueParameter->getName() . ';' . "\n";
-        $body .= '        break;' . "\n";
-        $body .= '    }' . "\n";
-        $body .= '}' . "\n\n";
-        $body .= 'if ($' . $requiredParameter->getName() . ' && (null === $value)) {' . "\n";
-        $body .= '    if (null === $' . $defaultValueParameter->getName() . ') {' . "\n";
+        $body = '$steps = explode(\'.\', $' . $propertyNameParameter->getName() . ');' . PHP_EOL;
+        $body .= '$value = $this->' . $parameterValueProperty->getName() . ';' . PHP_EOL;
+        $body .= '$currentPath = [];' . PHP_EOL;
+        $body .= 'foreach ($steps as $step) {' . PHP_EOL;
+        $body .= '    $currentPath[] = $step;' . PHP_EOL;
+        $body .= '    if (isset($value[$step])) {' . PHP_EOL;
+        $body .= '        $value = $value[$step];' . PHP_EOL;
+        $body .= '    } else {' . PHP_EOL;
+        $body .= '        $value = $' . $defaultValueParameter->getName() . ';' . PHP_EOL;
+        $body .= '        break;' . PHP_EOL;
+        $body .= '    }' . PHP_EOL;
+        $body .= '}' . PHP_EOL . PHP_EOL;
+        $body .= 'if ($' . $requiredParameter->getName() . ' && (null === $value)) {' . PHP_EOL;
+        $body .= '    if (null === $' . $defaultValueParameter->getName() . ') {' . PHP_EOL;
         $body .= '        throw new \RuntimeException(\'Parameter "\' .$' . $propertyNameParameter->getName() .
-            '. \'" is required but not defined and no default value provided!\');' . "\n";
-        $body .= '    }' . "\n";
+            '. \'" is required but not defined and no default value provided!\');' . PHP_EOL;
+        $body .= '    }' . PHP_EOL;
         $body .= '    throw new \RuntimeException(\'Parameter "\' .$' . $propertyNameParameter->getName() .
-            '. \'" not defined!\');' . "\n";
-        $body .= '}' . "\n\n";
-        $body .= 'return $value;' . "\n";
+            '. \'" not defined!\');' . PHP_EOL;
+        $body .= '}' . PHP_EOL . PHP_EOL;
+        $body .= 'return $value;' . PHP_EOL;
 
         $this->setParameter($propertyNameParameter);
         $this->setParameter($requiredParameter);

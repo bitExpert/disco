@@ -86,41 +86,41 @@ class BeanMethod extends MethodGenerator
 
         if (in_array($beanType, ['array', 'callable', 'bool', 'float', 'int', 'string'])) {
             // return type is a primitive, simply call parent method and return immediately.
-            $body .= $padding . 'return parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
+            $body .= $padding . 'return parent::' . $methodName . '(' . $methodParamTpl . ');' . PHP_EOL;
         } elseif (class_exists($beanType) || interface_exists($beanType)) {
             // return type is either class or interface
             if ($methodAnnotation->isSingleton()) {
                 $padding = '    ';
-                $body .= 'static $instance = null;' . "\n\n";
-                $body .= 'if ($instance === null) {' . "\n";
+                $body .= 'static $instance = null;' . PHP_EOL . PHP_EOL;
+                $body .= 'if ($instance === null) {' . PHP_EOL;
             }
 
             if ($methodAnnotation->isSession()) {
-                $body .= $padding . 'if(isset($this->sessionBeans["' . $methodName . '"])) {' . "\n";
+                $body .= $padding . 'if(isset($this->sessionBeans["' . $methodName . '"])) {' . PHP_EOL;
                 if ($methodAnnotation->isSingleton()) {
-                    $body .= $padding . '    $instance = $this->sessionBeans["' . $methodName . '"];' . "\n";
+                    $body .= $padding . '    $instance = $this->sessionBeans["' . $methodName . '"];' . PHP_EOL;
                 } else {
-                    $body .= $padding . '    return $this->sessionBeans["' . $methodName . '"];' . "\n";
+                    $body .= $padding . '    return $this->sessionBeans["' . $methodName . '"];' . PHP_EOL;
                 }
-                $body .= $padding . '}' . "\n\n";
+                $body .= $padding . '}' . PHP_EOL . PHP_EOL;
             }
 
             // Sessionbeans "force" their dependencies to be lazy proxies
             if ($methodAnnotation->isSession()) {
-                $body .= $padding . '$this->' . $forceLazyInitProperty->getName() . ' = true;' . "\n";
+                $body .= $padding . '$this->' . $forceLazyInitProperty->getName() . ' = true;' . PHP_EOL;
             }
 
             if ($methodAnnotation->isLazy()) {
                 $ipadding = $padding . '    ';
                 $body .= $padding . '$factory     = new \bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory("' .
-                    $methodName . '");' . "\n";
+                    $methodName . '");' . PHP_EOL;
                 $body .= $padding . '$initializer = function (& $wrappedObject, '.
                     '\ProxyManager\Proxy\LazyLoadingInterface $proxy, $method, array $parameters, & $initializer) {' .
-                    "\n";
-                $body .= $ipadding . '$initializer   = null;' . "\n";
-                $body .= $ipadding . 'try {' . "\n";
+                    PHP_EOL;
+                $body .= $ipadding . '$initializer   = null;' . PHP_EOL;
+                $body .= $ipadding . 'try {' . PHP_EOL;
                 $body .= $ipadding . '    $wrappedObject = parent::' . $methodName . '(' . $methodParamTpl . ');' .
-                    "\n";
+                    PHP_EOL;
                 $body .= static::generateBeanInitCode(
                     $ipadding,
                     'wrappedObject',
@@ -128,25 +128,26 @@ class BeanMethod extends MethodGenerator
                     $beanType,
                     $postProcessorsProperty
                 );
-                $body .= $ipadding . '} catch (\Throwable $e) {' . "\n";
-                $body .= $ipadding . '    $message = sprintf(' . "\n";
+                $body .= $ipadding . '} catch (\Throwable $e) {' . PHP_EOL;
+                $body .= $ipadding . '    $message = sprintf(' . PHP_EOL;
                 $body .= $ipadding . '        \'Exception occured while instanciating "' . $methodName . '": %s\',' .
-                    "\n";
-                $body .= $ipadding . '        $e->getMessage()' . "\n";
-                $body .= $ipadding . '    );' . "\n";
-                $body .= $ipadding . '    throw new \bitExpert\Disco\BeanException($message, 0, $e);' . "\n";
-                $body .= $ipadding . '}' . "\n";
-                $body .= $ipadding . 'return true;' . "\n";
-                $body .= $padding . '};' . "\n\n";
-                $body .= $padding . '$instance = $factory->createProxy("' . $beanType . '", $initializer);' . "\n\n";
+                    PHP_EOL;
+                $body .= $ipadding . '        $e->getMessage()' . PHP_EOL;
+                $body .= $ipadding . '    );' . PHP_EOL;
+                $body .= $ipadding . '    throw new \bitExpert\Disco\BeanException($message, 0, $e);' . PHP_EOL;
+                $body .= $ipadding . '}' . PHP_EOL;
+                $body .= $ipadding . 'return true;' . PHP_EOL;
+                $body .= $padding . '};' . PHP_EOL . PHP_EOL;
+                $body .= $padding . '$instance = $factory->createProxy("' . $beanType . '", $initializer);' .
+                    PHP_EOL . PHP_EOL;
             } else {
                 $ipadding = $padding;
                 if ($methodAnnotation->isSingleton()) {
                     $ipadding .= $padding;
-                    $body .= $padding . 'if ($instance === null) {' . "\n";
+                    $body .= $padding . 'if ($instance === null) {' . PHP_EOL;
                 }
 
-                $body .= $ipadding . '$instance = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
+                $body .= $ipadding . '$instance = parent::' . $methodName . '(' . $methodParamTpl . ');' . PHP_EOL;
                 $body .= static::generateBeanInitCode(
                     $ipadding,
                     'instance',
@@ -156,46 +157,46 @@ class BeanMethod extends MethodGenerator
                 );
 
                 if ($methodAnnotation->isSingleton()) {
-                    $body .= $padding . '}' . "\n";
+                    $body .= $padding . '}' . PHP_EOL;
                 }
             }
 
             if ($methodAnnotation->isSession()) {
-                $body .= $padding . '$this->' . $forceLazyInitProperty->getName() . ' = false;' . "\n";
+                $body .= $padding . '$this->' . $forceLazyInitProperty->getName() . ' = false;' . PHP_EOL;
             }
 
             if ($methodAnnotation->isSingleton()) {
-                $body .= '}' . "\n";
+                $body .= '}' . PHP_EOL;
             }
 
             if ($methodAnnotation->isSession()) {
-                $body .= '$this->sessionBeans["' . $methodName . '"] = $instance;' . "\n\n";
+                $body .= '$this->sessionBeans["' . $methodName . '"] = $instance;' . PHP_EOL . PHP_EOL;
             }
 
-            $body .= "\n" . 'if ($this->' . $forceLazyInitProperty->getName() . ') {' . "\n";
-            $body .= '    if ($instance instanceof \\ProxyManager\\Proxy\\VirtualProxyInterface) {' . "\n";
-            $body .= '        return $instance;' . "\n";
-            $body .= '    }' . "\n\n";
+            $body .= PHP_EOL . 'if ($this->' . $forceLazyInitProperty->getName() . ') {' . PHP_EOL;
+            $body .= '    if ($instance instanceof \\ProxyManager\\Proxy\\VirtualProxyInterface) {' . PHP_EOL;
+            $body .= '        return $instance;' . PHP_EOL;
+            $body .= '    }' . PHP_EOL . PHP_EOL;
             $body .= '    $factory     = new \\bitExpert\\Disco\\Proxy\\LazyBean\\LazyBeanFactory("' . $methodName .
-                '");' . "\n";
+                '");' . PHP_EOL;
             $body .= '    $initializer = function (& $wrappedObject, \\ProxyManager\\Proxy\\LazyLoadingInterface ' .
-                ' $proxy, $method, array $parameters, & $initializer) use ($instance) {' . "\n";
-            $body .= '        $initializer   = null;' . "\n";
-            $body .= '        $wrappedObject = $instance;' . "\n";
-            $body .= '        return true;' . "\n";
-            $body .= '    };' . "\n\n";
-            $body .= '    return $factory->createProxy("' . $beanType . '", $initializer);' . "\n";
-            $body .= '}' . "\n\n";
+                ' $proxy, $method, array $parameters, & $initializer) use ($instance) {' . PHP_EOL;
+            $body .= '        $initializer   = null;' . PHP_EOL;
+            $body .= '        $wrappedObject = $instance;' . PHP_EOL;
+            $body .= '        return true;' . PHP_EOL;
+            $body .= '    };' . PHP_EOL . PHP_EOL;
+            $body .= '    return $factory->createProxy("' . $beanType . '", $initializer);' . PHP_EOL;
+            $body .= '}' . PHP_EOL . PHP_EOL;
 
-            $body .= 'return $instance;' . "\n";
+            $body .= 'return $instance;' . PHP_EOL;
         } else {
             // return type is unknown, throw an exception
-            $body .= $padding . '$message = sprintf(' . "\n";
+            $body .= $padding . '$message = sprintf(' . PHP_EOL;
             $body .= $padding . '    \'Either return type declaration missing or unkown for bean with id "'
-                . $methodName . '": %s\',' . "\n";
-            $body .= $padding . '    $e->getMessage()' . "\n";
-            $body .= $padding . ');' . "\n";
-            $body .= $padding . 'throw new \bitExpert\Disco\BeanException($message, 0, $e);' . "\n";
+                . $methodName . '": %s\',' . PHP_EOL;
+            $body .= $padding . '    $e->getMessage()' . PHP_EOL;
+            $body .= $padding . ');' . PHP_EOL;
+            $body .= $padding . 'throw new \bitExpert\Disco\BeanException($message, 0, $e);' . PHP_EOL;
         }
 
         $method->setBody($body);
@@ -281,23 +282,23 @@ class BeanMethod extends MethodGenerator
         $beanType,
         BeanPostProcessorsProperty $postProcessorsProperty
     ) {
-        $body = $padding . 'if ($' . $beanVar . ' instanceof \\' . InitializedBean::class . ') {' . "\n";
-        $body .= $padding . '    $' . $beanVar . '->postInitialization();' . "\n";
-        $body .= $padding . '}' . "\n\n";
+        $body = $padding . 'if ($' . $beanVar . ' instanceof \\' . InitializedBean::class . ') {' . PHP_EOL;
+        $body .= $padding . '    $' . $beanVar . '->postInitialization();' . PHP_EOL;
+        $body .= $padding . '}' . PHP_EOL . PHP_EOL;
 
-        // $body .= $padding . 'if (!($' . $beanVar .' instanceof ' . $beanType . ')) {' . "\n";
-        $body .= $padding . 'if (false) {' . "\n";
-        $body .= $padding . '    throw new \\bitExpert\\Disco\\BeanException(sprintf(' . "\n";
-        $body .= $padding . '        \'Bean "%s" has declared "%s" as return type but returned "%s"\',' . "\n";
-        $body .= $padding . '        \'' . $beanName . '\',' . "\n";
-        $body .= $padding . '        \'' . $beanType . '\',' . "\n";
-        $body .= $padding . '        $' . $beanVar . ' ? get_class($' . $beanVar . ') : \'null\'' . "\n";
-        $body .= $padding . '    ));' . "\n";
-        $body .= $padding . '}' . "\n\n";
+        // $body .= $padding . 'if (!($' . $beanVar .' instanceof ' . $beanType . ')) {' . PHP_EOL;
+        $body .= $padding . 'if (false) {' . PHP_EOL;
+        $body .= $padding . '    throw new \\bitExpert\\Disco\\BeanException(sprintf(' . PHP_EOL;
+        $body .= $padding . '        \'Bean "%s" has declared "%s" as return type but returned "%s"\',' . PHP_EOL;
+        $body .= $padding . '        \'' . $beanName . '\',' . PHP_EOL;
+        $body .= $padding . '        \'' . $beanType . '\',' . PHP_EOL;
+        $body .= $padding . '        $' . $beanVar . ' ? get_class($' . $beanVar . ') : \'null\'' . PHP_EOL;
+        $body .= $padding . '    ));' . PHP_EOL;
+        $body .= $padding . '}' . PHP_EOL . PHP_EOL;
 
-        $body .= $padding . 'foreach ($this->' . $postProcessorsProperty->getName() . ' as $postProcessor) {' . "\n";
-        $body .= $padding . '    $postProcessor->postProcess($' . $beanVar . ', "' . $beanName . '");' . "\n";
-        $body .= $padding . '}' . "\n";
+        $body .= $padding . 'foreach ($this->' . $postProcessorsProperty->getName() . ' as $postProcessor) {' . PHP_EOL;
+        $body .= $padding . '    $postProcessor->postProcess($' . $beanVar . ', "' . $beanName . '");' . PHP_EOL;
+        $body .= $padding . '}' . PHP_EOL;
 
         return $body;
     }
