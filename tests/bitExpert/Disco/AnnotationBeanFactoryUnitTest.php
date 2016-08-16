@@ -15,6 +15,7 @@ namespace bitExpert\Disco;
 use bitExpert\Disco\Config\BeanConfiguration;
 use bitExpert\Disco\Config\BeanConfigurationSubclass;
 use bitExpert\Disco\Config\BeanConfigurationTrait;
+use bitExpert\Disco\Config\BeanConfigurationWithNormalizedIds;
 use bitExpert\Disco\Config\BeanConfigurationWithParameterizedPostProcessor;
 use bitExpert\Disco\Config\BeanConfigurationWithParameters;
 use bitExpert\Disco\Config\BeanConfigurationWithPostProcessor;
@@ -66,6 +67,14 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
     public function checkForExistingBeanReturnsTrue()
     {
         $this->assertTrue($this->beanFactory->has('nonSingletonNonLazyRequestBean'));
+    }
+
+    /**
+     * @test
+     */
+    public function checkForBeanWithEmptyIdReturnsFalse()
+    {
+        $this->assertFalse($this->beanFactory->has(''));
     }
 
     /**
@@ -519,7 +528,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function retrievingServiceWithStringInjected()
+    public function retrievingBeanWithStringInjected()
     {
         $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithPrimitives::class);
         BeanFactoryRegistry::register($this->beanFactory);
@@ -527,5 +536,29 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         $bean = $this->beanFactory->get('serviceWithStringInjected');
         $this->assertInstanceOf(SampleService::class, $bean);
         $this->assertTrue(is_string($bean->test));
+    }
+
+    /**
+     * @test
+     * @dataProvider beannameProvider
+     */
+    public function retrievingBeanWithNormalizedBeanId($beanId, $beanType)
+    {
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithNormalizedIds::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean = $this->beanFactory->get($beanId);
+        $this->assertInstanceOf($beanType, $bean);
+    }
+
+    public function beannameProvider()
+    {
+        return [
+            ['\my\Custom\Namespace', SampleService::class],
+            ['my::Custom::Namespace', SampleService::class],
+            ['*myCustomNamespace*', SampleService::class],
+            ['Bean_With_Underscores', SampleService::class],
+            ['1Bean', SampleService::class],
+        ];
     }
 }

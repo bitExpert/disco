@@ -64,7 +64,8 @@ class AnnotationBeanFactory implements BeanFactory
     {
         $instance = null;
 
-        if ($this->has($id)) {
+        $id = $this->normalizeBeanId($id);
+        if ($this->beanIdExists($id)) {
             try {
                 $instance = call_user_func([$this->beanStore, $id]);
             } catch (\Throwable $e) {
@@ -90,7 +91,8 @@ class AnnotationBeanFactory implements BeanFactory
      */
     public function has($id)
     {
-        return is_callable([$this->beanStore, $id]);
+        $id = $this->normalizeBeanId($id);
+        return $this->beanIdExists($id);
     }
 
     /**
@@ -121,5 +123,41 @@ class AnnotationBeanFactory implements BeanFactory
     {
         $configFactory = new ConfigurationFactory($config);
         return $configFactory->createInstance($configClassName, $parameters);
+    }
+
+    /**
+     * Helper method to "normalize" bean identifiers. Since the bean identifier is basically a method name
+     * of the config class we can only support a subset of characters, namely alphabetic characters, digits
+     * and underscore.
+     *
+     * @param string $id
+     * @return string
+     */
+    protected function normalizeBeanId($id)
+    {
+        // filter out all invalid characters
+        $id = preg_replace('#[^a-zA-Z0-9_]#', '', $id);
+        // prepend underscore when first character is neither an alphabetic character nor a underscore
+        if (!preg_match('#^[a-zA-Z_]#', $id)) {
+            $id = '_' . $id;
+        }
+
+        return $id;
+    }
+
+    /**
+     * Returns true if the container can return an entry for the given identifier.
+     * Returns false otherwise. Expects $id to be normalized!
+     *
+     * @param string $id Identifier of the entry to look for.
+     * @return boolean
+     */
+    protected function beanIdExists($id)
+    {
+        if (empty($id) or !is_string($id)) {
+            return false;
+        }
+
+        return is_callable([$this->beanStore, $id]);
     }
 }
