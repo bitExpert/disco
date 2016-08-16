@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
 use bitExpert\Disco\Proxy\Configuration\BeanPostProcessorsProperty;
 use bitExpert\Disco\Proxy\Configuration\ParameterValuesProperty;
 use ProxyManager\Generator\MethodGenerator;
-use Zend\Code\Generator\ParameterGenerator;
 use ReflectionClass;
+use Zend\Code\Generator\ParameterGenerator;
 
 /**
  * `__construct` method for the generated config proxy class.
@@ -42,12 +42,14 @@ class Constructor extends MethodGenerator
         $parametersParameter = new ParameterGenerator('params');
         $parametersParameter->setDefaultValue([]);
 
-        $body = '$this->' . $parameterValuesProperty->getName() . ' = $' . $parametersParameter->getName() . ";\n";
-        $body .= '// register {@link \\bitExpert\\Disco\\BeanPostProcessor} instances' . "\n";
+        $body = '$this->' . $parameterValuesProperty->getName() . ' = $' . $parametersParameter->getName() . ';';
+        $body .= PHP_EOL;
+        $body .= '// register {@link \\bitExpert\\Disco\\BeanPostProcessor} instances' . PHP_EOL;
         $body .= '$this->' . $beanPostProcessorsProperty->getName() .
-            '[] = new \bitExpert\Disco\BeanFactoryPostProcessor();' . "\n";
+            '[] = new \bitExpert\Disco\BeanFactoryPostProcessor();' . PHP_EOL;
         foreach ($beanPostProcessorMethodNames as $methodName) {
-            $body .= '$this->' . $beanPostProcessorsProperty->getName() . '[] = $this->' . $methodName . '(); ' . "\n";
+            $body .= '$this->' . $beanPostProcessorsProperty->getName() . '[] = $this->' . $methodName . '(); ';
+            $body .= PHP_EOL;
         }
 
         $this->setParameter($parametersParameter);

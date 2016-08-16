@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace bitExpert\Disco\Proxy\LazyBean\MethodGenerator;
 
@@ -48,7 +48,7 @@ class MagicSleep extends MagicMethodGenerator
         $this->setBody(
             '$this->' . $initializer . ' && $this->' . $initializer
             . '->__invoke($this->' . $valueHolder . ', $this, \'__sleep\', array(), $this->'
-            . $initializer . ');' . "\n\n"
+            . $initializer . ');' . PHP_EOL . PHP_EOL
             . 'return array(' . var_export($valueHolderBeanId, true) . ');'
         );
     }

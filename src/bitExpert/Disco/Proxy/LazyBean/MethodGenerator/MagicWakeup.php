@@ -43,11 +43,11 @@ class MagicWakeup extends MagicMethodGenerator
         $valueHolderBeanId = $valueHolderBeanIdProperty->getName();
 
         $this->setBody(
-            '$beanFactory = \\' . BeanFactoryRegistry::class . '::getInstance();' . "\n\n"
-            . '$this->' . $valueHolder . ' = $beanFactory->get($this->' . $valueHolderBeanId . ');' . "\n"
-            . 'if ($this->' . $valueHolder . ' instanceof \\' . VirtualProxyInterface::class . ') {' . "\n"
-            . '    $this->' . $valueHolder . ' = $this->' . $valueHolder . '->getWrappedValueHolderValue();' . "\n"
-            . '}' . "\n"
+            '$beanFactory = \\' . BeanFactoryRegistry::class . '::getInstance();' . PHP_EOL . PHP_EOL
+            . '$this->' . $valueHolder . ' = $beanFactory->get($this->' . $valueHolderBeanId . ');' . PHP_EOL
+            . 'if ($this->' . $valueHolder . ' instanceof \\' . VirtualProxyInterface::class . ') {' . PHP_EOL
+            . '    $this->' . $valueHolder . ' = $this->' . $valueHolder . '->getWrappedValueHolderValue();' . PHP_EOL
+            . '}' . PHP_EOL
         );
     }
 }
