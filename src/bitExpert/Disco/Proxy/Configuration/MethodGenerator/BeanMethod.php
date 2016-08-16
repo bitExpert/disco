@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
@@ -19,8 +19,8 @@ use bitExpert\Disco\InitializedBean;
 use bitExpert\Disco\Proxy\Configuration\BeanPostProcessorsProperty;
 use bitExpert\Disco\Proxy\Configuration\ForceLazyInitProperty;
 use ProxyManager\Generator\MethodGenerator;
-use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
+use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Reflection\MethodReflection;
 
 /**
@@ -83,91 +83,120 @@ class BeanMethod extends MethodGenerator
         $methodParamTpl = implode(', ', $methodParamTpl);
 
         $body = '';
-        if ($methodAnnotation->isSingleton()) {
-            $padding = '    ';
-            $body .= 'static $instance = null;' . "\n\n";
-            $body .= 'if ($instance === null) {' . "\n";
-        }
 
-        if ($methodAnnotation->isSession()) {
-            $body .= $padding . 'if(isset($this->sessionBeans["' . $methodName . '"])) {' . "\n";
+        if (in_array($beanType, ['array', 'callable', 'bool', 'float', 'int', 'string'])) {
+            // return type is a primitive, simply call parent method and return immediately.
+            $body .= $padding . 'return parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
+        } elseif (class_exists($beanType) || interface_exists($beanType)) {
+            // return type is either class or interface
             if ($methodAnnotation->isSingleton()) {
-                $body .= $padding . '    $instance = $this->sessionBeans["' . $methodName . '"];' . "\n";
+                $padding = '    ';
+                $body .= 'static $instance = null;' . "\n\n";
+                $body .= 'if ($instance === null) {' . "\n";
+            }
+
+            if ($methodAnnotation->isSession()) {
+                $body .= $padding . 'if(isset($this->sessionBeans["' . $methodName . '"])) {' . "\n";
+                if ($methodAnnotation->isSingleton()) {
+                    $body .= $padding . '    $instance = $this->sessionBeans["' . $methodName . '"];' . "\n";
+                } else {
+                    $body .= $padding . '    return $this->sessionBeans["' . $methodName . '"];' . "\n";
+                }
+                $body .= $padding . '}' . "\n\n";
+            }
+
+            // Sessionbeans "force" their dependencies to be lazy proxies
+            if ($methodAnnotation->isSession()) {
+                $body .= $padding . '$this->' . $forceLazyInitProperty->getName() . ' = true;' . "\n";
+            }
+
+            if ($methodAnnotation->isLazy()) {
+                $ipadding = $padding . '    ';
+                $body .= $padding . '$factory     = new \bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory("' .
+                    $methodName . '");' . "\n";
+                $body .= $padding . '$initializer = function (& $wrappedObject, '.
+                    '\ProxyManager\Proxy\LazyLoadingInterface $proxy, $method, array $parameters, & $initializer) {' .
+                    "\n";
+                $body .= $ipadding . '$initializer   = null;' . "\n";
+                $body .= $ipadding . 'try {' . "\n";
+                $body .= $ipadding . '    $wrappedObject = parent::' . $methodName . '(' . $methodParamTpl . ');' .
+                    "\n";
+                $body .= static::generateBeanInitCode(
+                    $ipadding,
+                    'wrappedObject',
+                    $methodName,
+                    $beanType,
+                    $postProcessorsProperty
+                );
+                $body .= $ipadding . '} catch (\Throwable $e) {' . "\n";
+                $body .= $ipadding . '    $message = sprintf(' . "\n";
+                $body .= $ipadding . '        \'Exception occured while instanciating "' . $methodName . '": %s\',' .
+                    "\n";
+                $body .= $ipadding . '        $e->getMessage()' . "\n";
+                $body .= $ipadding . '    );' . "\n";
+                $body .= $ipadding . '    throw new \bitExpert\Disco\BeanException($message, 0, $e);' . "\n";
+                $body .= $ipadding . '}' . "\n";
+                $body .= $ipadding . 'return true;' . "\n";
+                $body .= $padding . '};' . "\n\n";
+                $body .= $padding . '$instance = $factory->createProxy("' . $beanType . '", $initializer);' . "\n\n";
             } else {
-                $body .= $padding . '    return $this->sessionBeans["' . $methodName . '"];' . "\n";
+                $ipadding = $padding;
+                if ($methodAnnotation->isSingleton()) {
+                    $ipadding .= $padding;
+                    $body .= $padding . 'if ($instance === null) {' . "\n";
+                }
+
+                $body .= $ipadding . '$instance = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
+                $body .= static::generateBeanInitCode(
+                    $ipadding,
+                    'instance',
+                    $methodName,
+                    $beanType,
+                    $postProcessorsProperty
+                );
+
+                if ($methodAnnotation->isSingleton()) {
+                    $body .= $padding . '}' . "\n";
+                }
             }
-            $body .= $padding . '}' . "\n\n";
-        }
 
-        // Sessionbeans "force" their dependencies to be lazy proxies
-        if ($methodAnnotation->isSession()) {
-            $body .= $padding . '$this->' . $forceLazyInitProperty->getName() . ' = true;' . "\n";
-        }
+            if ($methodAnnotation->isSession()) {
+                $body .= $padding . '$this->' . $forceLazyInitProperty->getName() . ' = false;' . "\n";
+            }
 
-        if ($methodAnnotation->isLazy()) {
-            $ipadding = $padding . '    ';
-            $body .= $padding . '$factory     = new \\bitExpert\\Disco\\Proxy\\LazyBean\\LazyBeanFactory("' .
-                $methodName . '");' . "\n";
-            $body .= $padding . '$initializer = function (& $wrappedObject, ' .
-                '\\ProxyManager\\Proxy\\LazyLoadingInterface $proxy, $method, array $parameters, & $initializer) {' .
-                "\n";
-            $body .= $ipadding . '$initializer   = null;' . "\n";
-            $body .= $ipadding . 'try {' . "\n";
-            $body .= $ipadding . '    $wrappedObject = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
-            $body .= static::genInitCode($ipadding, 'wrappedObject', $methodName, $beanType, $postProcessorsProperty);
-            $body .= $ipadding . '} catch (\Throwable $e) {' . "\n";
-            $body .= $ipadding . '    $message = sprintf(' . "\n";
-            $body .= $ipadding . '        \'Exception occured while instanciating "'.$methodName.'": %s\',' . "\n";
-            $body .= $ipadding . '        $e->getMessage()' . "\n";
-            $body .= $ipadding . '    );' . "\n";
-            $body .= $ipadding . '    throw new \bitExpert\Disco\BeanException($message, 0, $e);' . "\n";
-            $body .= $ipadding . '}' . "\n";
-            $body .= $ipadding . 'return true;' . "\n";
-            $body .= $padding . '};' . "\n\n";
-            $body .= $padding . '$instance = $factory->createProxy("' . $beanType . '", $initializer);' . "\n\n";
+            if ($methodAnnotation->isSingleton()) {
+                $body .= '}' . "\n";
+            }
+
+            if ($methodAnnotation->isSession()) {
+                $body .= '$this->sessionBeans["' . $methodName . '"] = $instance;' . "\n\n";
+            }
+
+            $body .= "\n" . 'if ($this->' . $forceLazyInitProperty->getName() . ') {' . "\n";
+            $body .= '    if ($instance instanceof \\ProxyManager\\Proxy\\VirtualProxyInterface) {' . "\n";
+            $body .= '        return $instance;' . "\n";
+            $body .= '    }' . "\n\n";
+            $body .= '    $factory     = new \\bitExpert\\Disco\\Proxy\\LazyBean\\LazyBeanFactory("' . $methodName .
+                '");' . "\n";
+            $body .= '    $initializer = function (& $wrappedObject, \\ProxyManager\\Proxy\\LazyLoadingInterface ' .
+                ' $proxy, $method, array $parameters, & $initializer) use ($instance) {' . "\n";
+            $body .= '        $initializer   = null;' . "\n";
+            $body .= '        $wrappedObject = $instance;' . "\n";
+            $body .= '        return true;' . "\n";
+            $body .= '    };' . "\n\n";
+            $body .= '    return $factory->createProxy("' . $beanType . '", $initializer);' . "\n";
+            $body .= '}' . "\n\n";
+
+            $body .= 'return $instance;' . "\n";
         } else {
-            $ipadding = $padding;
-            if ($methodAnnotation->isSingleton()) {
-                $ipadding .= $padding;
-                $body .= $padding . 'if ($instance === null) {' . "\n";
-            }
-
-            $body .= $ipadding . '$instance = parent::' . $methodName . '(' . $methodParamTpl . ');' . "\n";
-            $body .= static::genInitCode($ipadding, 'instance', $methodName, $beanType, $postProcessorsProperty);
-
-            if ($methodAnnotation->isSingleton()) {
-                $body .= $padding . '}' . "\n";
-            }
+            // return type is unknown, throw an exception
+            $body .= $padding . '$message = sprintf(' . "\n";
+            $body .= $padding . '    \'Either return type declaration missing or unkown for bean with id "'
+                . $methodName . '": %s\',' . "\n";
+            $body .= $padding . '    $e->getMessage()' . "\n";
+            $body .= $padding . ');' . "\n";
+            $body .= $padding . 'throw new \bitExpert\Disco\BeanException($message, 0, $e);' . "\n";
         }
-
-        if ($methodAnnotation->isSession()) {
-            $body .= $padding . '$this->' . $forceLazyInitProperty->getName() . ' = false;' . "\n";
-        }
-
-        if ($methodAnnotation->isSingleton()) {
-            $body .= '}' . "\n";
-        }
-
-        if ($methodAnnotation->isSession()) {
-            $body .= '$this->sessionBeans["' . $methodName . '"] = $instance;' . "\n\n";
-        }
-
-        $body .= "\n" . 'if ($this->' . $forceLazyInitProperty->getName() . ') {' . "\n";
-        $body .= '    if ($instance instanceof \\ProxyManager\\Proxy\\VirtualProxyInterface) {' . "\n";
-        $body .= '        return $instance;' . "\n";
-        $body .= '    }' . "\n\n";
-        $body .= '    $factory     = new \\bitExpert\\Disco\\Proxy\\LazyBean\\LazyBeanFactory("' . $methodName .
-            '");' . "\n";
-        $body .= '    $initializer = function (& $wrappedObject, \\ProxyManager\\Proxy\\LazyLoadingInterface ' .
-            ' $proxy, $method, array $parameters, & $initializer) use ($instance) {' . "\n";
-        $body .= '        $initializer   = null;' . "\n";
-        $body .= '        $wrappedObject = $instance;' . "\n";
-        $body .= '        return true;' . "\n";
-        $body .= '    };' . "\n\n";
-        $body .= '    return $factory->createProxy("' . $beanType . '", $initializer);' . "\n";
-        $body .= '}' . "\n\n";
-
-        $body .= 'return $instance;' . "\n";
 
         $method->setBody($body);
         $method->setDocBlock('{@inheritDoc}');
@@ -245,7 +274,7 @@ class BeanMethod extends MethodGenerator
      * @param BeanPostProcessorsProperty $postProcessorsProperty
      * @return string
      */
-    private static function genInitCode(
+    protected static function generateBeanInitCode(
         $padding,
         $beanVar,
         $beanName,
