@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
-use bitExpert\Disco\Proxy\Configuration\SessionBeansProperty;
+use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
 use ProxyManager\Generator\MagicMethodGenerator;
 use ReflectionClass;
 

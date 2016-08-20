@@ -12,8 +12,8 @@ declare(strict_types = 1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
-use bitExpert\Disco\Proxy\Configuration\BeanPostProcessorsProperty;
-use bitExpert\Disco\Proxy\Configuration\ParameterValuesProperty;
+use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProperty;
+use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ParameterValuesProperty;
 use ProxyManager\Generator\MethodGenerator;
 use ReflectionClass;
 use Zend\Code\Generator\ParameterGenerator;

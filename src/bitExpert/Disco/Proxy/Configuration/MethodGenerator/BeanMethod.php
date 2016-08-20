@@ -16,8 +16,8 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Parameter;
 use bitExpert\Disco\Annotations\Parameters;
 use bitExpert\Disco\InitializedBean;
-use bitExpert\Disco\Proxy\Configuration\BeanPostProcessorsProperty;
-use bitExpert\Disco\Proxy\Configuration\ForceLazyInitProperty;
+use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProperty;
+use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ForceLazyInitProperty;
 use ProxyManager\Generator\MethodGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
 use Zend\Code\Generator\ParameterGenerator;
@@ -32,7 +32,7 @@ use Zend\Code\Reflection\MethodReflection;
 class BeanMethod extends MethodGenerator
 {
     /**
-     * Generates a bean creation method.
+     * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanMethod}.
      *
      * @param MethodReflection $originalMethod
      * @param Bean $methodAnnotation
@@ -41,8 +41,7 @@ class BeanMethod extends MethodGenerator
      * @param ForceLazyInitProperty $forceLazyInitProperty
      * @param BeanPostProcessorsProperty $postProcessorsProperty
      * @param $beanType
-     * @return MethodGenerator|static
-     * @internal param SessionBeansProperty $sessionBeansProperty
+     * @return MethodGenerator
      */
     public static function generateMethod(
         MethodReflection $originalMethod,
@@ -103,10 +102,8 @@ class BeanMethod extends MethodGenerator
                     $body .= $padding . '    return $this->sessionBeans["' . $methodName . '"];' . PHP_EOL;
                 }
                 $body .= $padding . '}' . PHP_EOL . PHP_EOL;
-            }
 
-            // Sessionbeans "force" their dependencies to be lazy proxies
-            if ($methodAnnotation->isSession()) {
+                // Sessionbeans "force" their dependencies to be lazy proxies
                 $body .= $padding . '$this->' . $forceLazyInitProperty->getName() . ' = true;' . PHP_EOL;
             }
 

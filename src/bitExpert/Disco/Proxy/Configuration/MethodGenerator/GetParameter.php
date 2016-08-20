@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
-use bitExpert\Disco\Proxy\Configuration\ParameterValuesProperty;
+use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ParameterValuesProperty;
 use ProxyManager\Generator\MethodGenerator;
 use Zend\Code\Generator\ParameterGenerator;
 use ReflectionClass;
@@ -23,7 +23,7 @@ use ReflectionClass;
 class GetParameter extends MethodGenerator
 {
     /**
-     * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\ParameterValue}.
+     * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\GetParameter}.
      *
      * @param ReflectionClass $originalClass
      * @param ParameterValuesProperty $parameterValueProperty

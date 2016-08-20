@@ -10,24 +10,24 @@
  */
 declare(strict_types=1);
 
-namespace bitExpert\Disco\Proxy\Configuration;
+namespace bitExpert\Disco\Proxy\LazyBean\PropertyGenerator;
 
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
 use Zend\Code\Generator\PropertyGenerator;
 
 /**
- * Private property to store alias lookups for the bean instances.
+ * Property that contains the beanId of the wrapped value object.
  */
-class AliasesProperty extends PropertyGenerator
+class ValueHolderBeanIdProperty extends PropertyGenerator
 {
     /**
-     * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\AliasesProperty}.
+     * Creates a new {@link \bitExpert\Disco\Proxy\LazyBean\PropertyGenerator\ValueHolderBeanIdProperty}
      */
     public function __construct()
     {
-        parent::__construct(UniqueIdentifierGenerator::getIdentifier('aliases'));
+        parent::__construct(UniqueIdentifierGenerator::getIdentifier('valueHolderBeanId'));
 
         $this->setVisibility(self::VISIBILITY_PRIVATE);
-        $this->setDocBlock('@var array contains a list of aliases and their bean references');
+        $this->setDocBlock('@var \\string beanId');
     }
 }

@@ -15,6 +15,7 @@ namespace bitExpert\Disco\Proxy\LazyBean;
 use bitExpert\Disco\Proxy\LazyBean\MethodGenerator\Constructor;
 use bitExpert\Disco\Proxy\LazyBean\MethodGenerator\MagicSleep;
 use bitExpert\Disco\Proxy\LazyBean\MethodGenerator\MagicWakeup;
+use bitExpert\Disco\Proxy\LazyBean\PropertyGenerator\ValueHolderBeanIdProperty;
 use ProxyManager\Generator\Util\ClassGeneratorUtils;
 use ProxyManager\Proxy\VirtualProxyInterface;
 use ProxyManager\ProxyGenerator\Assertion\CanProxyAssertion;
@@ -48,6 +49,7 @@ class LazyBeanGenerator implements ProxyGeneratorInterface
 {
     /**
      * {@inheritDoc}
+     * @throws \Zend\Code\Generator\Exception\InvalidArgumentException
      */
     public function generate(ReflectionClass $originalClass, ClassGenerator $classGenerator)
     {

@@ -13,7 +13,7 @@ declare(strict_types = 1);
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
 use bitExpert\Disco\BeanNotFoundException;
-use bitExpert\Disco\Proxy\Configuration\AliasesProperty;
+use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\AliasesProperty;
 use ProxyManager\Generator\MethodGenerator;
 use ReflectionClass;
 use Zend\Code\Generator\ParameterGenerator;

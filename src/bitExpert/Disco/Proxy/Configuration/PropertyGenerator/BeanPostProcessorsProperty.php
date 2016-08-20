@@ -10,7 +10,7 @@
  */
 declare(strict_types=1);
 
-namespace bitExpert\Disco\Proxy\Configuration;
+namespace bitExpert\Disco\Proxy\Configuration\PropertyGenerator;
 
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
 use Zend\Code\Generator\PropertyGenerator;
@@ -21,7 +21,7 @@ use Zend\Code\Generator\PropertyGenerator;
 class BeanPostProcessorsProperty extends PropertyGenerator
 {
     /**
-     * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\ForceLazyInitProperty}.
+     * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProperty}.
      */
     public function __construct()
     {
