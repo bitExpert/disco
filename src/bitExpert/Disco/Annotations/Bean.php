@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
+use Doctrine\Common\Annotations\Annotation\Attribute;
+use Doctrine\Common\Annotations\Annotation\Attributes;
 use Doctrine\Common\Annotations\AnnotationException;
 
 /**
@@ -21,6 +23,7 @@ use Doctrine\Common\Annotations\AnnotationException;
  *   @Attribute("scope", type = "string"),
  *   @Attribute("singleton", type = "bool"),
  *   @Attribute("lazy", type = "bool"),
+ *   @Attribute("alias", type = "string"),
  * })
  */
 class Bean
@@ -52,6 +55,7 @@ class Bean
         $this->scope = self::SCOPE_REQUEST;
         $this->singleton = true;
         $this->lazy = false;
+        $this->alias = '';
 
         if (isset($attributes['value'])) {
             if (isset($attributes['value']['scope']) && (strtolower($attributes['value']['scope']) === 'session')) {
@@ -64,6 +68,10 @@ class Bean
 
             if (isset($attributes['value']['lazy'])) {
                 $this->lazy = $this->parseBooleanValue($attributes['value']['lazy']);
+            }
+
+            if (isset($attributes['value']['alias'])) {
+                $this->alias = $attributes['value']['alias'];
             }
         }
     }
@@ -106,6 +114,15 @@ class Bean
     public function isLazy() : bool
     {
         return $this->lazy;
+    }
+
+    /**
+     * Returns the alias for the bean instance. Returns an empty string when no alias was set.
+     * @return string
+     */
+    public function getAlias(): string
+    {
+        return $this->alias;
     }
 
     /**
