@@ -15,7 +15,7 @@ namespace bitExpert\Disco;
 use bitExpert\Disco\Config\BeanConfiguration;
 use bitExpert\Disco\Config\BeanConfigurationSubclass;
 use bitExpert\Disco\Config\BeanConfigurationTrait;
-use bitExpert\Disco\Config\BeanConfigurationWithNormalizedIds;
+use bitExpert\Disco\Config\BeanConfigurationWithAliases;
 use bitExpert\Disco\Config\BeanConfigurationWithParameterizedPostProcessor;
 use bitExpert\Disco\Config\BeanConfigurationWithParameters;
 use bitExpert\Disco\Config\BeanConfigurationWithPostProcessor;
@@ -540,25 +540,37 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @dataProvider beannameProvider
+     * @dataProvider beanAliasProvider
      */
-    public function retrievingBeanWithNormalizedBeanId($beanId, $beanType)
+    public function retrievingBeanByAlias($beanId, $beanType)
     {
-        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithNormalizedIds::class);
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithAliases::class);
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get($beanId);
         $this->assertInstanceOf($beanType, $bean);
     }
 
-    public function beannameProvider()
+    /**
+     * @test
+     */
+    public function retrievingProtectedBeanByAlias()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithAliases::class);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $this->assertFalse($this->beanFactory->has('internalServiceWithAlias'));
+        $this->assertTrue($this->beanFactory->has('aliasIsPublicForInternalService'));
+        $this->assertInstanceOf(SampleService::class, $this->beanFactory->get('aliasIsPublicForInternalService'));
+    }
+
+    public function beanAliasProvider()
     {
         return [
             ['\my\Custom\Namespace', SampleService::class],
             ['my::Custom::Namespace', SampleService::class],
-            ['*myCustomNamespace*', SampleService::class],
-            ['Bean_With_Underscores', SampleService::class],
-            ['1Bean', SampleService::class],
+            ['Alias_With_Underscore', SampleService::class],
+            ['123456', SampleService::class],
         ];
     }
 }

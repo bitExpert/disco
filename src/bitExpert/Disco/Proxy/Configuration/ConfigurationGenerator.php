@@ -18,7 +18,9 @@ use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Annotations\Parameters;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanMethod;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\Constructor;
+use bitExpert\Disco\Proxy\Configuration\MethodGenerator\GetAlias;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\GetParameter;
+use bitExpert\Disco\Proxy\Configuration\MethodGenerator\HasAlias;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\MagicSleep;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -78,6 +80,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $sessionBeansProperty = new SessionBeansProperty();
         $postProcessorsProperty = new BeanPostProcessorsProperty();
         $parameterValuesProperty = new ParameterValuesProperty();
+        $aliasesProperty = new AliasesProperty();
         $getParameterMethod = new GetParameter($originalClass, $parameterValuesProperty);
 
         try {
@@ -96,12 +99,15 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         }
 
         $classGenerator->setExtendedClass($originalClass->getName());
+        $classGenerator->setImplementedInterfaces([AliasContainerInterface::class]);
         $classGenerator->addPropertyFromGenerator($forceLazyInitProperty);
         $classGenerator->addPropertyFromGenerator($sessionBeansProperty);
         $classGenerator->addPropertyFromGenerator($postProcessorsProperty);
         $classGenerator->addPropertyFromGenerator($parameterValuesProperty);
+        $classGenerator->addPropertyFromGenerator($aliasesProperty);
 
         $postProcessorMethods = [];
+        $aliases = [];
         $methods = $originalClass->getMethods(ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED);
         foreach ($methods as $method) {
             if (null !== $this->reader->getMethodAnnotation($method, BeanPostProcessor::class)) {
@@ -119,6 +125,11 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                         $originalClass->getName()
                     )
                 );
+            }
+
+            // if alias is defined append it to the aliases list
+            if ($beanAnnotation->getAlias() !== '' && !isset($aliases[$beanAnnotation->getAlias()])) {
+                $aliases[$beanAnnotation->getAlias()] = $method->getName();
             }
 
             /* @var \bitExpert\Disco\Annotations\Parameters $parametersAnnotation */
@@ -168,6 +179,8 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             $classGenerator->addMethodFromGenerator($proxyMethod);
         }
 
+        $aliasesProperty->setDefaultValue($aliases);
+
         $classGenerator->addMethodFromGenerator(
             new Constructor(
                 $originalClass,
@@ -181,6 +194,18 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             new MagicSleep(
                 $originalClass,
                 $sessionBeansProperty
+            )
+        );
+        $classGenerator->addMethodFromGenerator(
+            new GetAlias(
+                $originalClass,
+                $aliasesProperty
+            )
+        );
+        $classGenerator->addMethodFromGenerator(
+            new HasAlias(
+                $originalClass,
+                $aliasesProperty
             )
         );
     }
