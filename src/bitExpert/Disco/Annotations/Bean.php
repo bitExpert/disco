@@ -26,7 +26,7 @@ use Doctrine\Common\Annotations\AnnotationException;
  *   @Attribute("alias", type = "string"),
  * })
  */
-class Bean
+final class Bean
 {
     const SCOPE_REQUEST = 1;
     const SCOPE_SESSION = 2;

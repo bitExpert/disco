@@ -25,7 +25,7 @@ use Doctrine\Common\Annotations\AnnotationException;
  *   @Attribute("required", type = "bool")
  * })
  */
-class Parameter
+final class Parameter
 {
     /**
      * @var string

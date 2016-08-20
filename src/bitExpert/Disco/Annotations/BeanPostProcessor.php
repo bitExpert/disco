@@ -16,6 +16,6 @@ namespace bitExpert\Disco\Annotations;
  * @Annotation
  * @Target({"METHOD"})
  */
-class BeanPostProcessor
+final class BeanPostProcessor
 {
 }

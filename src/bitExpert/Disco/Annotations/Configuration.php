@@ -16,6 +16,6 @@ namespace bitExpert\Disco\Annotations;
  * @Annotation
  * @Target({"CLASS"})
  */
-class Configuration
+final class Configuration
 {
 }
