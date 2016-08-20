@@ -42,6 +42,10 @@ class Bean
      * @var bool
      */
     protected $lazy;
+    /**
+     * @var string
+     */
+    protected $alias;
 
     /**
      * Creates a new {@link \bitExpert\Disco\Annotations\Bean}.
@@ -131,7 +135,7 @@ class Bean
      * @param string|bool $value
      * @return bool
      */
-    protected function parseBooleanValue($value)
+    protected function parseBooleanValue($value) : bool
     {
         if (is_bool($value)) {
             return $value;
