@@ -25,14 +25,14 @@ class MagicSleep extends MagicMethodGenerator
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\MagicSleep}.
      *
      * @param ReflectionClass $originalClass
-     * @param SessionBeansProperty $sessionBeansProperty
+     * @param SessionBeansProperty $aliasesProperty
      */
-    public function __construct(ReflectionClass $originalClass, SessionBeansProperty $sessionBeansProperty)
+    public function __construct(ReflectionClass $originalClass, SessionBeansProperty $aliasesProperty)
     {
         parent::__construct($originalClass, '__sleep');
 
         $this->setBody(
-            'return ["' . $sessionBeansProperty->getName() . '"];'
+            'return ["' . $aliasesProperty->getName() . '"];'
         );
     }
 }

@@ -28,6 +28,7 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($bean->isSession());
         $this->assertTrue($bean->isSingleton());
         $this->assertFalse($bean->isLazy());
+        $this->assertEmpty($bean->getAlias());
     }
 
     /**
@@ -170,5 +171,15 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
         $bean = new Bean(['value' => ['lazy' => 0]]);
 
         $this->assertFalse($bean->isLazy());
+    }
+
+    /**
+     * @test
+     */
+    public function aliasingBean()
+    {
+        $bean = new Bean(['value' => ['alias' => 'someAlias']]);
+
+        $this->assertSame($bean->getAlias(), 'someAlias');
     }
 }
