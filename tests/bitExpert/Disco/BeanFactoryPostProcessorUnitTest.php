@@ -29,11 +29,11 @@ class BeanFactoryPostProcessorUnitTest extends \PHPUnit_Framework_TestCase
         $service = new BeanFactoryAwareService();
 
         // un-setting the BeanFactory instance stored in the BeanFactoryRegistry
-        $reflection = new ReflectionProperty(\bitExpert\Disco\BeanFactoryRegistry::class, 'beanFactory');
+        $reflection = new ReflectionProperty(BeanFactoryRegistry::class, 'beanFactory');
         $reflection->setAccessible(true);
         $reflection->setValue(null);
 
         $processor->postProcess($service, 'BeanFactoryAwareService');
-        $this->assertNull($service->getBeanFactory());
+        self::assertNull($service->getBeanFactory());
     }
 }

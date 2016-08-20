@@ -66,7 +66,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function checkForExistingBeanReturnsTrue()
     {
-        $this->assertTrue($this->beanFactory->has('nonSingletonNonLazyRequestBean'));
+        self::assertTrue($this->beanFactory->has('nonSingletonNonLazyRequestBean'));
     }
 
     /**
@@ -74,7 +74,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function checkForBeanWithEmptyIdReturnsFalse()
     {
-        $this->assertFalse($this->beanFactory->has(''));
+        self::assertFalse($this->beanFactory->has(''));
     }
 
     /**
@@ -82,7 +82,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function checkForNonExistingBeanReturnsFalse()
     {
-        $this->assertFalse($this->beanFactory->has('serviceWhichDoesNotExist'));
+        self::assertFalse($this->beanFactory->has('serviceWhichDoesNotExist'));
     }
 
     /**
@@ -93,7 +93,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         $bean = $this->beanFactory->get('nonSingletonNonLazyRequestBean');
         $bean2 = $this->beanFactory->get('nonSingletonNonLazyRequestBean');
 
-        $this->assertNotSame($bean, $bean2);
+        self::assertNotSame($bean, $bean2);
     }
 
     /**
@@ -107,9 +107,9 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         $bean->initializeProxy();
         $bean2->initializeProxy();
 
-        $this->assertInstanceOf(ValueHolderInterface::class, $bean);
-        $this->assertInstanceOf(ValueHolderInterface::class, $bean2);
-        $this->assertNotSame($bean->getWrappedValueHolderValue(), $bean2->getWrappedValueHolderValue());
+        self::assertInstanceOf(ValueHolderInterface::class, $bean);
+        self::assertInstanceOf(ValueHolderInterface::class, $bean2);
+        self::assertNotSame($bean->getWrappedValueHolderValue(), $bean2->getWrappedValueHolderValue());
     }
 
     /**
@@ -123,9 +123,9 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         $bean->initializeProxy();
         $bean2->initializeProxy();
 
-        $this->assertInstanceOf(ValueHolderInterface::class, $bean);
-        $this->assertInstanceOf(ValueHolderInterface::class, $bean2);
-        $this->assertSame($bean->getWrappedValueHolderValue(), $bean2->getWrappedValueHolderValue());
+        self::assertInstanceOf(ValueHolderInterface::class, $bean);
+        self::assertInstanceOf(ValueHolderInterface::class, $bean2);
+        self::assertSame($bean->getWrappedValueHolderValue(), $bean2->getWrappedValueHolderValue());
     }
 
     /**
@@ -135,7 +135,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = $this->beanFactory->get('singletonNonLazySessionBean');
 
-        $this->assertInstanceOf(VirtualProxyInterface::class, $bean->service);
+        self::assertInstanceOf(VirtualProxyInterface::class, $bean->service);
     }
 
     /**
@@ -147,7 +147,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         $bean = $this->beanFactory->get('singletonNonLazySessionBean');
 
         $bean->service->initializeProxy();
-        $this->assertSame($dependency, $bean->service->getWrappedValueHolderValue());
+        self::assertSame($dependency, $bean->service->getWrappedValueHolderValue());
     }
 
     /**
@@ -165,9 +165,9 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         $beanAfter = $this->beanFactory->get('singletonNonLazySessionBean');
         $beanAfter->service->initializeProxy();
 
-        $this->assertSame($beanBefore, $beanAfter);
-        $this->assertSame($dependency, $beanBefore->service->getWrappedValueHolderValue());
-        $this->assertSame($dependency, $beanAfter->service->getWrappedValueHolderValue());
+        self::assertSame($beanBefore, $beanAfter);
+        self::assertSame($dependency, $beanBefore->service->getWrappedValueHolderValue());
+        self::assertSame($dependency, $beanAfter->service->getWrappedValueHolderValue());
     }
 
     /**
@@ -176,11 +176,11 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
     public function initializedBeanHookGetsCalledOnlyWhenBeanGetsCreated()
     {
         $bean = $this->beanFactory->get('singletonInitializedService');
-        $this->assertEquals(1, $bean->postInitCnt);
+        self::assertEquals(1, $bean->postInitCnt);
 
         // pulling the dependency a second time does not trigger the postInitialization() call!
         $bean = $this->beanFactory->get('singletonInitializedService');
-        $this->assertEquals(1, $bean->postInitCnt);
+        self::assertEquals(1, $bean->postInitCnt);
     }
 
     /**
@@ -189,11 +189,11 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
     public function initializedBeanHookGetsCalledOnlyWhenLazyBeanGetsCreated()
     {
         $bean = $this->beanFactory->get('singletonLazyInitializedService');
-        $this->assertEquals(1, $bean->postInitCnt);
+        self::assertEquals(1, $bean->postInitCnt);
 
         // pulling the dependency a second time does not trigger the postInitialization() call!
         $bean = $this->beanFactory->get('singletonLazyInitializedService');
-        $this->assertEquals(1, $bean->postInitCnt);
+        self::assertEquals(1, $bean->postInitCnt);
     }
 
     /**
@@ -205,7 +205,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('nonSingletonNonLazyRequestBean');
-        $this->assertEquals('postProcessed', $bean->test);
+        self::assertEquals('postProcessed', $bean->test);
     }
 
     /**
@@ -217,7 +217,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('nonSingletonLazyRequestBean');
-        $this->assertEquals('postProcessed', $bean->test);
+        self::assertEquals('postProcessed', $bean->test);
     }
 
     /**
@@ -230,7 +230,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 
         /** @var BeanFactoryAwareService $bean */
         $bean = $this->beanFactory->get('beanFactoryAwareBean');
-        $this->assertInstanceOf(BeanFactory::class, $bean->getBeanFactory());
+        self::assertInstanceOf(BeanFactory::class, $bean->getBeanFactory());
     }
 
     /**
@@ -246,8 +246,8 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 
         /** @var SampleService $bean */
         $bean = $this->beanFactory->get('nonSingletonNonLazyRequestBean');
-        $this->assertInstanceOf(stdClass::class, $bean->test);
-        $this->assertEquals('injectedValue', $bean->test->property);
+        self::assertInstanceOf(stdClass::class, $bean->test);
+        self::assertEquals('injectedValue', $bean->test->property);
     }
 
     /**
@@ -262,7 +262,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('sampleServiceWithParam');
-        $this->assertEquals('injectedValue', $bean->test);
+        self::assertEquals('injectedValue', $bean->test);
     }
 
     /**
@@ -284,7 +284,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('sampleServiceWithNestedParamKey');
-        $this->assertEquals('injectedValue', $bean->test);
+        self::assertEquals('injectedValue', $bean->test);
     }
 
     /**
@@ -308,7 +308,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('sampleServiceWithoutRequiredParam');
-        $this->assertNull($bean->test);
+        self::assertNull($bean->test);
     }
 
     /**
@@ -320,7 +320,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('sampleServiceWithParamDefaultValue');
-        $this->assertEquals('myDefaultValue', $bean->test);
+        self::assertEquals('myDefaultValue', $bean->test);
     }
 
     /**
@@ -332,7 +332,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('singletonNonLazySessionBeanInSubclass');
-        $this->assertInstanceOf(MasterService::class, $bean);
+        self::assertInstanceOf(MasterService::class, $bean);
     }
 
     /**
@@ -344,7 +344,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('nonSingletonNonLazyRequestBeanInTrait');
-        $this->assertInstanceOf(SampleService::class, $bean);
+        self::assertInstanceOf(SampleService::class, $bean);
     }
 
     /**
@@ -358,7 +358,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         $bean1 = $this->beanFactory->get('masterServiceWithSingletonDependency');
         $bean2 = $this->beanFactory->get('masterServiceWithSingletonDependency');
 
-        $this->assertSame($bean1->service, $bean2->service);
+        self::assertSame($bean1->service, $bean2->service);
     }
 
     /**
@@ -372,7 +372,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         $bean1 = $this->beanFactory->get('masterServiceWithNonSingletonDependency');
         $bean2 = $this->beanFactory->get('masterServiceWithNonSingletonDependency');
 
-        $this->assertNotSame($bean1->service, $bean2->service);
+        self::assertNotSame($bean1->service, $bean2->service);
     }
     /**
      * @test
@@ -382,7 +382,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithProtectedMethod::class);
         BeanFactoryRegistry::register($this->beanFactory);
 
-        $this->assertFalse($this->beanFactory->has('singletonDependency'));
+        self::assertFalse($this->beanFactory->has('singletonDependency'));
     }
 
     /**
@@ -398,8 +398,9 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $autoloaderFunctionsAfterBeanFactoryInit = spl_autoload_functions();
-        $this->assertTrue(
-            count($autoloaderFunctionsBeforeBeanFactoryInit) + 1 === count($autoloaderFunctionsAfterBeanFactoryInit)
+        self::assertCount(
+            count($autoloaderFunctionsBeforeBeanFactoryInit) + 1,
+            $autoloaderFunctionsAfterBeanFactoryInit
         );
     }
 
@@ -462,7 +463,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('arrayPrimitive');
-        $this->assertTrue(is_array($bean));
+        self::assertTrue(is_array($bean));
     }
 
     /**
@@ -474,7 +475,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('callablePrimitive');
-        $this->assertTrue(is_callable($bean));
+        self::assertTrue(is_callable($bean));
     }
 
     /**
@@ -486,7 +487,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('boolPrimitive');
-        $this->assertTrue(is_bool($bean));
+        self::assertTrue(is_bool($bean));
     }
 
     /**
@@ -498,7 +499,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('floatPrimitive');
-        $this->assertTrue(is_float($bean));
+        self::assertTrue(is_float($bean));
     }
 
     /**
@@ -510,7 +511,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('intPrimitive');
-        $this->assertTrue(is_int($bean));
+        self::assertTrue(is_int($bean));
     }
 
     /**
@@ -522,7 +523,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('stringPrimitive');
-        $this->assertTrue(is_string($bean));
+        self::assertTrue(is_string($bean));
     }
 
     /**
@@ -534,8 +535,8 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get('serviceWithStringInjected');
-        $this->assertInstanceOf(SampleService::class, $bean);
-        $this->assertTrue(is_string($bean->test));
+        self::assertInstanceOf(SampleService::class, $bean);
+        self::assertTrue(is_string($bean->test));
     }
 
     /**
@@ -548,7 +549,7 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         $bean = $this->beanFactory->get($beanId);
-        $this->assertInstanceOf($beanType, $bean);
+        self::assertInstanceOf($beanType, $bean);
     }
 
     /**
@@ -559,9 +560,9 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithAliases::class);
         BeanFactoryRegistry::register($this->beanFactory);
 
-        $this->assertFalse($this->beanFactory->has('internalServiceWithAlias'));
-        $this->assertTrue($this->beanFactory->has('aliasIsPublicForInternalService'));
-        $this->assertInstanceOf(SampleService::class, $this->beanFactory->get('aliasIsPublicForInternalService'));
+        self::assertFalse($this->beanFactory->has('internalServiceWithAlias'));
+        self::assertTrue($this->beanFactory->has('aliasIsPublicForInternalService'));
+        self::assertInstanceOf(SampleService::class, $this->beanFactory->get('aliasIsPublicForInternalService'));
     }
 
     public function beanAliasProvider()

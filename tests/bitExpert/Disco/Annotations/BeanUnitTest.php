@@ -24,11 +24,11 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean();
 
-        $this->assertTrue($bean->isRequest());
-        $this->assertFalse($bean->isSession());
-        $this->assertTrue($bean->isSingleton());
-        $this->assertFalse($bean->isLazy());
-        $this->assertEmpty($bean->getAlias());
+        self::assertTrue($bean->isRequest());
+        self::assertFalse($bean->isSession());
+        self::assertTrue($bean->isSingleton());
+        self::assertFalse($bean->isLazy());
+        self::assertEmpty($bean->getAlias());
     }
 
     /**
@@ -38,8 +38,8 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['scope' => 'session']]);
 
-        $this->assertTrue($bean->isSession());
-        $this->assertFalse($bean->isRequest());
+        self::assertTrue($bean->isSession());
+        self::assertFalse($bean->isRequest());
     }
 
     /**
@@ -49,8 +49,8 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['scope' => 'request']]);
 
-        $this->assertTrue($bean->isRequest());
-        $this->assertFalse($bean->isSession());
+        self::assertTrue($bean->isRequest());
+        self::assertFalse($bean->isSession());
     }
 
     /**
@@ -60,7 +60,7 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['singleton' => true]]);
 
-        $this->assertTrue($bean->isSingleton());
+        self::assertTrue($bean->isSingleton());
     }
 
     /**
@@ -70,7 +70,7 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['singleton' => 'true']]);
 
-        $this->assertTrue($bean->isSingleton());
+        self::assertTrue($bean->isSingleton());
     }
 
     /**
@@ -80,7 +80,7 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['singleton' => 1]]);
 
-        $this->assertTrue($bean->isSingleton());
+        self::assertTrue($bean->isSingleton());
     }
 
     /**
@@ -90,7 +90,7 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['singleton' => false]]);
 
-        $this->assertFalse($bean->isSingleton());
+        self::assertFalse($bean->isSingleton());
     }
 
     /**
@@ -100,7 +100,7 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['singleton' => 'false']]);
 
-        $this->assertFalse($bean->isSingleton());
+        self::assertFalse($bean->isSingleton());
     }
 
     /**
@@ -110,7 +110,7 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['singleton' => 0]]);
 
-        $this->assertFalse($bean->isSingleton());
+        self::assertFalse($bean->isSingleton());
     }
 
     /**
@@ -120,7 +120,7 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['lazy' => true]]);
 
-        $this->assertTrue($bean->isLazy());
+        self::assertTrue($bean->isLazy());
     }
 
     /**
@@ -130,7 +130,7 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['lazy' => 'true']]);
 
-        $this->assertTrue($bean->isLazy());
+        self::assertTrue($bean->isLazy());
     }
 
     /**
@@ -140,7 +140,7 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['lazy' => 1]]);
 
-        $this->assertTrue($bean->isLazy());
+        self::assertTrue($bean->isLazy());
     }
 
     /**
@@ -150,7 +150,7 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['lazy' => false]]);
 
-        $this->assertFalse($bean->isLazy());
+        self::assertFalse($bean->isLazy());
     }
 
     /**
@@ -160,7 +160,7 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['lazy' => 'false']]);
 
-        $this->assertFalse($bean->isLazy());
+        self::assertFalse($bean->isLazy());
     }
 
     /**
@@ -170,7 +170,7 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['lazy' => 0]]);
 
-        $this->assertFalse($bean->isLazy());
+        self::assertFalse($bean->isLazy());
     }
 
     /**
@@ -180,6 +180,6 @@ class BeanUnitTest extends \PHPUnit_Framework_TestCase
     {
         $bean = new Bean(['value' => ['alias' => 'someAlias']]);
 
-        $this->assertSame($bean->getAlias(), 'someAlias');
+        self::assertSame($bean->getAlias(), 'someAlias');
     }
 }

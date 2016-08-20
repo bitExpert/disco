@@ -37,7 +37,7 @@ class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
     {
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
 
-        $this->assertSame(sys_get_temp_dir(), $config->getProxyTargetDir());
+        self::assertSame(sys_get_temp_dir(), $config->getProxyTargetDir());
     }
 
     /**
@@ -49,8 +49,8 @@ class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
 
         /** @var FilesystemCache $annotationCache */
         $annotationCache = $config->getAnnotationCache();
-        $this->assertInstanceOf(FilesystemCache::class, $annotationCache);
-        $this->assertSame(sys_get_temp_dir(), $annotationCache->getDirectory());
+        self::assertInstanceOf(FilesystemCache::class, $annotationCache);
+        self::assertSame(sys_get_temp_dir(), $annotationCache->getDirectory());
     }
 
     /**
@@ -61,7 +61,7 @@ class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
         $config = new BeanFactoryConfiguration(sys_get_temp_dir(), null, new VoidCache());
 
         $annotationCache = $config->getAnnotationCache();
-        $this->assertInstanceOf(VoidCache::class, $annotationCache);
+        self::assertInstanceOf(VoidCache::class, $annotationCache);
     }
 
     /**
@@ -72,18 +72,18 @@ class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
         $config = new BeanFactoryConfiguration(sys_get_temp_dir(), new EvaluatingGeneratorStrategy());
 
         $proxyGeneratorStrategy = $config->getProxyGeneratorStrategy();
-        $this->assertInstanceOf(EvaluatingGeneratorStrategy::class, $proxyGeneratorStrategy);
+        self::assertInstanceOf(EvaluatingGeneratorStrategy::class, $proxyGeneratorStrategy);
     }
 
     /**
      * @test
      * @dataProvider proxyAutoloaderFlags
      */
-    public function configuredProxyAutoloaderFlagCanBeRetrieved($autoloadConfig)
+    public function configuredProxyAutoloaderFlagCanBeRetrieved(bool $autoloadConfig)
     {
         $config = new BeanFactoryConfiguration(sys_get_temp_dir(), null, null, $autoloadConfig);
 
-        $this->assertSame($autoloadConfig, $config->useProxyAutoloader());
+        self::assertSame($autoloadConfig, $config->useProxyAutoloader());
     }
 
     public function proxyAutoloaderFlags()

@@ -33,7 +33,7 @@ class ParameterUnitTest extends \PHPUnit_Framework_TestCase
     {
         $parameter = new Parameter(['value' => ['name' => 'myParam']]);
 
-        $this->assertSame('myParam', $parameter->getName());
+        self::assertSame('myParam', $parameter->getName());
     }
 
     /**
@@ -43,7 +43,7 @@ class ParameterUnitTest extends \PHPUnit_Framework_TestCase
     {
         $parameter = new Parameter(['value' => ['name' => 'myParam']]);
 
-        $this->assertNull($parameter->getDefaultValue());
+        self::assertNull($parameter->getDefaultValue());
     }
 
     /**
@@ -54,7 +54,7 @@ class ParameterUnitTest extends \PHPUnit_Framework_TestCase
     {
         $parameter = new Parameter(['value' => ['name' => 'myParam', 'default' => $defaultValue]]);
 
-        $this->assertSame($defaultValue, $parameter->getDefaultValue());
+        self::assertSame($defaultValue, $parameter->getDefaultValue());
     }
 
     public function defaultValueDataProvider()

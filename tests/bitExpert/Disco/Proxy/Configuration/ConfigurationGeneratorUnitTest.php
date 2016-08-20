@@ -101,7 +101,7 @@ class ConfigurationGeneratorUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function parsingConfigurationWithoutAnyErrorsSucceeds()
     {
-        $this->classGenerator->expects($this->any())
+        $this->classGenerator->expects(static::any())
             ->method('addMethodFromGenerator');
 
         $reflClass = new \ReflectionClass(BeanConfiguration::class);
