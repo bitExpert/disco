@@ -16,6 +16,7 @@ use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProp
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ParameterValuesProperty;
 use ProxyManager\Generator\MethodGenerator;
 use ReflectionClass;
+use Zend\Code\Generator\Exception\InvalidArgumentException;
 use Zend\Code\Generator\ParameterGenerator;
 
 /**
@@ -30,6 +31,7 @@ class Constructor extends MethodGenerator
      * @param BeanPostProcessorsProperty $beanPostProcessorsProperty
      * @param string[] $beanPostProcessorMethodNames
      * @param ParameterValuesProperty $parameterValuesProperty
+     * @throws InvalidArgumentException
      */
     public function __construct(
         ReflectionClass $originalClass,

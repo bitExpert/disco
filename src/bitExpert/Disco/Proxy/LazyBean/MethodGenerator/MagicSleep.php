@@ -14,6 +14,7 @@ namespace bitExpert\Disco\Proxy\LazyBean\MethodGenerator;
 
 use ProxyManager\Generator\MagicMethodGenerator;
 use ReflectionClass;
+use Zend\Code\Generator\Exception\InvalidArgumentException;
 use Zend\Code\Generator\PropertyGenerator;
 
 /**
@@ -32,6 +33,7 @@ class MagicSleep extends MagicMethodGenerator
      * @param PropertyGenerator $initializerProperty
      * @param PropertyGenerator $valueHolderProperty
      * @param PropertyGenerator $valueHolderBeanIdProperty
+     * @throws InvalidArgumentException
      */
     public function __construct(
         ReflectionClass $originalClass,

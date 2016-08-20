@@ -16,6 +16,7 @@ use bitExpert\Disco\BeanFactoryRegistry;
 use ProxyManager\Generator\MagicMethodGenerator;
 use ProxyManager\Proxy\VirtualProxyInterface;
 use ReflectionClass;
+use Zend\Code\Generator\Exception\InvalidArgumentException;
 use Zend\Code\Generator\PropertyGenerator;
 
 /**
@@ -31,6 +32,7 @@ class MagicWakeup extends MagicMethodGenerator
      * @param ReflectionClass $originalClass
      * @param PropertyGenerator $valueHolderProperty
      * @param PropertyGenerator $valueHolderBeanIdProperty
+     * @throws InvalidArgumentException
      */
     public function __construct(
         ReflectionClass $originalClass,

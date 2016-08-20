@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Proxy\Configuration\PropertyGenerator;
 
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
+use Zend\Code\Generator\Exception\InvalidArgumentException;
 use Zend\Code\Generator\PropertyGenerator;
 
 /**
@@ -24,6 +25,8 @@ class ForceLazyInitProperty extends PropertyGenerator
 {
     /**
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ForceLazyInitProperty}.
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct()
     {

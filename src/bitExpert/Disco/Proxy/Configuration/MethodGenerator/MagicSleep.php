@@ -15,6 +15,7 @@ namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
 use ProxyManager\Generator\MagicMethodGenerator;
 use ReflectionClass;
+use Zend\Code\Generator\Exception\InvalidArgumentException;
 
 /**
  * `__sleep` method for the generated config proxy class.
@@ -26,6 +27,7 @@ class MagicSleep extends MagicMethodGenerator
      *
      * @param ReflectionClass $originalClass
      * @param SessionBeansProperty $aliasesProperty
+     * @throws InvalidArgumentException
      */
     public function __construct(ReflectionClass $originalClass, SessionBeansProperty $aliasesProperty)
     {

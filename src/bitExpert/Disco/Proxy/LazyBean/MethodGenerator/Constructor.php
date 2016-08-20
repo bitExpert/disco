@@ -15,6 +15,7 @@ namespace bitExpert\Disco\Proxy\LazyBean\MethodGenerator;
 use ProxyManager\Generator\MethodGenerator;
 use ReflectionClass;
 use ReflectionProperty;
+use Zend\Code\Generator\Exception\InvalidArgumentException;
 use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Generator\PropertyGenerator;
 
@@ -29,6 +30,7 @@ class Constructor extends MethodGenerator
      * @param ReflectionClass $originalClass
      * @param PropertyGenerator $initializerProperty
      * @param PropertyGenerator $valueHolderBeanIdProperty
+     * @throws InvalidArgumentException
      */
     public function __construct(
         ReflectionClass $originalClass,

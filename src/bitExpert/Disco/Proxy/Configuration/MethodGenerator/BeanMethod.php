@@ -207,7 +207,7 @@ class BeanMethod extends MethodGenerator
      *
      * {@inheritDoc}
      */
-    public static function fromReflection(MethodReflection $reflectionMethod) : \ProxyManager\Generator\MethodGenerator
+    public static function fromReflection(MethodReflection $reflectionMethod) : MethodGenerator
     {
         /* @var $method self */
         $method = new static();
@@ -273,12 +273,12 @@ class BeanMethod extends MethodGenerator
      * @return string
      */
     protected static function generateBeanInitCode(
-        $padding,
-        $beanVar,
-        $beanName,
-        $beanType,
+        string $padding,
+        string $beanVar,
+        string $beanName,
+        string $beanType,
         BeanPostProcessorsProperty $postProcessorsProperty
-    ) {
+    ) : string {
         $body = $padding . 'if ($' . $beanVar . ' instanceof \\' . InitializedBean::class . ') {' . PHP_EOL;
         $body .= $padding . '    $' . $beanVar . '->postInitialization();' . PHP_EOL;
         $body .= $padding . '}' . PHP_EOL . PHP_EOL;

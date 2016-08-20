@@ -16,6 +16,7 @@ use bitExpert\Disco\BeanNotFoundException;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\AliasesProperty;
 use ProxyManager\Generator\MethodGenerator;
 use ReflectionClass;
+use Zend\Code\Generator\Exception\InvalidArgumentException;
 use Zend\Code\Generator\ParameterGenerator;
 
 /**
@@ -28,6 +29,7 @@ class GetAlias extends MethodGenerator
      *
      * @param ReflectionClass $originalClass
      * @param AliasesProperty $aliasesProperty
+     * @throws InvalidArgumentException
      */
     public function __construct(ReflectionClass $originalClass, AliasesProperty $aliasesProperty)
     {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Proxy\LazyBean\PropertyGenerator;
 
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
+use Zend\Code\Generator\Exception\InvalidArgumentException;
 use Zend\Code\Generator\PropertyGenerator;
 
 /**
@@ -21,7 +22,9 @@ use Zend\Code\Generator\PropertyGenerator;
 class ValueHolderBeanIdProperty extends PropertyGenerator
 {
     /**
-     * Creates a new {@link \bitExpert\Disco\Proxy\LazyBean\PropertyGenerator\ValueHolderBeanIdProperty}
+     * Creates a new {@link \bitExpert\Disco\Proxy\LazyBean\PropertyGenerator\ValueHolderBeanIdProperty}.
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct()
     {

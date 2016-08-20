@@ -39,6 +39,7 @@ use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 use ReflectionClass;
 use ReflectionMethod;
 use Zend\Code\Generator\ClassGenerator;
+use Zend\Code\Generator\Exception\InvalidArgumentException;
 use Zend\Code\Reflection\MethodReflection;
 
 /**
@@ -75,6 +76,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
     /**
      * {@inheritDoc}
      * @throws InvalidProxiedClassException
+     * @throws InvalidArgumentException
      */
     public function generate(ReflectionClass $originalClass, ClassGenerator $classGenerator)
     {
