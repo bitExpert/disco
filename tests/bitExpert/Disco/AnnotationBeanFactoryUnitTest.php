@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace bitExpert\Disco;
 
 use bitExpert\Disco\Config\BeanConfiguration;
+use bitExpert\Disco\Config\BeanConfigurationPersistence;
 use bitExpert\Disco\Config\BeanConfigurationSubclass;
 use bitExpert\Disco\Config\BeanConfigurationTrait;
 use bitExpert\Disco\Config\BeanConfigurationWithAliases;
@@ -25,8 +26,12 @@ use bitExpert\Disco\Config\WrongReturnTypeConfiguration;
 use bitExpert\Disco\Helper\BeanFactoryAwareService;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
-use ProxyManager\FileLocator\FileLocator;
+use org\bovigo\vfs\vfsStream;
+use ProxyManager\Autoloader\Autoloader;
+use ProxyManager\Configuration;
+use ProxyManager\FileLocator\FileLocatorInterface;
 use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
+use ProxyManager\Inflector\ClassNameInflector;
 use ProxyManager\Proxy\ValueHolderInterface;
 use ProxyManager\Proxy\VirtualProxyInterface;
 use stdClass;
@@ -168,6 +173,33 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         self::assertSame($beanBefore, $beanAfter);
         self::assertSame($dependency, $beanBefore->service->getWrappedValueHolderValue());
         self::assertSame($dependency, $beanAfter->service->getWrappedValueHolderValue());
+    }
+
+    /**
+     * @test
+     */
+    public function beanFactoryCanBePersistedOnDisk()
+    {
+        $rootDir = vfsStream::setup('disco');
+        $locator = $this->createMock(FileLocatorInterface::class);
+        $locator->method('getProxyFileName')
+            ->willReturn($rootDir->url() . DIRECTORY_SEPARATOR . 'cache.php');
+        $loader = new Autoloader($locator, new ClassNameInflector(Configuration::DEFAULT_PROXY_NAMESPACE));
+        $strategy = new FileWriterGeneratorStrategy($locator);
+
+        $config = new BeanFactoryConfiguration($rootDir->url(), $strategy, null, $loader);
+        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationPersistence::class, [], $config);
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $beanBefore = $this->beanFactory->get('sampleService');
+
+        $serialized = serialize($this->beanFactory);
+        $this->beanFactory = unserialize($serialized);
+
+        $beanAfter = $this->beanFactory->get('sampleService');
+
+        self::assertSame($beanBefore, $beanAfter);
+        self::assertTrue($rootDir->hasChild('cache.php'));
     }
 
     /**
@@ -383,25 +415,6 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
         BeanFactoryRegistry::register($this->beanFactory);
 
         self::assertFalse($this->beanFactory->has('singletonDependency'));
-    }
-
-    /**
-     * @test
-     */
-    public function enablingProxyAutoloaderRegistersAdditionalAutoloader()
-    {
-        $useProxyAutoloader = true;
-        $autoloaderFunctionsBeforeBeanFactoryInit = spl_autoload_functions();
-
-        $beanFactoryConfig = new BeanFactoryConfiguration(sys_get_temp_dir(), null, null, $useProxyAutoloader);
-        $this->beanFactory = new AnnotationBeanFactory(BeanConfiguration::class, [], $beanFactoryConfig);
-        BeanFactoryRegistry::register($this->beanFactory);
-
-        $autoloaderFunctionsAfterBeanFactoryInit = spl_autoload_functions();
-        self::assertCount(
-            count($autoloaderFunctionsBeforeBeanFactoryInit) + 1,
-            $autoloaderFunctionsAfterBeanFactoryInit
-        );
     }
 
     /**

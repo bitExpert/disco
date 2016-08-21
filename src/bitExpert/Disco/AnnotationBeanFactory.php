@@ -31,10 +31,6 @@ class AnnotationBeanFactory implements BeanFactory
      */
     protected $parameters;
     /**
-     * @var BeanFactoryConfiguration
-     */
-    protected $config;
-    /**
      * @var AliasContainerInterface
      */
     protected $beanStore;
@@ -50,9 +46,9 @@ class AnnotationBeanFactory implements BeanFactory
     {
         $this->configClassName = $configClassName;
         $this->parameters = $parameters;
-        $this->config = $config;
 
-        $this->__wakeup();
+        $configFactory = new ConfigurationFactory($config);
+        $this->beanStore = $configFactory->createInstance($configClassName, $parameters);
     }
 
     /**
@@ -102,28 +98,6 @@ class AnnotationBeanFactory implements BeanFactory
      */
     public function __sleep()
     {
-        return ['configClassName', 'parameters', 'config'];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function __wakeup()
-    {
-        $this->beanStore = $this->initBeanStore($this->configClassName, $this->parameters, $this->config);
-    }
-
-    /**
-     * Returns an instance of the given $configClassName.
-     *
-     * @param $configClassName
-     * @param array $parameters
-     * @param BeanFactoryConfiguration $config
-     * @return object
-     */
-    protected function initBeanStore($configClassName, array $parameters, BeanFactoryConfiguration $config = null)
-    {
-        $configFactory = new ConfigurationFactory($config);
-        return $configFactory->createInstance($configClassName, $parameters);
+        return ['configClassName', 'parameters', 'beanStore'];
     }
 }
