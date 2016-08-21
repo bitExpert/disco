@@ -14,7 +14,13 @@ namespace bitExpert\Disco;
 
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\FilesystemCache;
+use ProxyManager\Autoloader\Autoloader;
+use ProxyManager\Autoloader\AutoloaderInterface;
+use ProxyManager\Configuration;
+use ProxyManager\FileLocator\FileLocator;
+use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
 use ProxyManager\GeneratorStrategy\GeneratorStrategyInterface;
+use ProxyManager\Inflector\ClassNameInflector;
 
 /**
  * BeanFactory configuration class.
@@ -36,9 +42,9 @@ class BeanFactoryConfiguration
      */
     protected $annotationCache;
     /**
-     * @var bool
+     * @var AutoloaderInterface
      */
-    protected $useProxyAutoloader;
+    protected $proxyAutoloader;
 
     /**
      * Creates a new {@link \bitExpert\Disco\BeanFactoryConfiguration}.
@@ -46,14 +52,14 @@ class BeanFactoryConfiguration
      * @param string $proxyTargetDir
      * @param GeneratorStrategyInterface|null $proxyGeneratorStrategy
      * @param Cache|null $annotationCache
-     * @param bool $useProxyAutoloader
+     * @param AutoloaderInterface $proxyAutoloader
      * @throws \InvalidArgumentException
      */
     public function __construct(
         $proxyTargetDir,
         GeneratorStrategyInterface $proxyGeneratorStrategy = null,
         Cache $annotationCache = null,
-        $useProxyAutoloader = false
+        AutoloaderInterface $proxyAutoloader = null
     ) {
         if (!is_dir($proxyTargetDir)) {
             throw new \InvalidArgumentException(
@@ -77,10 +83,14 @@ class BeanFactoryConfiguration
             $annotationCache = new FilesystemCache($proxyTargetDir);
         }
 
+        if ($proxyAutoloader !== null) {
+            spl_autoload_register($proxyAutoloader);
+        }
+
         $this->proxyTargetDir = $proxyTargetDir;
         $this->proxyGeneratorStrategy = $proxyGeneratorStrategy;
         $this->annotationCache = $annotationCache;
-        $this->useProxyAutoloader = (bool) $useProxyAutoloader;
+        $this->proxyAutoloader = $proxyAutoloader;
     }
 
     /**
@@ -116,14 +126,42 @@ class BeanFactoryConfiguration
     }
 
     /**
-     * Returns true if ProxyManager should set a custom autoloader to speed up the processing of the bean configuration.
-     * Returns false if the custom autoloader should not get loaded. Not using the autoloader will have a massive
-     * impact on performance!
+     * Returns the {@link \ProxyManager\Autoloader\AutoloaderInterface} that should be
+     * used by ProxyManager to load the generated classes.
      *
-     * @return bool
+     * @return AutoloaderInterface|null
      */
-    public function useProxyAutoloader() : bool
+    public function getProxyAutoloader()
     {
-        return $this->useProxyAutoloader;
+        return $this->proxyAutoloader;
+    }
+
+    /**
+     * Factory method to create a default {@link \Disco\BeanFactoryConfiguration} by simply
+     * providing a $cacheDir.
+     *
+     * @param string $cacheDir
+     * @return BeanFactoryConfiguration
+     * @throws \InvalidArgumentException
+     */
+    public static function getDefault(string $cacheDir) : self
+    {
+        try {
+            $annotationCache = new FilesystemCache($cacheDir);
+            $proxyFileLocator = new FileLocator($cacheDir);
+            $proxyWriterGenerator = new FileWriterGeneratorStrategy($proxyFileLocator);
+            $proxyAutoloader = new Autoloader(
+                $proxyFileLocator,
+                new ClassNameInflector(Configuration::DEFAULT_PROXY_NAMESPACE)
+            );
+
+            return new self($cacheDir, $proxyWriterGenerator, $annotationCache, $proxyAutoloader);
+        } catch (\Exception $e) {
+            throw new \InvalidArgumentException(
+                sprintf('The directory "%s" does not exist or is not writeable!', $cacheDir),
+                0,
+                $e
+            );
+        }
     }
 }

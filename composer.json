@@ -25,7 +25,8 @@
     "phpdocumentor/phpdocumentor": "v2.9.0",
     "monolog/monolog": "^1.21.0",
     "phing/phing": "^2.14.0",
-    "bitexpert/phing-securitychecker": "^0.2.1"
+    "bitexpert/phing-securitychecker": "^0.2.1",
+    "mikey179/vfsStream": "^1.6"
   },
   "autoload": {
     "psr-4": {

@@ -14,7 +14,12 @@ namespace bitExpert\Disco;
 
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\Common\Cache\VoidCache;
+use ProxyManager\Autoloader\Autoloader;
+use ProxyManager\Autoloader\AutoloaderInterface;
+use ProxyManager\FileLocator\FileLocator;
 use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
+use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
+use ProxyManager\Inflector\ClassNameInflector;
 
 /**
  * Unit test for {@link \bitExpert\Disco\BeanFactoryConfiguration}.
@@ -77,20 +82,43 @@ class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @dataProvider proxyAutoloaderFlags
      */
-    public function configuredProxyAutoloaderFlagCanBeRetrieved(bool $autoloadConfig)
+    public function configuredProxyAutoloaderInstanceCanBeRetrieved()
     {
-        $config = new BeanFactoryConfiguration(sys_get_temp_dir(), null, null, $autoloadConfig);
+        $autoloader = $this->createMock(AutoloaderInterface::class);
+        $config = new BeanFactoryConfiguration(sys_get_temp_dir(), null, null, $autoloader);
 
-        self::assertSame($autoloadConfig, $config->useProxyAutoloader());
+        self::assertSame($autoloader, $config->getProxyAutoloader());
     }
 
-    public function proxyAutoloaderFlags()
+    /**
+     * @test
+     */
+    public function enablingProxyAutoloaderRegistersAdditionalAutoloader()
     {
-        return [
-          [ true ],
-          [ false ]
-        ];
+        $autoloader = new Autoloader(new FileLocator(sys_get_temp_dir()), new ClassNameInflector('AUTOLOADER'));
+        $autoloaderFunctionsBeforeBeanFactoryInit = spl_autoload_functions();
+
+        $beanFactoryConfig = new BeanFactoryConfiguration(sys_get_temp_dir(), null, null, $autoloader);
+
+        $autoloaderFunctionsAfterBeanFactoryInit = spl_autoload_functions();
+        self::assertCount(
+            count($autoloaderFunctionsBeforeBeanFactoryInit) + 1,
+            $autoloaderFunctionsAfterBeanFactoryInit
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function getDefaultMethodReturnsConfiguredBeanFactoryConfiguration()
+    {
+        $config = BeanFactoryConfiguration::getDefault(sys_get_temp_dir());
+
+        self::assertInstanceOf(BeanFactoryConfiguration::class, $config);
+        self::assertSame(sys_get_temp_dir(), $config->getProxyTargetDir());
+        self::assertInstanceOf(FilesystemCache::class, $config->getAnnotationCache());
+        self::assertInstanceOf(FileWriterGeneratorStrategy::class, $config->getProxyGeneratorStrategy());
+        self::assertInstanceOf(Autoloader::class, $config->getProxyAutoloader());
     }
 }

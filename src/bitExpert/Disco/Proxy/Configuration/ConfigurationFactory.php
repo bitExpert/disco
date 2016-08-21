@@ -45,8 +45,8 @@ class ConfigurationFactory extends AbstractBaseFactory
                 $proxyManagerConfiguration->setGeneratorStrategy($config->getProxyGeneratorStrategy());
             }
 
-            if ($config->useProxyAutoloader()) {
-                spl_autoload_register($proxyManagerConfiguration->getProxyAutoloader());
+            if ($config->getProxyAutoloader()) {
+                $proxyManagerConfiguration->setProxyAutoloader($config->getProxyAutoloader());
             }
 
             $annotationCache = $config->getAnnotationCache();
