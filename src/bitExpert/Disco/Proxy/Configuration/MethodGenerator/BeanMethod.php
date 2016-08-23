@@ -18,6 +18,7 @@ use bitExpert\Disco\Annotations\Parameters;
 use bitExpert\Disco\InitializedBean;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ForceLazyInitProperty;
+use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
 use ProxyManager\Generator\MethodGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
 use Zend\Code\Generator\ParameterGenerator;
@@ -39,9 +40,10 @@ class BeanMethod extends MethodGenerator
      * @param Parameters $methodParameters
      * @param GetParameter $parameterValuesMethod
      * @param ForceLazyInitProperty $forceLazyInitProperty
+     * @param SessionBeansProperty $sessionBeansProperty
      * @param BeanPostProcessorsProperty $postProcessorsProperty
      * @param $beanType
-     * @return MethodGenerator
+     * @return BeanMethod|MethodGenerator
      */
     public static function generateMethod(
         MethodReflection $originalMethod,
@@ -49,6 +51,7 @@ class BeanMethod extends MethodGenerator
         Parameters $methodParameters,
         GetParameter $parameterValuesMethod,
         ForceLazyInitProperty $forceLazyInitProperty,
+        SessionBeansProperty $sessionBeansProperty,
         BeanPostProcessorsProperty $postProcessorsProperty,
         $beanType
     ) : self {
@@ -95,11 +98,14 @@ class BeanMethod extends MethodGenerator
             }
 
             if ($methodAnnotation->isSession()) {
-                $body .= $padding . 'if(isset($this->sessionBeans["' . $methodName . '"])) {' . PHP_EOL;
+                $body .= $padding . 'if(isset($this->'.$sessionBeansProperty->getName().'["' . $methodName . '"])) {' .
+                    PHP_EOL;
                 if ($methodAnnotation->isSingleton()) {
-                    $body .= $padding . '    $instance = $this->sessionBeans["' . $methodName . '"];' . PHP_EOL;
+                    $body .= $padding . '    $instance = $this->'.$sessionBeansProperty->getName().
+                        '["' . $methodName . '"];' . PHP_EOL;
                 } else {
-                    $body .= $padding . '    return $this->sessionBeans["' . $methodName . '"];' . PHP_EOL;
+                    $body .= $padding . '    return $this->'.$sessionBeansProperty->getName().
+                        '["' . $methodName . '"];' . PHP_EOL;
                 }
                 $body .= $padding . '}' . PHP_EOL . PHP_EOL;
 
@@ -167,7 +173,8 @@ class BeanMethod extends MethodGenerator
             }
 
             if ($methodAnnotation->isSession()) {
-                $body .= '$this->sessionBeans["' . $methodName . '"] = $instance;' . PHP_EOL . PHP_EOL;
+                $body .= '$this->'.$sessionBeansProperty->getName().'["' . $methodName . '"] = $instance;' .
+                    PHP_EOL . PHP_EOL;
             }
 
             $body .= PHP_EOL . 'if ($this->' . $forceLazyInitProperty->getName() . ') {' . PHP_EOL;
