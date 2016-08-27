@@ -12,8 +12,11 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco;
 
+use bitExpert\Disco\Store\BeanStore;
+use bitExpert\Disco\Store\SerializableBeanStore;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\FilesystemCache;
+use InvalidArgumentException;
 use ProxyManager\Autoloader\Autoloader;
 use ProxyManager\Autoloader\AutoloaderInterface;
 use ProxyManager\Configuration;
@@ -21,6 +24,7 @@ use ProxyManager\FileLocator\FileLocator;
 use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
 use ProxyManager\GeneratorStrategy\GeneratorStrategyInterface;
 use ProxyManager\Inflector\ClassNameInflector;
+use RuntimeException;
 
 /**
  * BeanFactory configuration class.
@@ -30,6 +34,14 @@ use ProxyManager\Inflector\ClassNameInflector;
 class BeanFactoryConfiguration
 {
     /**
+     * @var Cache
+     */
+    protected $annotationCache;
+    /**
+     * @var BeanStore
+     */
+    protected $beanStore;
+    /**
      * @var string
      */
     protected $proxyTargetDir;
@@ -37,10 +49,6 @@ class BeanFactoryConfiguration
      * @var GeneratorStrategyInterface
      */
     protected $proxyGeneratorStrategy;
-    /**
-     * @var Cache
-     */
-    protected $annotationCache;
     /**
      * @var AutoloaderInterface
      */
@@ -50,19 +58,52 @@ class BeanFactoryConfiguration
      * Creates a new {@link \bitExpert\Disco\BeanFactoryConfiguration}.
      *
      * @param string $proxyTargetDir
-     * @param GeneratorStrategyInterface|null $proxyGeneratorStrategy
-     * @param Cache|null $annotationCache
-     * @param AutoloaderInterface $proxyAutoloader
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
-    public function __construct(
-        $proxyTargetDir,
-        GeneratorStrategyInterface $proxyGeneratorStrategy = null,
-        Cache $annotationCache = null,
-        AutoloaderInterface $proxyAutoloader = null
-    ) {
+    public function __construct($proxyTargetDir) {
+        $proxyFileLocator = new FileLocator($proxyTargetDir);
+        $classNameInflector = new ClassNameInflector(Configuration::DEFAULT_PROXY_NAMESPACE);
+
+        $this->setProxyTargetDir($proxyTargetDir);
+        $this->setAnnotationCache(new FilesystemCache($proxyTargetDir));
+        $this->setBeanStore(new SerializableBeanStore());
+        $this->setProxyWriterGenerator(new FileWriterGeneratorStrategy($proxyFileLocator));
+        $this->setProxyAutoloader(new Autoloader($proxyFileLocator, $classNameInflector));
+    }
+
+    /**
+     * Sets the {@link \Doctrine\Common\Cache\Cache} to store the parsed annotation
+     * metadata in.
+     *
+     * @param Cache $annotationCache
+     */
+    public function setAnnotationCache(Cache $annotationCache)
+    {
+        $this->annotationCache = $annotationCache;
+    }
+
+    /**
+     * Sets the {@link \bitExpert\Disco\Store\BeanStore} instance used to store the
+     * session-aware beans.
+     *
+     * @param BeanStore $beanStore
+     */
+    public function setBeanStore(BeanStore $beanStore)
+    {
+        $this->beanStore = $beanStore;
+    }
+
+    /**
+     * Sets the directory in which ProxyManager will store the generated proxy classes in.
+     *
+     * @param string $proxyTargetDir
+     * @throws InvalidArgumentException
+     */
+    public function setProxyTargetDir(string $proxyTargetDir)
+    {
         if (!is_dir($proxyTargetDir)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'Proxy target directory "%s" does not exist!',
                     $proxyTargetDir
@@ -71,7 +112,7 @@ class BeanFactoryConfiguration
         }
 
         if (!is_writable($proxyTargetDir)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'Proxy target directory "%s" is not writeable!',
                     $proxyTargetDir
@@ -79,44 +120,71 @@ class BeanFactoryConfiguration
             );
         }
 
-        if ($annotationCache === null) {
-            $annotationCache = new FilesystemCache($proxyTargetDir);
-        }
-
-        if ($proxyAutoloader !== null) {
-            spl_autoload_register($proxyAutoloader);
-        }
-
         $this->proxyTargetDir = $proxyTargetDir;
-        $this->proxyGeneratorStrategy = $proxyGeneratorStrategy;
-        $this->annotationCache = $annotationCache;
-        $this->proxyAutoloader = $proxyAutoloader;
     }
 
     /**
-     * Returns the directory in which the ProxyManager will store the generated proxy classes.
-     *
-     * @return string
-     */
-    public function getProxyTargetDir() : string
-    {
-        return $this->proxyTargetDir;
-    }
-
-    /**
-     * Returns the {@link \ProxyManager\GeneratorStrategy\GeneratorStrategyInterface} which the
+     * Sets the {@link \ProxyManager\GeneratorStrategy\GeneratorStrategyInterface} which
      * ProxyManager will use the generate the proxy classes.
      *
-     * @return GeneratorStrategyInterface : null
+     * @param GeneratorStrategyInterface $writergenerator
      */
-    public function getProxyGeneratorStrategy()
+    public function setProxyWriterGenerator(GeneratorStrategyInterface $writergenerator)
     {
-        return $this->proxyGeneratorStrategy;
+        $this->proxyWriterGenerator = $writergenerator;
     }
 
     /**
-     * Returns the configured {@link \Doctrine\Common\Cache\Cache} to store the parsed
-     * annotation metadata in.
+     * Sets the {@link \ProxyManager\Autoloader\AutoloaderInterface} that should be
+     * used by ProxyManager to load the generated classes.
+     *
+     * @param AutoloaderInterface $autoloader
+     * @throws \RuntimeException
+     */
+    public function setProxyAutoloader(AutoloaderInterface $autoloader)
+    {
+        if ($this->proxyAutoloader instanceof AutoloaderInterface) {
+            if(!spl_autoload_unregister($this->proxyAutoloader)) {
+                throw new RuntimeException(
+                  sprintf('Cannot unregister autoloader "%s"', get_class($this->proxyAutoloader))
+                );
+            }
+        }
+
+        $this->proxyAutoloader = $autoloader;
+
+        if(!spl_autoload_register($this->proxyAutoloader, false)) {
+            throw new RuntimeException(
+                sprintf('Cannot register autoloader "%s"', get_class($this->proxyAutoloader))
+            );
+        }
+    }
+
+    /**
+     * Returns the ProxyManager configuration based on the current
+     * {@link \bitExpert\Disco\BeanFactoryConfiguration}.
+     *
+     * @return Configuration
+     */
+    public function getProxyManagerConfiguration() : Configuration
+    {
+        $proxyManagerConfiguration = new Configuration();
+        $proxyManagerConfiguration->setProxiesTargetDir($this->proxyTargetDir);
+
+        if ($this->proxyWriterGenerator instanceof GeneratorStrategyInterface) {
+            $proxyManagerConfiguration->setGeneratorStrategy($this->proxyWriterGenerator);
+        }
+
+        if ($this->proxyAutoloader instanceof AutoloaderInterface) {
+            $proxyManagerConfiguration->setProxyAutoloader($this->proxyAutoloader);
+        }
+
+        return $proxyManagerConfiguration;
+    }
+
+    /**
+     * Returns the configured {@link \Doctrine\Common\Cache\Cache} used to store
+     * the parsed annotation metadata in.
      *
      * @return Cache
      */
@@ -126,42 +194,13 @@ class BeanFactoryConfiguration
     }
 
     /**
-     * Returns the {@link \ProxyManager\Autoloader\AutoloaderInterface} that should be
-     * used by ProxyManager to load the generated classes.
+     * Returns the configured {@link \bitExpert\Disco\Store\BeanStore} used to store
+     * the session-aware beans in.
      *
-     * @return AutoloaderInterface|null
+     * @return BeanStore
      */
-    public function getProxyAutoloader()
+    public function getBeanStore() : BeanStore
     {
-        return $this->proxyAutoloader;
-    }
-
-    /**
-     * Factory method to create a default {@link \Disco\BeanFactoryConfiguration} by simply
-     * providing a $cacheDir.
-     *
-     * @param string $cacheDir
-     * @return BeanFactoryConfiguration
-     * @throws \InvalidArgumentException
-     */
-    public static function getDefault(string $cacheDir) : self
-    {
-        try {
-            $annotationCache = new FilesystemCache($cacheDir);
-            $proxyFileLocator = new FileLocator($cacheDir);
-            $proxyWriterGenerator = new FileWriterGeneratorStrategy($proxyFileLocator);
-            $proxyAutoloader = new Autoloader(
-                $proxyFileLocator,
-                new ClassNameInflector(Configuration::DEFAULT_PROXY_NAMESPACE)
-            );
-
-            return new self($cacheDir, $proxyWriterGenerator, $annotationCache, $proxyAutoloader);
-        } catch (\Exception $e) {
-            throw new \InvalidArgumentException(
-                sprintf('The directory "%s" does not exist or is not writeable!', $cacheDir),
-                0,
-                $e
-            );
-        }
+        return $this->beanStore;
     }
 }

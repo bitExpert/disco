@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco;
 
+use bitExpert\Disco\Store\SerializableBeanStore;
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\Common\Cache\VoidCache;
 use ProxyManager\Autoloader\Autoloader;
 use ProxyManager\Autoloader\AutoloaderInterface;
 use ProxyManager\FileLocator\FileLocator;
 use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
-use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
 use ProxyManager\Inflector\ClassNameInflector;
 
 /**
@@ -41,19 +41,21 @@ class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
     public function configuredProxyTargetDirCanBeRetrieved()
     {
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+        $proxyManagerConfig = $config->getProxyManagerConfiguration();
 
-        self::assertSame(sys_get_temp_dir(), $config->getProxyTargetDir());
+        self::assertSame(sys_get_temp_dir(), $proxyManagerConfig->getProxiesTargetDir());
     }
 
     /**
      * @test
      */
-    public function annotationCacheWillDefaultToProxyTargetDir()
+    public function defaultAnnotationCacheDirWillDefaultToProxyTargetDir()
     {
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
 
         /** @var FilesystemCache $annotationCache */
         $annotationCache = $config->getAnnotationCache();
+
         self::assertInstanceOf(FilesystemCache::class, $annotationCache);
         self::assertSame(sys_get_temp_dir(), $annotationCache->getDirectory());
     }
@@ -61,23 +63,42 @@ class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function customAnnotationCacheInstanceCanBeRetrieved()
+    public function customAnnotationCacheDirCanBeConfigured()
     {
-        $config = new BeanFactoryConfiguration(sys_get_temp_dir(), null, new VoidCache());
+        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+        $config->setAnnotationCache(new FilesystemCache(__DIR__));
+
+        /** @var FilesystemCache $annotationCache */
+        $annotationCache = $config->getAnnotationCache();
+
+        self::assertInstanceOf(FilesystemCache::class, $annotationCache);
+        self::assertSame(__DIR__, $annotationCache->getDirectory());
+    }
+
+    /**
+     * @test
+     */
+    public function configuredAnnotationCacheInstanceCanBeRetrieved()
+    {
+        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+        $config->setAnnotationCache(new VoidCache());
 
         $annotationCache = $config->getAnnotationCache();
+
         self::assertInstanceOf(VoidCache::class, $annotationCache);
     }
 
     /**
      * @test
      */
-    public function customGeneratorStrategyInstanceCanBeRetrieved()
+    public function configuredGeneratorStrategyInstanceCanBeRetrieved()
     {
-        $config = new BeanFactoryConfiguration(sys_get_temp_dir(), new EvaluatingGeneratorStrategy());
+        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+        $config->setProxyWriterGenerator(new EvaluatingGeneratorStrategy());
 
-        $proxyGeneratorStrategy = $config->getProxyGeneratorStrategy();
-        self::assertInstanceOf(EvaluatingGeneratorStrategy::class, $proxyGeneratorStrategy);
+        $proxyManagerConfig = $config->getProxyManagerConfiguration();
+
+        self::assertInstanceOf(EvaluatingGeneratorStrategy::class, $proxyManagerConfig->getGeneratorStrategy());
     }
 
     /**
@@ -86,9 +107,12 @@ class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
     public function configuredProxyAutoloaderInstanceCanBeRetrieved()
     {
         $autoloader = $this->createMock(AutoloaderInterface::class);
-        $config = new BeanFactoryConfiguration(sys_get_temp_dir(), null, null, $autoloader);
 
-        self::assertSame($autoloader, $config->getProxyAutoloader());
+        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+        $config->setProxyAutoloader($autoloader);
+        $proxyManagerConfig = $config->getProxyManagerConfiguration();
+
+        self::assertSame($autoloader, $proxyManagerConfig->getProxyAutoloader());
     }
 
     /**
@@ -97,11 +121,12 @@ class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
     public function enablingProxyAutoloaderRegistersAdditionalAutoloader()
     {
         $autoloader = new Autoloader(new FileLocator(sys_get_temp_dir()), new ClassNameInflector('AUTOLOADER'));
+
         $autoloaderFunctionsBeforeBeanFactoryInit = spl_autoload_functions();
-
-        $beanFactoryConfig = new BeanFactoryConfiguration(sys_get_temp_dir(), null, null, $autoloader);
-
+        $beanFactoryConfig = new BeanFactoryConfiguration(sys_get_temp_dir());
+        $beanFactoryConfig->setProxyAutoloader($autoloader);
         $autoloaderFunctionsAfterBeanFactoryInit = spl_autoload_functions();
+
         self::assertCount(
             count($autoloaderFunctionsBeforeBeanFactoryInit) + 1,
             $autoloaderFunctionsAfterBeanFactoryInit
@@ -111,14 +136,13 @@ class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function getDefaultMethodReturnsConfiguredBeanFactoryConfiguration()
+    public function configuredBeanStoreInstanceCanBererieved()
     {
-        $config = BeanFactoryConfiguration::getDefault(sys_get_temp_dir());
+        $beanStore = new SerializableBeanStore();
 
-        self::assertInstanceOf(BeanFactoryConfiguration::class, $config);
-        self::assertSame(sys_get_temp_dir(), $config->getProxyTargetDir());
-        self::assertInstanceOf(FilesystemCache::class, $config->getAnnotationCache());
-        self::assertInstanceOf(FileWriterGeneratorStrategy::class, $config->getProxyGeneratorStrategy());
-        self::assertInstanceOf(Autoloader::class, $config->getProxyAutoloader());
+        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+        $config->setBeanStore($beanStore);
+
+        self::assertSame($beanStore, $config->getBeanStore());
     }
 }
