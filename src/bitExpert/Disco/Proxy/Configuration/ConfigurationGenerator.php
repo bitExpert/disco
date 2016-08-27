@@ -180,6 +180,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 $parametersAnnotation,
                 $getParameterMethod,
                 $forceLazyInitProperty,
+                $sessionBeansProperty,
                 $postProcessorsProperty,
                 $beanType
             );
