@@ -238,14 +238,14 @@ Make sure to follow the hints on how to improve performance for [Doctrine Annota
 `\Doctrine\Common\Cache\Cache` implementation that suites your needs. To use a specific cache 
 implementation pass an instance of it to `\bitExpert\Disco\BeanFactoryConfiguration::construct()` as the third parameter.
 
-### ocramius/proxy-manager
+### ocramius/ProxyManager
 
 [ProxyManager](https://github.com/Ocramius/ProxyManager) also needs to be configured for faster performance. Read about the details [here](https://ocramius.github.io/ProxyManager/docs/tuning-for-production.html).
 
 For production mode you need to configure the `\ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy` 
 by passing an instance of it as second parameter to `\bitExpert\Disco\BeanFactoryConfiguration::construct()`.
 
-In addition to that enable the custom autoloader by setting the fourth parameter of `\bitExpert\Disco\BeanFactoryConfiguration::construct()` to `true` as this will significantly increase
+In addition to that enable the custom autoloader by passing an instance of `\ProxyManager\Autoloader\Autoloader` as fourth parameter of `\bitExpert\Disco\BeanFactoryConfiguration::construct()`. This will significantly increase
 the overall performance of Disco.
 
 When enabling the caching methods, make sure you regularly clean your cache storage directory after 
