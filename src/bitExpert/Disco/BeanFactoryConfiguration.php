@@ -46,7 +46,7 @@ class BeanFactoryConfiguration
     /**
      * @var GeneratorStrategyInterface
      */
-    protected $proxyGeneratorStrategy;
+    protected $proxyWriterGenerator;
     /**
      * @var AutoloaderInterface
      */
