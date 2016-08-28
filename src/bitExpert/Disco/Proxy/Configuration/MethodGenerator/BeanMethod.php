@@ -16,6 +16,7 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Parameter;
 use bitExpert\Disco\Annotations\Parameters;
 use bitExpert\Disco\InitializedBean;
+use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanFactoryConfigurationProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ForceLazyInitProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
@@ -42,6 +43,7 @@ class BeanMethod extends MethodGenerator
      * @param ForceLazyInitProperty $forceLazyInitProperty
      * @param SessionBeansProperty $sessionBeansProperty
      * @param BeanPostProcessorsProperty $postProcessorsProperty
+     * @param BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty
      * @param $beanType
      * @return BeanMethod|MethodGenerator
      */
@@ -53,6 +55,7 @@ class BeanMethod extends MethodGenerator
         ForceLazyInitProperty $forceLazyInitProperty,
         SessionBeansProperty $sessionBeansProperty,
         BeanPostProcessorsProperty $postProcessorsProperty,
+        BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty,
         $beanType
     ) : self {
         /* @var $method self */
@@ -98,14 +101,14 @@ class BeanMethod extends MethodGenerator
             }
 
             if ($methodAnnotation->isSession()) {
-                $body .= $padding . 'if(isset($this->'.$sessionBeansProperty->getName().'["' . $methodName . '"])) {' .
+                $body .= $padding . 'if($this->'.$sessionBeansProperty->getName().'->has("' . $methodName . '")) {' .
                     PHP_EOL;
                 if ($methodAnnotation->isSingleton()) {
                     $body .= $padding . '    $instance = $this->'.$sessionBeansProperty->getName().
-                        '["' . $methodName . '"];' . PHP_EOL;
+                        '->get("' . $methodName . '");' . PHP_EOL;
                 } else {
                     $body .= $padding . '    return $this->'.$sessionBeansProperty->getName().
-                        '["' . $methodName . '"];' . PHP_EOL;
+                        '->get("' . $methodName . '");' . PHP_EOL;
                 }
                 $body .= $padding . '}' . PHP_EOL . PHP_EOL;
 
@@ -116,7 +119,8 @@ class BeanMethod extends MethodGenerator
             if ($methodAnnotation->isLazy()) {
                 $ipadding = $padding . '    ';
                 $body .= $padding . '$factory     = new \bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory("' .
-                    $methodName . '");' . PHP_EOL;
+                    $methodName . '", $this->'.$beanFactoryConfigurationProperty->getName().
+                    '->getProxyManagerConfiguration());' . PHP_EOL;
                 $body .= $padding . '$initializer = function (& $wrappedObject, '.
                     '\ProxyManager\Proxy\LazyLoadingInterface $proxy, $method, array $parameters, & $initializer) {' .
                     PHP_EOL;
@@ -137,7 +141,8 @@ class BeanMethod extends MethodGenerator
                     PHP_EOL;
                 $body .= $ipadding . '        $e->getMessage()' . PHP_EOL;
                 $body .= $ipadding . '    );' . PHP_EOL;
-                $body .= $ipadding . '    throw new \bitExpert\Disco\BeanException($message, 0, $e);' . PHP_EOL;
+                $body .= $ipadding . '    throw new \bitExpert\Disco\BeanException($message, $e->getCode(), $e);' .
+                    PHP_EOL;
                 $body .= $ipadding . '}' . PHP_EOL;
                 $body .= $ipadding . 'return true;' . PHP_EOL;
                 $body .= $padding . '};' . PHP_EOL . PHP_EOL;
@@ -173,17 +178,18 @@ class BeanMethod extends MethodGenerator
             }
 
             if ($methodAnnotation->isSession()) {
-                $body .= '$this->'.$sessionBeansProperty->getName().'["' . $methodName . '"] = $instance;' .
+                $body .= '$this->'.$sessionBeansProperty->getName().'->add("' . $methodName . '", $instance);' .
                     PHP_EOL . PHP_EOL;
             }
 
             $body .= PHP_EOL . 'if ($this->' . $forceLazyInitProperty->getName() . ') {' . PHP_EOL;
-            $body .= '    if ($instance instanceof \\ProxyManager\\Proxy\\VirtualProxyInterface) {' . PHP_EOL;
+            $body .= '    if ($instance instanceof \ProxyManager\Proxy\VirtualProxyInterface) {' . PHP_EOL;
             $body .= '        return $instance;' . PHP_EOL;
             $body .= '    }' . PHP_EOL . PHP_EOL;
-            $body .= '    $factory     = new \\bitExpert\\Disco\\Proxy\\LazyBean\\LazyBeanFactory("' . $methodName .
-                '");' . PHP_EOL;
-            $body .= '    $initializer = function (& $wrappedObject, \\ProxyManager\\Proxy\\LazyLoadingInterface ' .
+            $body .= '    $factory     = new \bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory("' . $methodName .
+                '", $this->'.$beanFactoryConfigurationProperty->getName().'->getProxyManagerConfiguration());' .
+                PHP_EOL;
+            $body .= '    $initializer = function (& $wrappedObject, \ProxyManager\Proxy\LazyLoadingInterface ' .
                 ' $proxy, $method, array $parameters, & $initializer) use ($instance) {' . PHP_EOL;
             $body .= '        $initializer   = null;' . PHP_EOL;
             $body .= '        $wrappedObject = $instance;' . PHP_EOL;
@@ -291,7 +297,7 @@ class BeanMethod extends MethodGenerator
         $body .= $padding . '}' . PHP_EOL . PHP_EOL;
 
         $body .= $padding . 'if (!($' . $beanVar .' instanceof \\' . $beanType . ')) {' . PHP_EOL;
-        $body .= $padding . '    throw new \\bitExpert\\Disco\\BeanException(sprintf(' . PHP_EOL;
+        $body .= $padding . '    throw new \bitExpert\Disco\BeanException(sprintf(' . PHP_EOL;
         $body .= $padding . '        \'Bean "%s" has declared "%s" as return type but returned "%s"\',' . PHP_EOL;
         $body .= $padding . '        \'' . $beanName . '\',' . PHP_EOL;
         $body .= $padding . '        \'' . $beanType . '\',' . PHP_EOL;

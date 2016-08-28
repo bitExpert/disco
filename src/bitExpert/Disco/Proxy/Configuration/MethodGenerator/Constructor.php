@@ -12,11 +12,13 @@ declare(strict_types = 1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
+use bitExpert\Disco\BeanFactoryConfiguration;
+use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanFactoryConfigurationProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ParameterValuesProperty;
+use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
 use ProxyManager\Generator\MethodGenerator;
 use ReflectionClass;
-use Zend\Code\Generator\Exception\InvalidArgumentException;
 use Zend\Code\Generator\ParameterGenerator;
 
 /**
@@ -28,24 +30,33 @@ class Constructor extends MethodGenerator
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\Constructor}.
      *
      * @param ReflectionClass $originalClass
+     * @param ParameterValuesProperty $parameterValuesProperty
+     * @param SessionBeansProperty $sessionBeansProperty
+     * @param BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty
      * @param BeanPostProcessorsProperty $beanPostProcessorsProperty
      * @param string[] $beanPostProcessorMethodNames
-     * @param ParameterValuesProperty $parameterValuesProperty
-     * @throws InvalidArgumentException
      */
     public function __construct(
         ReflectionClass $originalClass,
+        ParameterValuesProperty $parameterValuesProperty,
+        SessionBeansProperty $sessionBeansProperty,
+        BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty,
         BeanPostProcessorsProperty $beanPostProcessorsProperty,
-        array $beanPostProcessorMethodNames,
-        ParameterValuesProperty $parameterValuesProperty
+        array $beanPostProcessorMethodNames
     ) {
         parent::__construct('__construct');
+
+        $beanFactoryConfigurationParameter = new ParameterGenerator('config');
+        $beanFactoryConfigurationParameter->setType(BeanFactoryConfiguration::class);
 
         $parametersParameter = new ParameterGenerator('params');
         $parametersParameter->setDefaultValue([]);
 
         $body = '$this->' . $parameterValuesProperty->getName() . ' = $' . $parametersParameter->getName() . ';';
-        $body .= PHP_EOL;
+        $body .= '$this->' . $beanFactoryConfigurationProperty->getName() .
+            ' = $' . $beanFactoryConfigurationParameter->getName() . ';';
+        $body .= '$this->' . $sessionBeansProperty->getName() . ' = $' . $beanFactoryConfigurationParameter->getName() .
+            '->getBeanStore();' . PHP_EOL;
         $body .= '// register {@link \\bitExpert\\Disco\\BeanPostProcessor} instances' . PHP_EOL;
         $body .= '$this->' . $beanPostProcessorsProperty->getName() .
             '[] = new \bitExpert\Disco\BeanFactoryPostProcessor();' . PHP_EOL;
@@ -54,6 +65,7 @@ class Constructor extends MethodGenerator
             $body .= PHP_EOL;
         }
 
+        $this->setParameter($beanFactoryConfigurationParameter);
         $this->setParameter($parametersParameter);
         $this->setBody($body);
         $this->setDocBlock("@override constructor");

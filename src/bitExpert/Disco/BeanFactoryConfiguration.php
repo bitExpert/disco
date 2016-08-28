@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace bitExpert\Disco;
 
@@ -17,13 +17,11 @@ use bitExpert\Disco\Store\SerializableBeanStore;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\FilesystemCache;
 use InvalidArgumentException;
-use ProxyManager\Autoloader\Autoloader;
 use ProxyManager\Autoloader\AutoloaderInterface;
 use ProxyManager\Configuration;
 use ProxyManager\FileLocator\FileLocator;
 use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
 use ProxyManager\GeneratorStrategy\GeneratorStrategyInterface;
-use ProxyManager\Inflector\ClassNameInflector;
 use RuntimeException;
 
 /**
@@ -59,17 +57,26 @@ class BeanFactoryConfiguration
      *
      * @param string $proxyTargetDir
      * @throws InvalidArgumentException
-     * @throws RuntimeException
      */
-    public function __construct($proxyTargetDir) {
-        $proxyFileLocator = new FileLocator($proxyTargetDir);
-        $classNameInflector = new ClassNameInflector(Configuration::DEFAULT_PROXY_NAMESPACE);
+    public function __construct($proxyTargetDir)
+    {
+        try {
+            $proxyFileLocator = new FileLocator($proxyTargetDir);
+        } catch (\Exception $e) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Proxy target directory "%s" does not exist!',
+                    $proxyTargetDir
+                ),
+                $e->getCode(),
+                $e
+            );
+        }
 
         $this->setProxyTargetDir($proxyTargetDir);
         $this->setAnnotationCache(new FilesystemCache($proxyTargetDir));
         $this->setBeanStore(new SerializableBeanStore());
         $this->setProxyWriterGenerator(new FileWriterGeneratorStrategy($proxyFileLocator));
-        $this->setProxyAutoloader(new Autoloader($proxyFileLocator, $classNameInflector));
     }
 
     /**
@@ -144,16 +151,16 @@ class BeanFactoryConfiguration
     public function setProxyAutoloader(AutoloaderInterface $autoloader)
     {
         if ($this->proxyAutoloader instanceof AutoloaderInterface) {
-            if(!spl_autoload_unregister($this->proxyAutoloader)) {
+            if (!spl_autoload_unregister($this->proxyAutoloader)) {
                 throw new RuntimeException(
-                  sprintf('Cannot unregister autoloader "%s"', get_class($this->proxyAutoloader))
+                    sprintf('Cannot unregister autoloader "%s"', get_class($this->proxyAutoloader))
                 );
             }
         }
 
         $this->proxyAutoloader = $autoloader;
 
-        if(!spl_autoload_register($this->proxyAutoloader, false)) {
+        if (!spl_autoload_register($this->proxyAutoloader, false)) {
             throw new RuntimeException(
                 sprintf('Cannot register autoloader "%s"', get_class($this->proxyAutoloader))
             );

@@ -32,4 +32,13 @@ interface BeanStore
      * @throws InvalidArgumentException
      */
     public function get(string $beanId);
+
+    /**
+     * Checks if a bean instance for $beanId exists. Will return true if an instance
+     * exists and false if no instance can be found.
+     *
+     * @param string $beanId
+     * @return bool
+     */
+    public function has(string $beanId) : bool;
 }

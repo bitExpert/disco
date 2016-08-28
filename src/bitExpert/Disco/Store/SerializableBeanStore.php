@@ -46,11 +46,19 @@ class SerializableBeanStore implements BeanStore
     {
         if (!isset($this->beans[$beanId])) {
             throw new \InvalidArgumentException(
-              sprintf('Bean "%s" not defined in store!', $beanId)
+                sprintf('Bean "%s" not defined in store!', $beanId)
             );
         }
 
         return $this->beans[$beanId];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function has(string $beanId) : bool
+    {
+        return isset($this->beans[$beanId]);
     }
 
     /**

@@ -12,25 +12,26 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration\PropertyGenerator;
 
+use bitExpert\Disco\BeanFactoryConfiguration;
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
 use Zend\Code\Generator\Exception\InvalidArgumentException;
 use Zend\Code\Generator\PropertyGenerator;
 
 /**
- * Private property to store the session beans (which which gets persisted after the request).
+ * Private property to store the {@link \bitExpert\Disco\BeanFactoryConfiguration}.
  */
-class SessionBeansProperty extends PropertyGenerator
+class BeanFactoryConfigurationProperty extends PropertyGenerator
 {
     /**
-     * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty}.
+     * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanFactoryConfigurationProperty}.
      *
      * @throws InvalidArgumentException
      */
     public function __construct()
     {
-        parent::__construct(UniqueIdentifierGenerator::getIdentifier('sessionBeans'));
+        parent::__construct(UniqueIdentifierGenerator::getIdentifier('config'));
 
         $this->setVisibility(self::VISIBILITY_PRIVATE);
-        $this->setDocBlock('@var '.\bitExpert\Disco\Store\BeanStore::class);
+        $this->setDocBlock('@var '.BeanFactoryConfiguration::class);
     }
 }
