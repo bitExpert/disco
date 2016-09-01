@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.5.0
+
+### Added
+
+-  [#55](https://github.com/bitExpert/disco/pull/55) Introducing aliases for Beans
+-  [#53](https://github.com/bitExpert/disco/pull/53) Switched to PHP_EOL.
+-  [#52](https://github.com/bitExpert/disco/pull/52) Primitive types can be returned from the bean methods.
+-  [#49](https://github.com/bitExpert/disco/issues/49) Upgraded ProxyManger to version 2.x and dropped support for PHP 5.x.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+-  [#59](https://github.com/bitExpert/disco/pull/59) Session refactoring
+-  [#56](https://github.com/bitExpert/disco/pull/56) Fixed an issue with the serialization of the BeanFactory instance.
+-  [#51](https://github.com/bitExpert/disco/pull/51) Fixed $reader property type hint.
+-  [#50](https://github.com/bitExpert/disco/pull/50) Added null check in BeanFactoryPostProcessor.
+
 ## 0.4.0
 
 ### Added
