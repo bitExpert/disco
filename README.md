@@ -4,8 +4,8 @@ This package provides a [container-interop](https://github.com/container-interop
 annotation-based dependency injection container. Have a look at the [adroit-disco-demo](https://github.com/bitExpert/adroit-disco-demo)
 project to find out how to use Disco.
 
-[![Build Status](https://travis-ci.org/bitExpert/disco.svg?branch=master)](https://travis-ci.org/bitExpert/disco)
-[![Dependency Status](https://www.versioneye.com/user/projects/563e5b144d415e0018000121/badge.svg?style=flat)](https://www.versioneye.com/user/projects/563e5b144d415e0018000121)
+[![Build Status](https://travis-ci.org/bitExpert/disco.svg?branch=release%2Fr0.5.0)](https://travis-ci.org/bitExpert/disco)
+[![Dependency Status](https://www.versioneye.com/user/projects/57c887a7939fc60037ebcf5d/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57c887a7939fc60037ebcf5d)
 
 ## Installation
 
