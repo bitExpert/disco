@@ -23,6 +23,7 @@ use bitExpert\Disco\Proxy\Configuration\MethodGenerator\GetParameter;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\HasAlias;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\MagicSleep;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\AliasesProperty;
+use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanFactoryConfigurationProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ForceLazyInitProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ParameterValuesProperty;
@@ -87,13 +88,14 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $sessionBeansProperty = new SessionBeansProperty();
         $postProcessorsProperty = new BeanPostProcessorsProperty();
         $parameterValuesProperty = new ParameterValuesProperty();
+        $beanFactoryConfigurationProperty = new BeanFactoryConfigurationProperty();
         $aliasesProperty = new AliasesProperty();
         $getParameterMethod = new GetParameter($originalClass, $parameterValuesProperty);
 
         try {
             $annotation = $this->reader->getClassAnnotation($originalClass, Configuration::class);
         } catch (Exception $e) {
-            throw new InvalidProxiedClassException($e->getMessage(), 0, $e);
+            throw new InvalidProxiedClassException($e->getMessage(), $e->getCode(), $e);
         }
 
         if (null === $annotation) {
@@ -111,6 +113,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $classGenerator->addPropertyFromGenerator($sessionBeansProperty);
         $classGenerator->addPropertyFromGenerator($postProcessorsProperty);
         $classGenerator->addPropertyFromGenerator($parameterValuesProperty);
+        $classGenerator->addPropertyFromGenerator($beanFactoryConfigurationProperty);
         $classGenerator->addPropertyFromGenerator($aliasesProperty);
 
         $postProcessorMethods = [];
@@ -182,6 +185,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 $forceLazyInitProperty,
                 $sessionBeansProperty,
                 $postProcessorsProperty,
+                $beanFactoryConfigurationProperty,
                 $beanType
             );
             $classGenerator->addMethodFromGenerator($proxyMethod);
@@ -192,9 +196,11 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $classGenerator->addMethodFromGenerator(
             new Constructor(
                 $originalClass,
+                $parameterValuesProperty,
+                $sessionBeansProperty,
+                $beanFactoryConfigurationProperty,
                 $postProcessorsProperty,
-                $postProcessorMethods,
-                $parameterValuesProperty
+                $postProcessorMethods
             )
         );
         $classGenerator->addMethodFromGenerator($getParameterMethod);

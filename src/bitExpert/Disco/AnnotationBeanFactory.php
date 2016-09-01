@@ -23,17 +23,9 @@ use bitExpert\Disco\Proxy\Configuration\ConfigurationFactory;
 class AnnotationBeanFactory implements BeanFactory
 {
     /**
-     * @var string
-     */
-    protected $configClassName;
-    /**
-     * @var string[]
-     */
-    protected $parameters;
-    /**
      * @var AliasContainerInterface
      */
-    protected $beanStore;
+    protected $beanConfig;
 
     /**
      * Creates a new {@link \bitExpert\Disco\BeanFactory}.
@@ -44,11 +36,12 @@ class AnnotationBeanFactory implements BeanFactory
      */
     public function __construct($configClassName, array $parameters = [], BeanFactoryConfiguration $config = null)
     {
-        $this->configClassName = $configClassName;
-        $this->parameters = $parameters;
+        if ($config === null) {
+            $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+        }
 
         $configFactory = new ConfigurationFactory($config);
-        $this->beanStore = $configFactory->createInstance($configClassName, $parameters);
+        $this->beanConfig = $configFactory->createInstance($config, $configClassName, $parameters);
     }
 
     /**
@@ -61,12 +54,10 @@ class AnnotationBeanFactory implements BeanFactory
         $instance = null;
 
         try {
-            if (is_callable([$this->beanStore, $id])) {
-                $instance = $this->beanStore->$id();
-            }
-
-            if ($this->beanStore->hasAlias($id)) {
-                $instance = $this->beanStore->getAlias($id);
+            if (is_callable([$this->beanConfig, $id])) {
+                $instance = $this->beanConfig->$id();
+            } elseif ($this->beanConfig->hasAlias($id)) {
+                $instance = $this->beanConfig->getAlias($id);
             }
         } catch (\Throwable $e) {
             $message = sprintf(
@@ -75,7 +66,7 @@ class AnnotationBeanFactory implements BeanFactory
                 $e->getMessage()
             );
 
-            throw new BeanException($message, 0, $e);
+            throw new BeanException($message, $e->getCode(), $e);
         }
 
         if (null === $instance) {
@@ -90,14 +81,6 @@ class AnnotationBeanFactory implements BeanFactory
      */
     public function has($id)
     {
-        return is_callable([$this->beanStore, $id]) || $this->beanStore->hasAlias($id);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function __sleep()
-    {
-        return ['configClassName', 'parameters', 'beanStore'];
+        return is_callable([$this->beanConfig, $id]) || $this->beanConfig->hasAlias($id);
     }
 }

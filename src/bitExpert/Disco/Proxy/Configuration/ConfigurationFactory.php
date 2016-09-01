@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Proxy\Configuration;
 
 use bitExpert\Disco\BeanFactoryConfiguration;
+use bitExpert\Disco\Store\BeanStore;
 use Doctrine\Common\Cache\VoidCache;
 use ProxyManager\Configuration;
 use ProxyManager\Factory\AbstractBaseFactory;
@@ -33,41 +34,25 @@ class ConfigurationFactory extends AbstractBaseFactory
      *
      * @param BeanFactoryConfiguration $config
      */
-    public function __construct(BeanFactoryConfiguration $config = null)
+    public function __construct(BeanFactoryConfiguration $config)
     {
-        $proxyManagerConfiguration = null;
-        $annotationCache = new VoidCache();
-        if ($config !== null) {
-            $proxyManagerConfiguration = new Configuration();
-            $proxyManagerConfiguration->setProxiesTargetDir($config->getProxyTargetDir());
+        parent::__construct($config->getProxyManagerConfiguration());
 
-            if ($config->getProxyGeneratorStrategy() !== null) {
-                $proxyManagerConfiguration->setGeneratorStrategy($config->getProxyGeneratorStrategy());
-            }
-
-            if ($config->getProxyAutoloader()) {
-                $proxyManagerConfiguration->setProxyAutoloader($config->getProxyAutoloader());
-            }
-
-            $annotationCache = $config->getAnnotationCache();
-        }
-        parent::__construct($proxyManagerConfiguration);
-
-        $this->generator = new ConfigurationGenerator($annotationCache);
+        $this->generator = new ConfigurationGenerator($config->getAnnotationCache());
     }
 
     /**
      * Creates an instance of the given $configClassName.
      *
+     * @param BeanFactoryConfiguration $config
      * @param string $configClassName name of the configuration class
      * @param array $parameters
      * @return object
      */
-    public function createInstance($configClassName, array $parameters = [])
+    public function createInstance(BeanFactoryConfiguration $config, $configClassName, array $parameters = [])
     {
         $proxyClassName = $this->generateProxy($configClassName);
-
-        return new $proxyClassName($parameters);
+        return new $proxyClassName($config, $parameters);
     }
 
     /**

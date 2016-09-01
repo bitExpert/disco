@@ -178,33 +178,6 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function beanFactoryCanBePersistedOnDisk()
-    {
-        $rootDir = vfsStream::setup('disco');
-        $locator = $this->createMock(FileLocatorInterface::class);
-        $locator->method('getProxyFileName')
-            ->willReturn($rootDir->url() . DIRECTORY_SEPARATOR . 'cache.php');
-        $loader = new Autoloader($locator, new ClassNameInflector(Configuration::DEFAULT_PROXY_NAMESPACE));
-        $strategy = new FileWriterGeneratorStrategy($locator);
-
-        $config = new BeanFactoryConfiguration($rootDir->url(), $strategy, null, $loader);
-        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationPersistence::class, [], $config);
-        BeanFactoryRegistry::register($this->beanFactory);
-
-        $beanBefore = $this->beanFactory->get('sampleService');
-
-        $serialized = serialize($this->beanFactory);
-        $this->beanFactory = unserialize($serialized);
-
-        $beanAfter = $this->beanFactory->get('sampleService');
-
-        self::assertSame($beanBefore, $beanAfter);
-        self::assertTrue($rootDir->hasChild('cache.php'));
-    }
-
-    /**
-     * @test
-     */
     public function initializedBeanHookGetsCalledOnlyWhenBeanGetsCreated()
     {
         $bean = $this->beanFactory->get('singletonInitializedService');
