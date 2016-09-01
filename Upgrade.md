@@ -65,20 +65,16 @@ and we do no longer need to "guess" which type might be the correct one.
 ## BC BREAK: BeanFactoryConfiguration
 
 The `\bitExpert\Disco\BeanFactoryConfiguration::__construct()` method 
-changed. The 4th parameter is no longer a bool but an instance of 
-`\ProxyManager\Autoloader\AutoloaderInterface`
+signature changed. The constructor accepts just one parameter which 
+defines the directory where the proxy classes and the annotation metadata
+are stored. To configure a proxy autoloader instance or a proxy genrator
+instance use the respective setter methods of the object.
 
-To make your life easier make use of the factory method 
-`\bitExpert\Disco\BeanFactoryConfiguration::getDefault()` to quickly
-set up a configuration instance.
+## BC BREAK: Serialization of AnnotationBeanFactory
 
-## BC BREAK: EvalStrategy (ProxyManager)
-
-When not using the BeanFactoryConfiguration to configure the BeanFactory
-internals, ProxyManager in version 2.x will make use of the 
-`\ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy` instead of 
-`\ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy`. Depending 
-on the complexitity of your configuration class and depending on how many
-traits you might use this can lead to a poor performance.
-
-Follow the advice in the README.md file on performance tuning.
+To make use of the session-aware beans it is no longer possible to serialize
+the `\bitExpert\Disco\AnnotationBeanFactory` instance. Instead grab the 
+`\bitExpert\Disco\Store\BeanStore` instance by calling 
+`\bitExpert\Disco\BeanFactoryConfiguration::getSessionBeanStore()` and serialize
+it. Pass the unserialized object to the `\bitExpert\Disco\BeanFactoryConfiguration`
+before creating the `\bitExpert\Disco\AnnotationBeanFactory` instance.
