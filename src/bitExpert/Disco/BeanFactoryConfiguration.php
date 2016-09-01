@@ -38,7 +38,7 @@ class BeanFactoryConfiguration
     /**
      * @var BeanStore
      */
-    protected $beanStore;
+    protected $sessionBeanStore;
     /**
      * @var string
      */
@@ -75,7 +75,7 @@ class BeanFactoryConfiguration
 
         $this->setProxyTargetDir($proxyTargetDir);
         $this->setAnnotationCache(new FilesystemCache($proxyTargetDir));
-        $this->setBeanStore(new SerializableBeanStore());
+        $this->setSessionBeanStore(new SerializableBeanStore());
         $this->setProxyWriterGenerator(new FileWriterGeneratorStrategy($proxyFileLocator));
     }
 
@@ -94,11 +94,11 @@ class BeanFactoryConfiguration
      * Sets the {@link \bitExpert\Disco\Store\BeanStore} instance used to store the
      * session-aware beans.
      *
-     * @param BeanStore $beanStore
+     * @param BeanStore $sessionBeanStore
      */
-    public function setBeanStore(BeanStore $beanStore)
+    public function setSessionBeanStore(BeanStore $sessionBeanStore)
     {
-        $this->beanStore = $beanStore;
+        $this->sessionBeanStore = $sessionBeanStore;
     }
 
     /**
@@ -206,8 +206,8 @@ class BeanFactoryConfiguration
      *
      * @return BeanStore
      */
-    public function getBeanStore() : BeanStore
+    public function getSessionBeanStore() : BeanStore
     {
-        return $this->beanStore;
+        return $this->sessionBeanStore;
     }
 }

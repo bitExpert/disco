@@ -56,7 +56,7 @@ class Constructor extends MethodGenerator
         $body .= '$this->' . $beanFactoryConfigurationProperty->getName() .
             ' = $' . $beanFactoryConfigurationParameter->getName() . ';';
         $body .= '$this->' . $sessionBeansProperty->getName() . ' = $' . $beanFactoryConfigurationParameter->getName() .
-            '->getBeanStore();' . PHP_EOL;
+            '->getSessionBeanStore();' . PHP_EOL;
         $body .= '// register {@link \\bitExpert\\Disco\\BeanPostProcessor} instances' . PHP_EOL;
         $body .= '$this->' . $beanPostProcessorsProperty->getName() .
             '[] = new \bitExpert\Disco\BeanFactoryPostProcessor();' . PHP_EOL;

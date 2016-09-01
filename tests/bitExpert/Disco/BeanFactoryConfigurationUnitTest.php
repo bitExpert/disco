@@ -141,8 +141,8 @@ class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
         $beanStore = new SerializableBeanStore();
 
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
-        $config->setBeanStore($beanStore);
+        $config->setSessionBeanStore($beanStore);
 
-        self::assertSame($beanStore, $config->getBeanStore());
+        self::assertSame($beanStore, $config->getSessionBeanStore());
     }
 }
