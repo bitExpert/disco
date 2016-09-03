@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Annotations;
 
 /**
- * Unit test for {@link \bitExpert\Disco\Annotations\Bean}.
+ * Unit tests for {@link \bitExpert\Disco\Annotations\Bean}.
  */
 class BeanUnitTest extends \PHPUnit_Framework_TestCase
 {

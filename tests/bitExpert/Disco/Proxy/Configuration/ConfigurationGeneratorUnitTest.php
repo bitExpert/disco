@@ -22,7 +22,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 use ProxyManager\Generator\ClassGenerator;
 
 /**
- * Unit test for {@link \bitExpert\Disco\Proxy\Configuration\ConfigurationGenerator}.
+ * Unit tests for {@link \bitExpert\Disco\Proxy\Configuration\ConfigurationGenerator}.
  */
 class ConfigurationGeneratorUnitTest extends \PHPUnit_Framework_TestCase
 {

@@ -16,7 +16,7 @@ use bitExpert\Disco\Helper\BeanFactoryAwareService;
 use ReflectionProperty;
 
 /**
- * Unit test for {@link \bitExpert\Disco\BeanFactoryPostProcessor}.
+ * Unit tests for {@link \bitExpert\Disco\BeanFactoryPostProcessor}.
  */
 class BeanFactoryPostProcessorUnitTest extends \PHPUnit_Framework_TestCase
 {

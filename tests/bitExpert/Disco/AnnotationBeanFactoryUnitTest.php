@@ -37,7 +37,7 @@ use ProxyManager\Proxy\VirtualProxyInterface;
 use stdClass;
 
 /**
- * Unit test for {@link \bitExpert\Disco\AnnotationBeanFactory}.
+ * Unit tests for {@link \bitExpert\Disco\AnnotationBeanFactory}.
  */
 class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 {

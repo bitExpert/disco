@@ -22,7 +22,7 @@ use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 use ProxyManager\Inflector\ClassNameInflector;
 
 /**
- * Unit test for {@link \bitExpert\Disco\BeanFactoryConfiguration}.
+ * Unit tests for {@link \bitExpert\Disco\BeanFactoryConfiguration}.
  */
 class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
 {

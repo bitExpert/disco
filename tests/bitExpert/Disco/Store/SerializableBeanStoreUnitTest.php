@@ -17,7 +17,7 @@ use bitExpert\Disco\Helper\SampleService;
 use Doctrine\Instantiator\Exception\InvalidArgumentException;
 
 /**
- * Unit test for {@link \bitExpert\Disco\Store\SerializableBeanStoreUnitTest}.
+ * Unit tests for {@link \bitExpert\Disco\Store\SerializableBeanStoreUnitTest}.
  */
 class SerializableBeanStoreUnitTest extends \PHPUnit_Framework_TestCase
 {
