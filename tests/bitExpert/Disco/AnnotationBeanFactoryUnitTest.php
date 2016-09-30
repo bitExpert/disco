@@ -68,6 +68,24 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \bitExpert\Disco\BeanException
+     */
+    public function retrievingBeanWithEmptyStringThrowsException()
+    {
+        $this->beanFactory->get('');
+    }
+
+    /**
+     * @test
+     * @expectedException \bitExpert\Disco\BeanException
+     */
+    public function retrievingBeanWithNonStringThrowsException()
+    {
+        $this->beanFactory->get(3);
+    }
+
+    /**
+     * @test
      */
     public function checkForExistingBeanReturnsTrue()
     {
@@ -76,20 +94,18 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
-    public function checkForBeanWithEmptyIdThrowsException()
+    public function checkForBeanWithEmptyIdWillReturnFalse()
     {
-        $this->beanFactory->has('');
+        $this->assertFalse($this->beanFactory->has(''));
     }
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
-    public function checkForBeanWithNonStringIdThrowsException()
+    public function checkForBeanWithNonStringIdWillReturnFalse()
     {
-        $this->beanFactory->has(1);
+        $this->assertFalse($this->beanFactory->has(1));
     }
 
     /**
