@@ -76,10 +76,20 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \InvalidArgumentException
      */
-    public function checkForBeanWithEmptyIdReturnsFalse()
+    public function checkForBeanWithEmptyIdThrowsException()
     {
-        self::assertFalse($this->beanFactory->has(''));
+        $this->beanFactory->has('');
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    public function checkForBeanWithNonStringIdThrowsException()
+    {
+        $this->beanFactory->has(1);
     }
 
     /**

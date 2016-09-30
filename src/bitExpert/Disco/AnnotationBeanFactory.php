@@ -51,6 +51,10 @@ class AnnotationBeanFactory implements BeanFactory
      */
     public function get($id)
     {
+        if (!is_string($id) || empty($id)) {
+            throw new \InvalidArgumentException('Id must be a non-empty string.');
+        }
+
         $instance = null;
 
         try {
@@ -81,6 +85,10 @@ class AnnotationBeanFactory implements BeanFactory
      */
     public function has($id)
     {
+        if (!is_string($id) || empty($id)) {
+            throw new \InvalidArgumentException('Id must be a non-empty string.');
+        }
+
         return is_callable([$this->beanConfig, $id]) || $this->beanConfig->hasAlias($id);
     }
 }
