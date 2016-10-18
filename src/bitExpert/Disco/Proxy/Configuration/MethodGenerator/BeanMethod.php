@@ -296,15 +296,6 @@ class BeanMethod extends MethodGenerator
         $body .= $padding . '    $' . $beanVar . '->postInitialization();' . PHP_EOL;
         $body .= $padding . '}' . PHP_EOL . PHP_EOL;
 
-        $body .= $padding . 'if (!($' . $beanVar .' instanceof \\' . $beanType . ')) {' . PHP_EOL;
-        $body .= $padding . '    throw new \bitExpert\Disco\BeanException(sprintf(' . PHP_EOL;
-        $body .= $padding . '        \'Bean "%s" has declared "%s" as return type but returned "%s"\',' . PHP_EOL;
-        $body .= $padding . '        \'' . $beanName . '\',' . PHP_EOL;
-        $body .= $padding . '        \'' . $beanType . '\',' . PHP_EOL;
-        $body .= $padding . '        $' . $beanVar . ' ? get_class($' . $beanVar . ') : \'null\'' . PHP_EOL;
-        $body .= $padding . '    ));' . PHP_EOL;
-        $body .= $padding . '}' . PHP_EOL . PHP_EOL;
-
         $body .= $padding . 'foreach ($this->' . $postProcessorsProperty->getName() . ' as $postProcessor) {' . PHP_EOL;
         $body .= $padding . '    $postProcessor->postProcess($' . $beanVar . ', "' . $beanName . '");' . PHP_EOL;
         $body .= $padding . '}' . PHP_EOL;
