@@ -49,48 +49,6 @@ class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function defaultAnnotationCacheDirWillDefaultToProxyTargetDir()
-    {
-        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
-
-        /** @var FilesystemCache $annotationCache */
-        $annotationCache = $config->getAnnotationCache();
-
-        self::assertInstanceOf(FilesystemCache::class, $annotationCache);
-        self::assertSame(sys_get_temp_dir(), $annotationCache->getDirectory());
-    }
-
-    /**
-     * @test
-     */
-    public function customAnnotationCacheDirCanBeConfigured()
-    {
-        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
-        $config->setAnnotationCache(new FilesystemCache(__DIR__));
-
-        /** @var FilesystemCache $annotationCache */
-        $annotationCache = $config->getAnnotationCache();
-
-        self::assertInstanceOf(FilesystemCache::class, $annotationCache);
-        self::assertSame(__DIR__, $annotationCache->getDirectory());
-    }
-
-    /**
-     * @test
-     */
-    public function configuredAnnotationCacheInstanceCanBeRetrieved()
-    {
-        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
-        $config->setAnnotationCache(new VoidCache());
-
-        $annotationCache = $config->getAnnotationCache();
-
-        self::assertInstanceOf(VoidCache::class, $annotationCache);
-    }
-
-    /**
-     * @test
-     */
     public function configuredGeneratorStrategyInstanceCanBeRetrieved()
     {
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
