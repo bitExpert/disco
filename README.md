@@ -285,12 +285,6 @@ Since a lot of parsing and reflection logic is involved during the conversion pr
 into its "final format" Disco can be rather slow in production mode and during development, especially when 
 running  Disco in a virtual machine with a shared hosts folder.
 
-### doctrine/annotations
-
-Make sure to follow the hints on how to improve performance for [Doctrine Annotations](http://doctrine-orm.readthedocs.org/projects/doctrine-common/en/latest/reference/annotations.html) and pick a 
-`\Doctrine\Common\Cache\Cache` implementation that suites your needs. To use a specific cache 
-implementation pass an instance of it to `\bitExpert\Disco\BeanFactoryConfiguration::construct()` as the third parameter.
-
 ### ocramius/ProxyManager
 
 [ProxyManager](https://github.com/Ocramius/ProxyManager) also needs to be configured for faster performance. Read about the details [here](https://ocramius.github.io/ProxyManager/docs/tuning-for-production.html).

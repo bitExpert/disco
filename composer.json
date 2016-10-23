@@ -14,7 +14,6 @@
     "php": "7.0.0 - 7.0.5 || ^7.0.7",
     "container-interop/container-interop": "^1.1.0",
     "doctrine/annotations": "v1.2.7",
-    "doctrine/cache": "^1.6.0",
     "ocramius/proxy-manager": "^2.0.3",
     "bitexpert/slf4psrlog": "^0.1.3"
   },
