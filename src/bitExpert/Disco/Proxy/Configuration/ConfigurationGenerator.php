@@ -30,9 +30,6 @@ use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ParameterValuesPropert
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Cache\Cache;
 use Exception;
 use ProxyManager\Exception\InvalidProxiedClassException;
 use ProxyManager\ProxyGenerator\Assertion\CanProxyAssertion;
@@ -49,16 +46,9 @@ use Zend\Code\Reflection\MethodReflection;
 class ConfigurationGenerator implements ProxyGeneratorInterface
 {
     /**
-     * @var Reader
-     */
-    protected $reader;
-
-    /**
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\ConfigurationGenerator}.
-     *
-     * @param Cache $cache
      */
-    public function __construct(Cache $cache = null)
+    public function __construct()
     {
         // registers all required annotations
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Bean.php');
@@ -66,12 +56,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Configuration.php');
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Parameters.php');
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Parameter.php');
-
-        $this->reader = new AnnotationReader();
-
-        if ($cache instanceof Cache) {
-            $this->reader = new CachedReader($this->reader, $cache);
-        }
     }
 
     /**
@@ -93,7 +77,8 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $getParameterMethod = new GetParameter($originalClass, $parameterValuesProperty);
 
         try {
-            $annotation = $this->reader->getClassAnnotation($originalClass, Configuration::class);
+            $reader = new AnnotationReader();
+            $annotation = $reader->getClassAnnotation($originalClass, Configuration::class);
         } catch (Exception $e) {
             throw new InvalidProxiedClassException($e->getMessage(), $e->getCode(), $e);
         }
@@ -120,13 +105,13 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $aliases = [];
         $methods = $originalClass->getMethods(ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED);
         foreach ($methods as $method) {
-            if (null !== $this->reader->getMethodAnnotation($method, BeanPostProcessor::class)) {
+            if (null !== $reader->getMethodAnnotation($method, BeanPostProcessor::class)) {
                 $postProcessorMethods[] = $method->getName();
                 continue;
             }
 
             /* @var \bitExpert\Disco\Annotations\Bean $beanAnnotation */
-            $beanAnnotation = $this->reader->getMethodAnnotation($method, Bean::class);
+            $beanAnnotation = $reader->getMethodAnnotation($method, Bean::class);
             if (null === $beanAnnotation) {
                 throw new InvalidProxiedClassException(
                     sprintf(
@@ -143,7 +128,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             }
 
             /* @var \bitExpert\Disco\Annotations\Parameters $parametersAnnotation */
-            $parametersAnnotation = $this->reader->getMethodAnnotation($method, Parameters::class);
+            $parametersAnnotation = $reader->getMethodAnnotation($method, Parameters::class);
             if (null === $parametersAnnotation) {
                 $parametersAnnotation = new Parameters();
             }

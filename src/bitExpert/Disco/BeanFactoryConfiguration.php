@@ -14,8 +14,6 @@ namespace bitExpert\Disco;
 
 use bitExpert\Disco\Store\BeanStore;
 use bitExpert\Disco\Store\SerializableBeanStore;
-use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Cache\FilesystemCache;
 use InvalidArgumentException;
 use ProxyManager\Autoloader\AutoloaderInterface;
 use ProxyManager\Configuration;
@@ -31,10 +29,6 @@ use RuntimeException;
  */
 class BeanFactoryConfiguration
 {
-    /**
-     * @var Cache
-     */
-    protected $annotationCache;
     /**
      * @var BeanStore
      */
@@ -74,21 +68,10 @@ class BeanFactoryConfiguration
         }
 
         $this->setProxyTargetDir($proxyTargetDir);
-        $this->setAnnotationCache(new FilesystemCache($proxyTargetDir));
         $this->setSessionBeanStore(new SerializableBeanStore());
         $this->setProxyWriterGenerator(new FileWriterGeneratorStrategy($proxyFileLocator));
     }
 
-    /**
-     * Sets the {@link \Doctrine\Common\Cache\Cache} to store the parsed annotation
-     * metadata in.
-     *
-     * @param Cache $annotationCache
-     */
-    public function setAnnotationCache(Cache $annotationCache)
-    {
-        $this->annotationCache = $annotationCache;
-    }
 
     /**
      * Sets the {@link \bitExpert\Disco\Store\BeanStore} instance used to store the
@@ -187,17 +170,6 @@ class BeanFactoryConfiguration
         }
 
         return $proxyManagerConfiguration;
-    }
-
-    /**
-     * Returns the configured {@link \Doctrine\Common\Cache\Cache} used to store
-     * the parsed annotation metadata in.
-     *
-     * @return Cache
-     */
-    public function getAnnotationCache() : Cache
-    {
-        return $this->annotationCache;
     }
 
     /**

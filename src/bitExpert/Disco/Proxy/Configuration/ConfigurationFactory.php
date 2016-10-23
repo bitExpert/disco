@@ -38,7 +38,7 @@ class ConfigurationFactory extends AbstractBaseFactory
     {
         parent::__construct($config->getProxyManagerConfiguration());
 
-        $this->generator = new ConfigurationGenerator($config->getAnnotationCache());
+        $this->generator = new ConfigurationGenerator();
     }
 
     /**
