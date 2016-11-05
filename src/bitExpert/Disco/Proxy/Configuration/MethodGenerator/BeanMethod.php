@@ -15,13 +15,16 @@ namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Parameter;
 use bitExpert\Disco\Annotations\Parameters;
+use bitExpert\Disco\BeanException;
 use bitExpert\Disco\InitializedBean;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanFactoryConfigurationProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ForceLazyInitProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
+use bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory;
+use bitExpert\Disco\Proxy\LazyBean\MethodGenerator\WrapBeanAsLazy;
 use ProxyManager\Generator\MethodGenerator;
-use Zend\Code\Generator\DocBlockGenerator;
+use ProxyManager\Proxy\LazyLoadingInterface;
 use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Reflection\MethodReflection;
 
@@ -37,33 +40,117 @@ class BeanMethod extends MethodGenerator
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanMethod}.
      *
      * @param MethodReflection $originalMethod
-     * @param Bean $methodAnnotation
+     * @param Bean $beanMetadata
      * @param Parameters $methodParameters
-     * @param GetParameter $parameterValuesMethod
+     * @param $beanType
      * @param ForceLazyInitProperty $forceLazyInitProperty
      * @param SessionBeansProperty $sessionBeansProperty
      * @param BeanPostProcessorsProperty $postProcessorsProperty
      * @param BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty
-     * @param $beanType
+     * @param GetParameter $parameterValuesMethod
+     * @param WrapBeanAsLazy $wrapBeanAsLazy
      * @return BeanMethod|MethodGenerator
      */
     public static function generateMethod(
         MethodReflection $originalMethod,
-        Bean $methodAnnotation,
+        Bean $beanMetadata,
         Parameters $methodParameters,
-        GetParameter $parameterValuesMethod,
+        $beanType,
         ForceLazyInitProperty $forceLazyInitProperty,
         SessionBeansProperty $sessionBeansProperty,
         BeanPostProcessorsProperty $postProcessorsProperty,
         BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty,
-        $beanType
-    ) : self {
-        /* @var $method self */
+        GetParameter $parameterValuesMethod,
+        WrapBeanAsLazy $wrapBeanAsLazy
+    ) {
         $method = static::fromReflection($originalMethod);
-        $methodName = $originalMethod->getName();
-        $padding = '';
+        $methodParams = static::convertMethodParamsToString($methodParameters, $parameterValuesMethod);
+        $beanId = $originalMethod->getName();
+        $body = '';
 
-        $methodParamTpl = [];
+        if (in_array($beanType, ['array', 'callable', 'bool', 'float', 'int', 'string'], true)) {
+            // return type is a primitive, simply call parent method and return immediately
+            $body .= 'return parent::' . $beanId . '(' . $methodParams . ');' . PHP_EOL;
+        } elseif (class_exists($beanType) || interface_exists($beanType)) {
+            if ($beanMetadata->isLazy()) {
+                $body = static::generateLazyBeanCode(
+                    '',
+                    $beanId,
+                    $beanType,
+                    $beanMetadata,
+                    $methodParams,
+                    $forceLazyInitProperty,
+                    $sessionBeansProperty,
+                    $postProcessorsProperty,
+                    $beanFactoryConfigurationProperty
+                );
+            } else {
+                $body = static::generateNonLazyBeanCode(
+                    '',
+                    $beanId,
+                    $beanType,
+                    $beanMetadata,
+                    $methodParams,
+                    $forceLazyInitProperty,
+                    $sessionBeansProperty,
+                    $postProcessorsProperty,
+                    $beanFactoryConfigurationProperty,
+                    $wrapBeanAsLazy
+                );
+            }
+        } else {
+            // return type is unknown, throw an exception
+            $body .= '$message = sprintf(' . PHP_EOL;
+            $body .= '    \'Either return type declaration missing or unkown for bean with id "' . $beanId .
+                '": %s\',' . PHP_EOL;
+            $body .= '    $e->getMessage()' . PHP_EOL;
+            $body .= ');' . PHP_EOL;
+            $body .= 'throw new \\' . BeanException::class . '($message, 0, $e);' . PHP_EOL;
+        }
+
+        $method->setBody($body);
+        $method->setDocBlock('{@inheritDoc}');
+        return $method;
+    }
+
+    /**
+     * @override Enforces generation of \ProxyManager\Generator\MethodGenerator.
+     *
+     * {@inheritDoc}
+     * @throws \Zend\Code\Generator\Exception\InvalidArgumentException
+     */
+    public static function fromReflection(MethodReflection $reflectionMethod) : MethodGenerator
+    {
+        $method = parent::fromReflection($reflectionMethod);
+
+        /*
+         * When overwriting methods PHP 7 enforces the same method parameters to be defined as in the base class. Since
+         * the {@link \bitExpert\Disco\AnnotationBeanFactory} calls the generated methods without any parameters we
+         * simply set a default value of null for each of the method parameters.
+         */
+        $method->setParameters([]);
+        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
+            $parameter = ParameterGenerator::fromReflection($reflectionParameter);
+            $parameter->setDefaultValue(null);
+            $method->setParameter($parameter);
+        }
+
+        return $method;
+    }
+
+    /**
+     * Converts the Parameter annotations to the respective getParameter() method calls to retrieve the configuration
+     * values.
+     *
+     * @param Parameters $methodParameters
+     * @param GetParameter $parameterValuesMethod
+     * @return string
+     */
+    protected static function convertMethodParamsToString(
+        Parameters $methodParameters,
+        GetParameter $parameterValuesMethod
+    ) : string {
+        $parameters = [];
         foreach ($methodParameters->value as $methodParameter) {
             /** @var $methodParameter Parameter */
             $name = $methodParameter->getName();
@@ -78,228 +165,210 @@ class BeanMethod extends MethodGenerator
             }
 
             if (!empty($defaultValue)) {
-                $methodParamTpl[] = '$this->' . $parameterValuesMethod->getName() . '("' . $name . '", ' . $required .
+                $parameters[] = '$this->' . $parameterValuesMethod->getName() . '("' . $name . '", ' . $required .
                     ', ' . $defaultValue . ')';
             } else {
-                $methodParamTpl[] = '$this->' . $parameterValuesMethod->getName() . '("' . $name . '", ' . $required .
+                $parameters[] = '$this->' . $parameterValuesMethod->getName() . '("' . $name . '", ' . $required .
                     ')';
             }
         }
-        $methodParamTpl = implode(', ', $methodParamTpl);
 
-        $body = '';
-
-        if (in_array($beanType, ['array', 'callable', 'bool', 'float', 'int', 'string'])) {
-            // return type is a primitive, simply call parent method and return immediately.
-            $body .= $padding . 'return parent::' . $methodName . '(' . $methodParamTpl . ');' . PHP_EOL;
-        } elseif (class_exists($beanType) || interface_exists($beanType)) {
-            // return type is either class or interface
-            if ($methodAnnotation->isSingleton()) {
-                $padding = '    ';
-                $body .= 'static $instance = null;' . PHP_EOL . PHP_EOL;
-                $body .= 'if ($instance === null) {' . PHP_EOL;
-            }
-
-            if ($methodAnnotation->isSession()) {
-                $body .= $padding . 'if($this->'.$sessionBeansProperty->getName().'->has("' . $methodName . '")) {' .
-                    PHP_EOL;
-                if ($methodAnnotation->isSingleton()) {
-                    $body .= $padding . '    $instance = $this->'.$sessionBeansProperty->getName().
-                        '->get("' . $methodName . '");' . PHP_EOL;
-                } else {
-                    $body .= $padding . '    return $this->'.$sessionBeansProperty->getName().
-                        '->get("' . $methodName . '");' . PHP_EOL;
-                }
-                $body .= $padding . '}' . PHP_EOL . PHP_EOL;
-
-                // Sessionbeans "force" their dependencies to be lazy proxies
-                $body .= $padding . '$this->' . $forceLazyInitProperty->getName() . ' = true;' . PHP_EOL;
-            }
-
-            if ($methodAnnotation->isLazy()) {
-                $ipadding = $padding . '    ';
-                $body .= $padding . '$factory     = new \bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory("' .
-                    $methodName . '", $this->'.$beanFactoryConfigurationProperty->getName().
-                    '->getProxyManagerConfiguration());' . PHP_EOL;
-                $body .= $padding . '$initializer = function (& $wrappedObject, '.
-                    '\ProxyManager\Proxy\LazyLoadingInterface $proxy, $method, array $parameters, & $initializer) {' .
-                    PHP_EOL;
-                $body .= $ipadding . '$initializer   = null;' . PHP_EOL;
-                $body .= $ipadding . 'try {' . PHP_EOL;
-                $body .= $ipadding . '    $wrappedObject = parent::' . $methodName . '(' . $methodParamTpl . ');' .
-                    PHP_EOL;
-                $body .= static::generateBeanInitCode(
-                    $ipadding,
-                    'wrappedObject',
-                    $methodName,
-                    $beanType,
-                    $postProcessorsProperty
-                );
-                $body .= $ipadding . '} catch (\Throwable $e) {' . PHP_EOL;
-                $body .= $ipadding . '    $message = sprintf(' . PHP_EOL;
-                $body .= $ipadding . '        \'Exception occured while instanciating "' . $methodName . '": %s\',' .
-                    PHP_EOL;
-                $body .= $ipadding . '        $e->getMessage()' . PHP_EOL;
-                $body .= $ipadding . '    );' . PHP_EOL;
-                $body .= $ipadding . '    throw new \bitExpert\Disco\BeanException($message, $e->getCode(), $e);' .
-                    PHP_EOL;
-                $body .= $ipadding . '}' . PHP_EOL;
-                $body .= $ipadding . 'return true;' . PHP_EOL;
-                $body .= $padding . '};' . PHP_EOL . PHP_EOL;
-                $body .= $padding . '$instance = $factory->createProxy("' . $beanType . '", $initializer);' .
-                    PHP_EOL . PHP_EOL;
-            } else {
-                $ipadding = $padding;
-                if ($methodAnnotation->isSingleton()) {
-                    $ipadding .= $padding;
-                    $body .= $padding . 'if ($instance === null) {' . PHP_EOL;
-                }
-
-                $body .= $ipadding . '$instance = parent::' . $methodName . '(' . $methodParamTpl . ');' . PHP_EOL;
-                $body .= static::generateBeanInitCode(
-                    $ipadding,
-                    'instance',
-                    $methodName,
-                    $beanType,
-                    $postProcessorsProperty
-                );
-
-                if ($methodAnnotation->isSingleton()) {
-                    $body .= $padding . '}' . PHP_EOL;
-                }
-            }
-
-            if ($methodAnnotation->isSession()) {
-                $body .= $padding . '$this->' . $forceLazyInitProperty->getName() . ' = false;' . PHP_EOL;
-            }
-
-            if ($methodAnnotation->isSingleton()) {
-                $body .= '}' . PHP_EOL;
-            }
-
-            if ($methodAnnotation->isSession()) {
-                $body .= '$this->'.$sessionBeansProperty->getName().'->add("' . $methodName . '", $instance);' .
-                    PHP_EOL . PHP_EOL;
-            }
-
-            $body .= PHP_EOL . 'if ($this->' . $forceLazyInitProperty->getName() . ') {' . PHP_EOL;
-            $body .= '    if ($instance instanceof \ProxyManager\Proxy\VirtualProxyInterface) {' . PHP_EOL;
-            $body .= '        return $instance;' . PHP_EOL;
-            $body .= '    }' . PHP_EOL . PHP_EOL;
-            $body .= '    $factory     = new \bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory("' . $methodName .
-                '", $this->'.$beanFactoryConfigurationProperty->getName().'->getProxyManagerConfiguration());' .
-                PHP_EOL;
-            $body .= '    $initializer = function (& $wrappedObject, \ProxyManager\Proxy\LazyLoadingInterface ' .
-                ' $proxy, $method, array $parameters, & $initializer) use ($instance) {' . PHP_EOL;
-            $body .= '        $initializer   = null;' . PHP_EOL;
-            $body .= '        $wrappedObject = $instance;' . PHP_EOL;
-            $body .= '        return true;' . PHP_EOL;
-            $body .= '    };' . PHP_EOL . PHP_EOL;
-            $body .= '    return $factory->createProxy("' . $beanType . '", $initializer);' . PHP_EOL;
-            $body .= '}' . PHP_EOL . PHP_EOL;
-
-            $body .= 'return $instance;' . PHP_EOL;
-        } else {
-            // return type is unknown, throw an exception
-            $body .= $padding . '$message = sprintf(' . PHP_EOL;
-            $body .= $padding . '    \'Either return type declaration missing or unkown for bean with id "'
-                . $methodName . '": %s\',' . PHP_EOL;
-            $body .= $padding . '    $e->getMessage()' . PHP_EOL;
-            $body .= $padding . ');' . PHP_EOL;
-            $body .= $padding . 'throw new \bitExpert\Disco\BeanException($message, 0, $e);' . PHP_EOL;
-        }
-
-        $method->setBody($body);
-        $method->setDocBlock('{@inheritDoc}');
-
-        return $method;
+        return implode(', ', $parameters);
     }
 
     /**
-     * @override Enforces generation of \ProxyManager\Generator\MethodGenerator.
-     *
-     * {@inheritDoc}
-     */
-    public static function fromReflection(MethodReflection $reflectionMethod) : MethodGenerator
-    {
-        /* @var $method self */
-        $method = new static();
-
-        $method->setSourceContent($reflectionMethod->getContents(false));
-        $method->setSourceDirty(false);
-
-        if ($reflectionMethod->getDocComment() != '') {
-            $method->setDocBlock(DocBlockGenerator::fromReflection($reflectionMethod->getDocBlock()));
-        }
-
-        $method->setFinal($reflectionMethod->isFinal());
-        $method->setVisibility(self::extractVisibility($reflectionMethod));
-
-        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
-            $parameter = ParameterGenerator::fromReflection($reflectionParameter);
-            /*
-             * Needed for PHP 7: When overwriting methods PHP 7 enforces the same method parameters
-             * as defined in the base class. Since the {@link \bitExpert\Disco\AnnotationBeanFactory}
-             * calls the methods without any parameters we simply define a default value for each of
-             * the method parameters.
-             */
-            $parameter->setDefaultValue(null);
-            $method->setParameter($parameter);
-        }
-
-        $method->setStatic($reflectionMethod->isStatic());
-        $method->setName($reflectionMethod->getName());
-        $method->setBody($reflectionMethod->getBody());
-        $method->setReturnsReference($reflectionMethod->returnsReference());
-        $method->setReturnType($reflectionMethod->getReturnType());
-
-        return $method;
-    }
-
-    /**
-     * Retrieves the visibility for the given method reflection
-     *
-     * @param MethodReflection $reflectionMethod
-     * @return string
-     */
-    private static function extractVisibility(MethodReflection $reflectionMethod)
-    {
-        if ($reflectionMethod->isPrivate()) {
-            return static::VISIBILITY_PRIVATE;
-        }
-
-        if ($reflectionMethod->isProtected()) {
-            return static::VISIBILITY_PROTECTED;
-        }
-
-        return static::VISIBILITY_PUBLIC;
-    }
-
-    /**
-     * Helper method to create the general initialization logic for a new bean instance.
+     * Helper method to generate the method body for managing lazy bean instances.
      *
      * @param string $padding
-     * @param string $beanVar
-     * @param string $beanName
+     * @param string $beanId
      * @param string $beanType
+     * @param Bean $beanMetadata
+     * @param string $methodParams
+     * @param ForceLazyInitProperty $forceLazyInitProperty
+     * @param SessionBeansProperty $sessionBeansProperty
+     * @param BeanPostProcessorsProperty $postProcessorsProperty
+     * @param BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty
+     * @return string
+     */
+    protected static function generateLazyBeanCode(
+        string $padding,
+        string $beanId,
+        string $beanType,
+        Bean $beanMetadata,
+        string $methodParams,
+        ForceLazyInitProperty $forceLazyInitProperty,
+        SessionBeansProperty $sessionBeansProperty,
+        BeanPostProcessorsProperty $postProcessorsProperty,
+        BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty
+    ) : string {
+        $content = '';
+
+        if ($beanMetadata->isSession()) {
+            $content .= $padding . 'if($this->' . $sessionBeansProperty->getName() . '->has("' . $beanId . '")) {' .
+                PHP_EOL;
+            if ($beanMetadata->isSingleton()) {
+                $content .= $padding . '    $sessionInstance = clone $this->' . $sessionBeansProperty->getName() .
+                    '->get("' . $beanId . '");' . PHP_EOL;
+            } else {
+                $content .= $padding . '    $sessionInstance = $this->' . $sessionBeansProperty->getName() . '->get("' .
+                    $beanId . '");' . PHP_EOL;
+            }
+            $content .= $padding . '    return $sessionInstance;' . PHP_EOL;
+            $content .= $padding . '}' . PHP_EOL;
+        }
+
+        if ($beanMetadata->isSingleton()) {
+            $content .= $padding . 'static $instance = null;' . PHP_EOL;
+            $content .= $padding . 'if ($instance !== null) {' . PHP_EOL;
+            $content .= $padding . '    return $instance;' . PHP_EOL;
+            $content .= $padding . '}' . PHP_EOL;
+        }
+
+        $content .= $padding . '$factory = new \\' . LazyBeanFactory::class . '("' . $beanId . '", $this->' .
+            $beanFactoryConfigurationProperty->getName() . '->getProxyManagerConfiguration());' . PHP_EOL;
+        $content .= $padding . '$initializer = function (&$instance, \\' . LazyLoadingInterface::class .
+            ' $proxy, $method, array $parameters, &$initializer) {' . PHP_EOL;
+        $content .= $padding . '    try {' . PHP_EOL;
+        $content .= $padding . '        $initializer = null;' . PHP_EOL;
+
+        if ($beanMetadata->isSession()) {
+            $content .= $padding . '        $backupForceLazyInit = $this->' . $forceLazyInitProperty->getName() . ';'
+                . PHP_EOL;
+            $content .= $padding . '        $this->' . $forceLazyInitProperty->getName() . ' = true;' . PHP_EOL;
+        }
+
+        $content .= $padding . self::generateBeanCreationCode(
+            $padding . '        ',
+            $beanId,
+            $methodParams,
+            $postProcessorsProperty
+        );
+
+        if ($beanMetadata->isSession()) {
+            $content .= $padding . '        $this->' . $forceLazyInitProperty->getName() . ' = $backupForceLazyInit;' .
+                PHP_EOL;
+        }
+
+        $content .= $padding . '    } catch (\Throwable $e) {' . PHP_EOL;
+        $content .= $padding . '        $message = sprintf(' . PHP_EOL;
+        $content .= $padding . '            \'Either return type declaration missing or unkown for bean with id "' .
+            $beanId . '": %s\',' . PHP_EOL;
+        $content .= $padding . '            $e->getMessage()' . PHP_EOL;
+        $content .= $padding . '        );' . PHP_EOL;
+        $content .= $padding . '        throw new \\' . BeanException::class . '($message, 0, $e);' . PHP_EOL;
+        $content .= $padding . '    }' . PHP_EOL;
+        $content .= $padding . '    return true;' . PHP_EOL;
+        $content .= $padding . '};' . PHP_EOL;
+        $content .= $padding . PHP_EOL;
+        $content .= $padding . '$initializer->bindTo($this);' . PHP_EOL;
+        $content .= $padding . '$instance = $factory->createProxy("' . $beanType . '", $initializer);' . PHP_EOL;
+
+        if ($beanMetadata->isSession()) {
+            $content .= $padding . '$this->' . $sessionBeansProperty->getName() . '->add("' . $beanId . '", $instance);'
+                . PHP_EOL;
+        }
+
+        $content .= $padding . 'return $instance;' . PHP_EOL;
+        return $content;
+    }
+
+    /**
+     * Helper method to generate the method body for managing non-lazy bean instances.
+     *
+     * @param string $padding
+     * @param string $beanId
+     * @param string $beanType
+     * @param Bean $beanMetadata
+     * @param string $methodParams
+     * @param ForceLazyInitProperty $forceLazyInitProperty
+     * @param SessionBeansProperty $sessionBeansProperty
+     * @param BeanPostProcessorsProperty $postProcessorsProperty
+     * @param BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty
+     * @param WrapBeanAsLazy $wrapBeanAsLazy
+     * @return string
+     */
+    protected static function generateNonLazyBeanCode(
+        string $padding,
+        string $beanId,
+        string $beanType,
+        Bean $beanMetadata,
+        string $methodParams,
+        ForceLazyInitProperty $forceLazyInitProperty,
+        SessionBeansProperty $sessionBeansProperty,
+        BeanPostProcessorsProperty $postProcessorsProperty,
+        BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty,
+        WrapBeanAsLazy $wrapBeanAsLazy
+    ) : string {
+        $content = $padding . '$backupForceLazyInit = $this->' . $forceLazyInitProperty->getName() . ';' . PHP_EOL;
+
+        if ($beanMetadata->isSession()) {
+            $content .= $padding . 'if($this->' . $sessionBeansProperty->getName() . '->has("' . $beanId . '")) {'
+                . PHP_EOL;
+            if ($beanMetadata->isSingleton()) {
+                $content .= $padding . '    $sessionInstance = clone $this->' . $sessionBeansProperty->getName()
+                    . '->get("' . $beanId . '");' . PHP_EOL;
+            } else {
+                $content .= $padding . '    $sessionInstance = $this->' . $sessionBeansProperty->getName() . '->get("' .
+                    $beanId . '");' . PHP_EOL;
+            }
+            $content .= $padding . '    return ($backupForceLazyInit) ? $this->' . $wrapBeanAsLazy->getName() . '("' .
+                $beanId . '", "' . $beanType . '", $sessionInstance) : $sessionInstance;' . PHP_EOL;
+            $content .= $padding . '}' . PHP_EOL;
+        }
+
+        if ($beanMetadata->isSingleton()) {
+            $content .= $padding . 'static $instance = null;' . PHP_EOL;
+            $content .= $padding . 'if ($instance !== null) {' . PHP_EOL;
+            $content .= $padding . '    return ($backupForceLazyInit) ? $this->' . $wrapBeanAsLazy->getName() . '("' .
+                $beanId . '", "' . $beanType . '", $instance) : $instance;' . PHP_EOL;
+            $content .= $padding . '}' . PHP_EOL;
+        }
+
+        if ($beanMetadata->isSession()) {
+            $content .= $padding . '$this->' . $forceLazyInitProperty->getName() . ' = true;' . PHP_EOL;
+        }
+
+        $content .= self::generateBeanCreationCode($padding, $beanId, $methodParams, $postProcessorsProperty);
+
+        if ($beanMetadata->isSession()) {
+            $content .= $padding . '$this->' . $forceLazyInitProperty->getName() . ' = $backupForceLazyInit;' . PHP_EOL;
+            $content .= $padding . '$this->' . $sessionBeansProperty->getName() . '->add("' . $beanId . '", $instance);'
+                . PHP_EOL;
+        }
+
+        $content .= $padding . 'return ($backupForceLazyInit) ? $this->' . $wrapBeanAsLazy->getName() . '("' .
+            $beanId . '", "' . $beanType . '", $instance) : $instance;' . PHP_EOL;
+
+        return $content;
+    }
+
+
+    /**
+     * Helper method to generate the code to initialize a bean.
+     *
+     * @param string $padding
+     * @param string $beanId
+     * @param string $methodParams
      * @param BeanPostProcessorsProperty $postProcessorsProperty
      * @return string
      */
-    protected static function generateBeanInitCode(
+    protected static function generateBeanCreationCode(
         string $padding,
-        string $beanVar,
-        string $beanName,
-        string $beanType,
+        string $beanId,
+        string $methodParams,
         BeanPostProcessorsProperty $postProcessorsProperty
     ) : string {
-        $body = $padding . 'if ($' . $beanVar . ' instanceof \\' . InitializedBean::class . ') {' . PHP_EOL;
-        $body .= $padding . '    $' . $beanVar . '->postInitialization();' . PHP_EOL;
-        $body .= $padding . '}' . PHP_EOL . PHP_EOL;
-
-        $body .= $padding . 'foreach ($this->' . $postProcessorsProperty->getName() . ' as $postProcessor) {' . PHP_EOL;
-        $body .= $padding . '    $postProcessor->postProcess($' . $beanVar . ', "' . $beanName . '");' . PHP_EOL;
-        $body .= $padding . '}' . PHP_EOL;
-
-        return $body;
+        $content = $padding . '$instance = parent::' . $beanId . '(' . $methodParams . ');' . PHP_EOL;
+        $content .= $padding . 'if ($instance instanceof \\' . InitializedBean::class . ') {
+        ' . PHP_EOL;
+        $content .= $padding . '    $instance->postInitialization();' . PHP_EOL;
+        $content .= $padding . '}' . PHP_EOL;
+        $content .= PHP_EOL;
+        $content .= $padding . 'foreach ($this->' . $postProcessorsProperty->getName() . ' as $postProcessor) {
+        ' .
+            PHP_EOL;
+        $content .= $padding . '    $postProcessor->postProcess($instance, "' . $beanId . '");' . PHP_EOL;
+        $content .= $padding . '}' . PHP_EOL;
+        return $content;
     }
 }
