@@ -28,6 +28,7 @@ use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProp
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ForceLazyInitProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ParameterValuesProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
+use bitExpert\Disco\Proxy\LazyBean\MethodGenerator\WrapBeanAsLazy;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Exception;
@@ -75,6 +76,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $beanFactoryConfigurationProperty = new BeanFactoryConfigurationProperty();
         $aliasesProperty = new AliasesProperty();
         $getParameterMethod = new GetParameter($originalClass, $parameterValuesProperty);
+        $wrapBeanAsLazyMethod = new WrapBeanAsLazy($originalClass, $beanFactoryConfigurationProperty);
 
         try {
             $reader = new AnnotationReader();
@@ -166,12 +168,13 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 $methodReflection,
                 $beanAnnotation,
                 $parametersAnnotation,
-                $getParameterMethod,
+                $beanType,
                 $forceLazyInitProperty,
                 $sessionBeansProperty,
                 $postProcessorsProperty,
                 $beanFactoryConfigurationProperty,
-                $beanType
+                $getParameterMethod,
+                $wrapBeanAsLazyMethod
             );
             $classGenerator->addMethodFromGenerator($proxyMethod);
         }
@@ -188,6 +191,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 $postProcessorMethods
             )
         );
+        $classGenerator->addMethodFromGenerator($wrapBeanAsLazyMethod);
         $classGenerator->addMethodFromGenerator($getParameterMethod);
         $classGenerator->addMethodFromGenerator(
             new MagicSleep(

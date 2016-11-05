@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace bitExpert\Disco;
 
 use bitExpert\Disco\Config\BeanConfiguration;
-use bitExpert\Disco\Config\BeanConfigurationPersistence;
 use bitExpert\Disco\Config\BeanConfigurationSubclass;
 use bitExpert\Disco\Config\BeanConfigurationTrait;
 use bitExpert\Disco\Config\BeanConfigurationWithAliases;
@@ -26,12 +25,6 @@ use bitExpert\Disco\Config\WrongReturnTypeConfiguration;
 use bitExpert\Disco\Helper\BeanFactoryAwareService;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
-use org\bovigo\vfs\vfsStream;
-use ProxyManager\Autoloader\Autoloader;
-use ProxyManager\Configuration;
-use ProxyManager\FileLocator\FileLocatorInterface;
-use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
-use ProxyManager\Inflector\ClassNameInflector;
 use ProxyManager\Proxy\ValueHolderInterface;
 use ProxyManager\Proxy\VirtualProxyInterface;
 use stdClass;
@@ -171,14 +164,18 @@ class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function retrievingSingletonDependencyMatchesDirectBeanAccess()
     {
         $dependency = $this->beanFactory->get('singletonNonLazyRequestBean');
         $bean = $this->beanFactory->get('singletonNonLazySessionBean');
+        $dependency2 = $this->beanFactory->get('singletonNonLazyRequestBean');
 
         $bean->service->initializeProxy();
         self::assertSame($dependency, $bean->service->getWrappedValueHolderValue());
+        self::assertSame($dependency, $dependency2);
     }
 
     /**
