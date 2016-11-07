@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.6.0
+
+### Added
+
+-  [#65](https://github.com/bitExpert/disco/pull/65) Restructure the bean method code generator
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+-  [#64](https://github.com/bitExpert/disco/pull/64) Remove Doctrine Cache dependency
+-  [#63](https://github.com/bitExpert/disco/pull/63) Remove type check code in generated class.
+
+### Fixed
+
+-  [#61](https://github.com/bitExpert/disco/issues/61) Check given $id for being a non-empty string
+
 ## 0.5.0
 
 ### Added
