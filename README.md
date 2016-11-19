@@ -305,6 +305,7 @@ changing your configuration code!
 
  - sitepoint.com: [Disco with Design Patterns: A Fresh Look at Dependency Injection](https://www.sitepoint.com/disco-with-frameworks-and-design-patterns-a-fresh-look-at-dependency-injection/)
  - php[architect]: [Education Station: Your Dependency Injection Needs a Disco](https://www.phparch.com/magazine/2016-2/september/)
+ - Presentation: [Disco - A Fresh Look at DI](https://talks.bitexpert.de/phpugffm16-disco/) at [PHPUGFFM V/2016](http://www.phpugffm.de)
 
 ## License
 
