@@ -82,7 +82,7 @@ class LazyBeanGenerator implements ProxyGeneratorInterface
                 array_map(
                     function (ReflectionMethod $method) use ($initializer, $valueHolder) {
                         return LazyLoadingMethodInterceptor::generateMethod(
-                            new MethodReflection($method->getDeclaringClass()->getName(), $method->getName()),
+                            new MethodReflection($method->class, $method->getName()),
                             $initializer,
                             $valueHolder
                         );

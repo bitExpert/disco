@@ -161,7 +161,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             }
 
             $methodReflection = new MethodReflection(
-                $method->getDeclaringClass()->getName(),
+                $method->class,
                 $method->getName()
             );
             $proxyMethod = BeanMethod::generateMethod(
