@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.6.1
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+-  [#75](https://github.com/bitExpert/disco/pull/75) Made sure that Proxy Manager 2.1.0 does not yet get installed
+
 ## 0.6.0
 
 ### Added
