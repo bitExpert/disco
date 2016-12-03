@@ -282,7 +282,6 @@ class BeanMethod extends MethodGenerator
      * @param ForceLazyInitProperty $forceLazyInitProperty
      * @param SessionBeansProperty $sessionBeansProperty
      * @param BeanPostProcessorsProperty $postProcessorsProperty
-     * @param BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty
      * @param WrapBeanAsLazy $wrapBeanAsLazy
      * @return string
      */
