@@ -51,6 +51,7 @@ class WrapBeanAsLazy extends MethodGenerator
         $content .= '$initializer->bindTo($this);'. PHP_EOL;
         $content .= 'return $factory->createProxy($beanType, $initializer);' . PHP_EOL;
 
+        $this->setVisibility(self::VISIBILITY_PROTECTED);
         $this->setBody($content);
     }
 }
