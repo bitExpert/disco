@@ -65,7 +65,7 @@ class BeanMethod extends MethodGenerator
     ) {
         $method = static::fromReflection($originalMethod);
         $methodParams = static::convertMethodParamsToString($methodParameters, $parameterValuesMethod);
-        $beanId = $originalMethod->getName();
+        $beanId = $originalMethod->name;
         $body = '';
 
         if (in_array($beanType, ['array', 'callable', 'bool', 'float', 'int', 'string'], true)) {
@@ -94,7 +94,6 @@ class BeanMethod extends MethodGenerator
                     $forceLazyInitProperty,
                     $sessionBeansProperty,
                     $postProcessorsProperty,
-                    $beanFactoryConfigurationProperty,
                     $wrapBeanAsLazy
                 );
             }
@@ -296,7 +295,6 @@ class BeanMethod extends MethodGenerator
         ForceLazyInitProperty $forceLazyInitProperty,
         SessionBeansProperty $sessionBeansProperty,
         BeanPostProcessorsProperty $postProcessorsProperty,
-        BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty,
         WrapBeanAsLazy $wrapBeanAsLazy
     ) : string {
         $content = $padding . '$backupForceLazyInit = $this->' . $forceLazyInitProperty->getName() . ';' . PHP_EOL;

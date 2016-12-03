@@ -52,9 +52,10 @@ class Constructor extends MethodGenerator
         $parametersParameter = new ParameterGenerator('params');
         $parametersParameter->setDefaultValue([]);
 
-        $body = '$this->' . $parameterValuesProperty->getName() . ' = $' . $parametersParameter->getName() . ';';
+        $body = '$this->' . $parameterValuesProperty->getName() . ' = $' . $parametersParameter->getName() .
+            ';' . PHP_EOL;
         $body .= '$this->' . $beanFactoryConfigurationProperty->getName() .
-            ' = $' . $beanFactoryConfigurationParameter->getName() . ';';
+            ' = $' . $beanFactoryConfigurationParameter->getName() . ';' . PHP_EOL;
         $body .= '$this->' . $sessionBeansProperty->getName() . ' = $' . $beanFactoryConfigurationParameter->getName() .
             '->getSessionBeanStore();' . PHP_EOL;
         $body .= '// register {@link \\bitExpert\\Disco\\BeanPostProcessor} instances' . PHP_EOL;
