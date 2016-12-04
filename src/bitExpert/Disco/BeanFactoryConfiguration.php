@@ -104,7 +104,7 @@ class BeanFactoryConfiguration
         if (!is_writable($proxyTargetDir)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Proxy target directory "%s" is not writeable!',
+                    'Proxy target directory "%s" is not writable!',
                     $proxyTargetDir
                 )
             );

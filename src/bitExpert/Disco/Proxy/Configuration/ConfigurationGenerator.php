@@ -139,7 +139,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             if (null === $beanType) {
                 throw new InvalidProxiedClassException(
                     sprintf(
-                        'Method "%s" on "%s" is missing the return typehint!',
+                        'Method "%s" on "%s" is missing the return type hint!',
                         $method->getName(),
                         $originalClass->getName()
                     )

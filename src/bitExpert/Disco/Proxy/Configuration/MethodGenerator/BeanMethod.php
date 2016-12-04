@@ -100,7 +100,7 @@ class BeanMethod extends MethodGenerator
         } else {
             // return type is unknown, throw an exception
             $body .= '$message = sprintf(' . PHP_EOL;
-            $body .= '    \'Either return type declaration missing or unkown for bean with id "' . $beanId .
+            $body .= '    \'Either return type declaration missing or unknown for bean with id "' . $beanId .
                 '": %s\',' . PHP_EOL;
             $body .= '    $e->getMessage()' . PHP_EOL;
             $body .= ');' . PHP_EOL;
@@ -250,7 +250,7 @@ class BeanMethod extends MethodGenerator
 
         $content .= $padding . '    } catch (\Throwable $e) {' . PHP_EOL;
         $content .= $padding . '        $message = sprintf(' . PHP_EOL;
-        $content .= $padding . '            \'Either return type declaration missing or unkown for bean with id "' .
+        $content .= $padding . '            \'Either return type declaration missing or unknown for bean with id "' .
             $beanId . '": %s\',' . PHP_EOL;
         $content .= $padding . '            $e->getMessage()' . PHP_EOL;
         $content .= $padding . '        );' . PHP_EOL;

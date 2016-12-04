@@ -15,7 +15,7 @@ namespace bitExpert\Disco;
 use Interop\Container\Exception\NotFoundException;
 
 /**
- * Exception being thrown if called / referenced bean doesn't exist in the
+ * Exception being thrown if called / referenced bean does not exist in the
  * {@link \bitExpert\Disco\BeanFactory}.
  */
 class BeanNotFoundException extends BeanException implements NotFoundException

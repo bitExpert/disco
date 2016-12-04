@@ -65,7 +65,7 @@ class AnnotationBeanFactory implements BeanFactory
             }
         } catch (\Throwable $e) {
             $message = sprintf(
-                'Exception occured while instanciating "%s": %s',
+                'Exception occurred while instantiating "%s": %s',
                 $id,
                 $e->getMessage()
             );
