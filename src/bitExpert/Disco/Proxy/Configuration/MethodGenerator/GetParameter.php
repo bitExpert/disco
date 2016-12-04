@@ -14,9 +14,9 @@ namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ParameterValuesProperty;
 use ProxyManager\Generator\MethodGenerator;
+use ReflectionClass;
 use Zend\Code\Generator\Exception\InvalidArgumentException;
 use Zend\Code\Generator\ParameterGenerator;
-use ReflectionClass;
 
 /**
  * `getParameter` method for the generated config proxy class.

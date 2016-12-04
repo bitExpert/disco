@@ -13,9 +13,6 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Proxy\Configuration;
 
 use bitExpert\Disco\BeanFactoryConfiguration;
-use bitExpert\Disco\Store\BeanStore;
-use Doctrine\Common\Cache\VoidCache;
-use ProxyManager\Configuration;
 use ProxyManager\Factory\AbstractBaseFactory;
 use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 

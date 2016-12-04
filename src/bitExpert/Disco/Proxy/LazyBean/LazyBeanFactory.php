@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Proxy\LazyBean;
 
 use Closure;
-use ProxyManager\Factory\AbstractBaseFactory;
 use ProxyManager\Configuration;
+use ProxyManager\Factory\AbstractBaseFactory;
 use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 
 /**
