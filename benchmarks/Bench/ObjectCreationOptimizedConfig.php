@@ -12,15 +12,12 @@ namespace bitExpert\Disco\Bench;
 use bitExpert\Disco\Asset\BenchmarkConfiguration;
 
 /**
- * @Revs(1000)
+ * @Revs({1, 100, 1000})
  * @Iterations(20)
  * @Warmup(2)
  */
-class ObjectCreationOptimizedConfig
+class ObjectCreationOptimizedConfig extends BaseObjectCreation
 {
-    /** @var BeanFactory */
-    private $disco;
-
     public function __construct()
     {
         $config = new \bitExpert\Disco\BeanFactoryConfiguration('/tmp/');
@@ -32,15 +29,5 @@ class ObjectCreationOptimizedConfig
         );
         $this->disco = new \bitExpert\Disco\AnnotationBeanFactory(BenchmarkConfiguration::class, [], $config);
         \bitExpert\Disco\BeanFactoryRegistry::register($this->disco);
-    }
-
-    public function benchCreateSimple()
-    {
-        $this->disco->get('A');
-    }
-
-    public function benchCreateComplex()
-    {
-        $this->disco->get('J');
     }
 }

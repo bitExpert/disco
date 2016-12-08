@@ -19,7 +19,7 @@ use bitExpert\Disco\Annotations\Bean;
 class BenchmarkConfiguration
 {
     /**
-     * @Bean
+     * @Bean({"alias"="mySimpleService"})
      */
     public function A(): A
     {
