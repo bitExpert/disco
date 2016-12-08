@@ -1,5 +1,12 @@
 {
   "bootstrap":       "vendor/autoload.php",
   "path":            "benchmarks/Bench",
-  "retry_threshold": 5
+  "retry_threshold": 5,
+  "outputs": {
+    "github": {
+      "extends": "markdown",
+      "file": "benchmark.md",
+      "title": "Disco"
+    }
+  }
 }
