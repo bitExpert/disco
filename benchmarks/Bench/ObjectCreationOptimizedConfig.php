@@ -9,7 +9,7 @@
  */
 namespace bitExpert\Disco\Bench;
 
-use bitExpert\Disco\Asset\MyConfiguration;
+use bitExpert\Disco\Asset\BenchmarkConfiguration;
 
 /**
  * @Revs(1000)
@@ -30,13 +30,13 @@ class ObjectCreationOptimizedConfig
                 new \ProxyManager\Inflector\ClassNameInflector('Disco')
             )
         );
-        $this->disco = new \bitExpert\Disco\AnnotationBeanFactory(MyConfiguration::class, [], $config);
+        $this->disco = new \bitExpert\Disco\AnnotationBeanFactory(BenchmarkConfiguration::class, [], $config);
         \bitExpert\Disco\BeanFactoryRegistry::register($this->disco);
     }
 
-    public function benchCreateInstance()
+    public function benchCreateSimple()
     {
-        $this->disco->get('mySimpleService');
+        $this->disco->get('A');
     }
 
     public function benchCreateComplex()
