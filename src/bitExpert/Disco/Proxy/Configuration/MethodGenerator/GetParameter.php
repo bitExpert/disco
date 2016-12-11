@@ -14,6 +14,7 @@ namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ParameterValuesProperty;
 use ProxyManager\Generator\MethodGenerator;
+use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
 use ReflectionClass;
 use Zend\Code\Generator\Exception\InvalidArgumentException;
 use Zend\Code\Generator\ParameterGenerator;
@@ -32,7 +33,7 @@ class GetParameter extends MethodGenerator
      */
     public function __construct(ReflectionClass $originalClass, ParameterValuesProperty $parameterValueProperty)
     {
-        parent::__construct('getParameter');
+        parent::__construct(UniqueIdentifierGenerator::getIdentifier('getParameter'));
 
         $propertyNameParameter = new ParameterGenerator('propertyName');
         $requiredParameter = new ParameterGenerator('required');
