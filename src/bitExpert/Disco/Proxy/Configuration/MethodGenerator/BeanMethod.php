@@ -21,8 +21,8 @@ use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanFactoryConfigurati
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ForceLazyInitProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
+use bitExpert\Disco\Proxy\Configuration\MethodGenerator\WrapBeanAsLazy;
 use bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory;
-use bitExpert\Disco\Proxy\LazyBean\MethodGenerator\WrapBeanAsLazy;
 use ProxyManager\Generator\MethodGenerator;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use Zend\Code\Generator\ParameterGenerator;

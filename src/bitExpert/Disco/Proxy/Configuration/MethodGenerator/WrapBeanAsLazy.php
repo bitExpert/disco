@@ -10,10 +10,11 @@
  */
 declare(strict_types=1);
 
-namespace bitExpert\Disco\Proxy\LazyBean\MethodGenerator;
+namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanFactoryConfigurationProperty;
 use ProxyManager\Generator\MethodGenerator;
+use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
 use ReflectionClass;
 use Zend\Code\Generator\ParameterGenerator;
 
@@ -32,7 +33,7 @@ class WrapBeanAsLazy extends MethodGenerator
         ReflectionClass $originalClass,
         BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty
     ) {
-        parent::__construct('wrapBeanAsLazy');
+        parent::__construct(UniqueIdentifierGenerator::getIdentifier('wrapBeanAsLazy'));
 
         $this->setParameter(new ParameterGenerator('beanId'));
         $this->setParameter(new ParameterGenerator('beanType'));
