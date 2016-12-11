@@ -1,6 +1,6 @@
 {
-  "bootstrap":       "vendor/autoload.php",
-  "path":            "benchmarks/Bench",
+  "bootstrap": "vendor/autoload.php",
+  "path": "benchmarks/bitExpert/Disco/Bench",
   "retry_threshold": 5,
   "outputs": {
     "github": {

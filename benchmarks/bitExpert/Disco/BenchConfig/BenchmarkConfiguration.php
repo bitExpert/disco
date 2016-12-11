@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Disco package.
  *
@@ -7,11 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare(strict_types=1);
 
-namespace bitExpert\Disco\Asset;
+namespace bitExpert\Disco\BenchConfig;
 
-use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\BenchHelper\A;
+use bitExpert\Disco\BenchHelper\B;
+use bitExpert\Disco\BenchHelper\C;
+use bitExpert\Disco\BenchHelper\D;
+use bitExpert\Disco\BenchHelper\E;
+use bitExpert\Disco\BenchHelper\F;
+use bitExpert\Disco\BenchHelper\G;
+use bitExpert\Disco\BenchHelper\H;
+use bitExpert\Disco\BenchHelper\I;
+use bitExpert\Disco\BenchHelper\J;
 
 /**
  * @Configuration
@@ -19,7 +31,7 @@ use bitExpert\Disco\Annotations\Bean;
 class BenchmarkConfiguration
 {
     /**
-     * @Bean({"alias"="mySimpleService"})
+     * @Bean({"alias"="simpleService"})
      */
     public function A(): A
     {
@@ -91,7 +103,7 @@ class BenchmarkConfiguration
     }
 
     /**
-     * @Bean
+     * @Bean({"alias"="complexService"})
      */
     public function J(): J
     {
