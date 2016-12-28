@@ -1,0 +1,9 @@
+{
+  "title": "Basic usage",
+  "content": [
+    "basic-concepts.md",
+    "bean-config.md",
+    "injecting-dependencies.md",
+    "bean-parameters.md"
+  ]
+}
