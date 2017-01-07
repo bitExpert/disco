@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.6.2
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+-  [#83](https://github.com/bitExpert/disco/pull/83) Make Disco not depend on a fixed version of Doctrine Annotations
+
 ## 0.6.1
 
 ### Added
