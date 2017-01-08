@@ -29,7 +29,7 @@ class ParameterUnitTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function parameterNameGetsRecognizedCorrectly()
+    public function parameterNameIsParsed()
     {
         $parameter = new Parameter(['value' => ['name' => 'myParam']]);
 
@@ -50,7 +50,7 @@ class ParameterUnitTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider defaultValueDataProvider
      */
-    public function defaultValueGetsRecognizedCorrectly($defaultValue)
+    public function defaultValueIsParsed($defaultValue)
     {
         $parameter = new Parameter(['value' => ['name' => 'myParam', 'default' => $defaultValue]]);
 
@@ -60,7 +60,7 @@ class ParameterUnitTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function requireDefaultsToTrueWhenNotDefined()
+    public function requireDefaultsToTrue()
     {
         $parameter = new Parameter(['value' => ['name' => 'myParam']]);
 
@@ -71,7 +71,7 @@ class ParameterUnitTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider requireDataProvider
      */
-    public function requireGetsRecognizedCorrectly($requireValue)
+    public function requireIsParsed($requireValue)
     {
         $parameter = new Parameter(['value' => ['name' => 'myParam', 'required' => $requireValue]]);
 
