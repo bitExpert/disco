@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace bitExpert\Disco\Annotations;
 
@@ -48,19 +48,24 @@ final class Parameter
      */
     public function __construct(array $attributes = [])
     {
-        if (isset($attributes['value']) && isset($attributes['value']['name'])) {
-            $this->name = $attributes['value']['name'];
-        } else {
-            throw new AnnotationException('name attribute missing!');
-        }
-
-        if (isset($attributes['value']) && isset($attributes['value']['default'])) {
-            $this->defaultValue = $attributes['value']['default'];
-        }
-
         $this->required = true;
-        if (isset($attributes['value']) && isset($attributes['value']['required'])) {
-            $this->required = (bool) $attributes['value']['required'];
+
+        if (isset($attributes['value'])) {
+            if (isset($attributes['value']['name'])) {
+                $this->name = $attributes['value']['name'];
+            }
+
+            if (isset($attributes['value']['default'])) {
+                $this->defaultValue = $attributes['value']['default'];
+            }
+
+            if (isset($attributes['value']['required'])) {
+                $this->required = AnnotationAttributeParser::parseBooleanValue($attributes['value']['required']);
+            }
+        }
+
+        if (!$this->name) {
+            throw new AnnotationException('name attribute missing!');
         }
     }
 
@@ -69,7 +74,7 @@ final class Parameter
      *
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -89,7 +94,7 @@ final class Parameter
      *
      * @return bool
      */
-    public function isRequired() : bool
+    public function isRequired(): bool
     {
         return $this->required;
     }
