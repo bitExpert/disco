@@ -57,6 +57,27 @@ class ParameterUnitTest extends \PHPUnit_Framework_TestCase
         self::assertSame($defaultValue, $parameter->getDefaultValue());
     }
 
+    /**
+     * @test
+     */
+    public function requireDefaultsToTrueWhenNotDefined()
+    {
+        $parameter = new Parameter(['value' => ['name' => 'myParam']]);
+
+        self::assertTrue($parameter->isRequired());
+    }
+
+    /**
+     * @test
+     * @dataProvider requireDataProvider
+     */
+    public function requireGetsRecognizedCorrectly($requireValue)
+    {
+        $parameter = new Parameter(['value' => ['name' => 'myParam', 'required' => $requireValue]]);
+
+        self::assertSame($requireValue, $parameter->isRequired());
+    }
+
     public function defaultValueDataProvider()
     {
         return [
@@ -66,6 +87,14 @@ class ParameterUnitTest extends \PHPUnit_Framework_TestCase
             [true],
             [false],
             [null]
+        ];
+    }
+
+    public function requireDataProvider()
+    {
+        return [
+            [true],
+            [false]
         ];
     }
 }

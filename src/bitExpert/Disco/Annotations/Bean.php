@@ -67,11 +67,11 @@ final class Bean
             }
 
             if (isset($attributes['value']['singleton'])) {
-                $this->singleton = $this->parseBooleanValue($attributes['value']['singleton']);
+                $this->singleton = AnnotationAttributeParser::parseBooleanValue($attributes['value']['singleton']);
             }
 
             if (isset($attributes['value']['lazy'])) {
-                $this->lazy = $this->parseBooleanValue($attributes['value']['lazy']);
+                $this->lazy = AnnotationAttributeParser::parseBooleanValue($attributes['value']['lazy']);
             }
 
             if (isset($attributes['value']['alias'])) {
@@ -127,24 +127,5 @@ final class Bean
     public function getAlias(): string
     {
         return $this->alias;
-    }
-
-    /**
-     * Helper function to cast a string value to a boolean representation.
-     *
-     * @param string|bool $value
-     * @return bool
-     */
-    protected function parseBooleanValue($value) : bool
-    {
-        if (is_bool($value)) {
-            return $value;
-        } elseif (is_string($value)) {
-            $value = strtolower($value);
-            return ('true' === $value);
-        }
-
-        // anything else is simply casted to bool
-        return (bool) $value;
     }
 }
