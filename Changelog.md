@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.6.3
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+-  [#85](https://github.com/bitExpert/disco/pull/85) Fix bool cast for @Parameter required attribute
+
 ## 0.6.2
 
 ### Added
