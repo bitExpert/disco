@@ -4,8 +4,8 @@ Disco provides a [container-interop](https://github.com/container-interop/contai
 
 ## Usage
 
-First, you need to define a configuration class.
-The class needs to be marked with `@Configuration` annotation:
+To use Disco as your DI container, first, you need to define a configuration class.
+The class needs to be marked with the `@Configuration` annotation, as in the example below:
 
 ```php
 <?php
@@ -21,11 +21,11 @@ class MyConfiguration
 ```
 
 Add a public or protected method for each instance you want Disco to manage for you.
-Instances managed by a public method are accessible via the `has()` and `get()` methods of the `\bitExpert\Disco\AnnotationBeanFactory` class.
-Any instance managed by a protected method is seen as a local dependency, and is just accessible "inside" the container's configuration class.
+Instances managed by a _public_ method are accessible via the `has()` and `get()` methods of the `\bitExpert\Disco\AnnotationBeanFactory` class.
+Any instance managed by a _protected_ method is seen as a local dependency, and is accessible "inside" the container's configuration class.
 This is useful for dependencies like database connectors, which you most likely do not want to expose to the outside world.
 
-Each method needs to be marked with `@Bean` annotation as well as define the [return type declaration](http://php.net/manual/en/functions.returning-values.php#functions.returning-values.type-declaration)
+Each method needs to be marked with the `@Bean` annotation, as well as define the [return type declaration](http://php.net/manual/en/functions.returning-values.php#functions.returning-values.type-declaration)
 (which is mainly needed for the lazy proxy magic).
 
 ```php
@@ -175,8 +175,7 @@ $beanFactory = new \bitExpert\Disco\AnnotationBeanFactory(MyConfiguration::class
 \bitExpert\Disco\BeanFactoryRegistry::register($beanFactory);
 ```
 
-To influence the object creation, you are able to register post processors by annotating the methods with the
-`@BeanPostProcessor` annotation.
+To influence object creation, you are able to register post processors by annotating the methods with the `@BeanPostProcessor` annotation.
 The method needs to return an instance, implementing the `\bitExpert\Disco\BeanPostProcessor` interface.
 
 ```php
