@@ -146,8 +146,11 @@ Total 20 (delta 12), reused 0 (delta 0)
 To ssh://git@github.com/{username}/disco.git
    b5583aa..4f51698  HEAD -> master
 ```
+### Sending a PR
 
-To send a pull request, you have two options.
+Before sending a PR, run `composer.phar validate`, as the Travis build will also run the command and will fail if the composer.lock file is not up-to-date with the changes in the composer.json file.
+
+When you’ve done that, and you’re reading to send one, you have two options:
 
 1. If using GitHub, you can do the pull request from there.
 Navigate to your repository, select the branch you just created, and then select the "Pull Request" button in the upper right. Select the user/organization "bitExpert" as the recipient.
