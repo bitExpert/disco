@@ -2,11 +2,17 @@
 
 ## Resources
 
+If you wish to contribute to Disco, please be sure to
+read/subscribe to the following resources:
+
+ -  [The PSR-2 Coding Standard](http://www.php-fig.org/psr/psr-2/)
+ -  The Disco Contributor's IRC channel: #disco.dev on Freenode.net
+
 If you are working on new features or refactoring [create a proposal](https://github.com/bitExpert/disco/issues/new).
 
 ## Reporting Potential Security Issues
 
-If you have encountered a potential security vulnerability, please **DO NOT** report it on the public issue tracker: send it to us at ... instead.
+If you have encountered a potential security vulnerability, please **DO NOT** report it on the public issue tracker: send it to us at [opensource@bitexpert.de](mailto:opensource@bitexpert.de) instead.
 We will work with you to verify the vulnerability and patch it as soon as possible.
 
 When reporting issues, please provide the following information:
@@ -18,7 +24,7 @@ When reporting issues, please provide the following information:
 We request that you contact us via the email address above and give the project contributors a chance to resolve the vulnerability and issue a new release prior to any public exposure.
 This helps protect users and provides them with a chance to upgrade and/or update in order to protect their applications.
 
-For sensitive email communications, please use [our PGP key](http://framework.zend.com/zf-security-pgp-key.asc).
+For sensitive email communications, please use [our PGP key](http://pgp.mit.edu/pks/lookup?op=vindex&search=0xEC37D631657E0A89).
 
 ## Running Tests
 
