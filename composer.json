@@ -36,5 +36,14 @@
     "psr-4": {
       "bitExpert\\Disco\\": ["tests/bitExpert/Disco", "benchmarks/bitExpert/Disco"]
     }
+  },
+  "scripts": {
+    "check": [
+      "@cs-check",
+      "@test"
+    ],
+    "cs-check": "vendor/bin/phing sniff",
+    "cs-fix": "vendor/bin/phpcbf",
+    "test": "vendor/bin/phing unit"
   }
 }
