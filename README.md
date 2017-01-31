@@ -111,7 +111,7 @@ class MyConfiguration
     {
         return new SampleService();
     }
-    
+
     /**
      * @Bean
      */
@@ -152,7 +152,7 @@ class MyConfiguration
 }
 ```
 
-To instantiate the `\bitExpert\Disco\AnnotationBeanFactory` instance, proceed as follows: 
+To instantiate the `\bitExpert\Disco\AnnotationBeanFactory` instance, proceed as follows:
 
 ```php
 <?php
@@ -227,9 +227,9 @@ class MyConfiguration
 
 ## Session-aware Beans
 
-Disco will not persists session-aware Beans on its own. You can choose freely how to accomplish that task. 
-Disco provides by default a bean store instance `\bitExpert\Disco\Store\SerializableBeanStore` which will 
-contain all created session-aware bean instances. The store can be serialized and unserialized. In case 
+Disco will not persists session-aware Beans on its own. You can choose freely how to accomplish that task.
+Disco provides by default a bean store instance `\bitExpert\Disco\Store\SerializableBeanStore` which will
+contain all created session-aware bean instances. The store can be serialized and unserialized. In case
 you want to provide your own logic e.g. persisting session-aware Beans in Redis you can implement a custom
 variant by implementing the `\bitExpert\Disco\Store\BeanStore` interface.
 
@@ -261,14 +261,14 @@ BeanFactoryRegistry::register($beanFactory);
 
 In case your session beans make use of dependencies managed by Disco lazy proxy instances will be used.
 That means you need to define a custom proxy autoloader to be able to load the classes before
-unserializing the `\bitExpert\Disco\Store\SerializableBeanStore` instance otherwise PHP is not able to 
+unserializing the `\bitExpert\Disco\Store\SerializableBeanStore` instance otherwise PHP is not able to
 find the class and will return an error.
- 
+
 ```php
 $config = new \bitExpert\Disco\BeanFactoryConfiguration('/tmp/');
 $config->setProxyAutoloader(
     new \ProxyManager\Autoloader\Autoloader(
-        new \ProxyManager\FileLocator\FileLocator('/tmp/'), 
+        new \ProxyManager\FileLocator\FileLocator('/tmp/'),
         new \ProxyManager\Inflector\ClassNameInflector('Disco')
     )
 );
@@ -281,16 +281,16 @@ $config->setBeanStore($sessionBeans);
 
 ## Performance Tuning
 
-Since a lot of parsing and reflection logic is involved during the conversion process of the configuration code 
-into its "final format" Disco can be rather slow in production mode and during development, especially when 
+Since a lot of parsing and reflection logic is involved during the conversion process of the configuration code
+into its "final format" Disco can be rather slow in production mode and during development, especially when
 running  Disco in a virtual machine with a shared hosts folder.
 
 ### ocramius/ProxyManager
 
 [ProxyManager](https://github.com/Ocramius/ProxyManager) also needs to be configured for faster performance. Read about the details [here](https://ocramius.github.io/ProxyManager/docs/tuning-for-production.html).
 
-For production mode you need to enable the custom autoloader by setting an instance of `\ProxyManager\Autoloader\Autoloader` 
-via `\bitExpert\Disco\BeanFactoryConfiguration::setProxyAutoloader()`. This will significantly increase the overall 
+For production mode you need to enable the custom autoloader by setting an instance of `\ProxyManager\Autoloader\Autoloader`
+via `\bitExpert\Disco\BeanFactoryConfiguration::setProxyAutoloader()`. This will significantly increase the overall
 performance of Disco.
 
 By default Disco is configured to use the `\ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy` which will dump
@@ -298,8 +298,13 @@ the generated config classes as well as the lazy proxy classes on disk. When no 
 get overwritten for every request which can be rather slow. Thus you might also want to use a proxy autoloader in your
 development environment.
 
-When enabling the caching methods, make sure you regularly clean your cache storage directory after 
+When enabling the caching methods, make sure you regularly clean your cache storage directory after
 changing your configuration code!
+
+## Want To Contribute?
+
+If you feel that you have something to share, then we’d love to have you.
+Check out [the contributing guide](CONTRIBUTING.md) to find out how, as well as what we expect from you.
 
 ## Resources
 
