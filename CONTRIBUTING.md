@@ -24,7 +24,7 @@ When reporting issues, please provide the following information:
 We request that you contact us via the email address above and give the project contributors a chance to resolve the vulnerability and issue a new release prior to any public exposure.
 This helps protect users and provides them with a chance to upgrade and/or update in order to protect their applications.
 
-For sensitive email communications, please use [our PGP key](http://pgp.mit.edu/pks/lookup?op=vindex&search=0xEC37D631657E0A89).
+For sensitive email communications, please use [our PGP key](http://pgp.mit.edu/pks/lookup?op=vindex&search=0x6DE7F8597CECDF13).
 
 ## Running Tests
 
@@ -40,11 +40,10 @@ $ cd disco
 2. Install dependencies via composer:
 
 ```console
-$ curl -sS https://getcomposer.org/installer | php --
 $ ./composer.phar install
 ```
 
-If you don't have `curl` installed, you can also download `composer.phar` from https://getcomposer.org/
+If you don't have `curl` installed, you can also download `composer.phar` from https://getcomposer.org/download/
 
 3. Run the tests using the "test" command shipped in the `composer.json`:
 
@@ -154,7 +153,7 @@ To ssh://git@github.com/{username}/disco.git
 ```
 ### Sending a PR
 
-Before sending a PR, run `composer.phar validate`, as the Travis build will also run the command and will fail if the composer.lock file is not up-to-date with the changes in the composer.json file.
+Before sending a PR, run `composer.phar validate && composer.phar check`, as the Travis build will also run the command and will fail if the composer.lock file is not up-to-date with the changes in the composer.json file.
 
 When you’ve done that, and you’re reading to send one, you have two options:
 
