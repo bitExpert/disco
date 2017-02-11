@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.7.0
+
+### Added
+
+-  [#81](https://github.com/bitExpert/disco/pull/81) Generate unique names for helper methods
+-  [#80](https://github.com/bitExpert/disco/pull/80) Adds setup for simple benchmarks
+-  [#78](https://github.com/bitExpert/disco/pull/78) Optimize the code formatting of the generated config class
+-  [#73](https://github.com/bitExpert/disco/issues/73) Benchmark Disco and add results to README
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+-  [#77](https://github.com/bitExpert/disco/pull/77) Change in Travis config: Remove hhvm, add PHP 7.1 to build matrix
+
+### Fixed
+
+-  [#76](https://github.com/bitExpert/disco/pull/76) Change visibility of wrapBeanAsLazy helper method to protected
+-  [#69](https://github.com/bitExpert/disco/pull/69) Use UniqueIdentifierGenerator::getIdentifier to generate unique names for helper methods
+-  [#68](https://github.com/bitExpert/disco/pull/68) Change visibility of wrapBeanAsLazy helper method
+-  [#66](https://github.com/bitExpert/disco/pull/66) APC fix as suggested by Scrutinizer
+
 ## 0.6.3
 
 ### Added
