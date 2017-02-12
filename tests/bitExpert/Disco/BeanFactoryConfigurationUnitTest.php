@@ -24,7 +24,7 @@ use ProxyManager\Inflector\ClassNameInflector;
 /**
  * Unit tests for {@link \bitExpert\Disco\BeanFactoryConfiguration}.
  */
-class BeanFactoryConfigurationUnitTest extends \PHPUnit_Framework_TestCase
+class BeanFactoryConfigurationUnitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

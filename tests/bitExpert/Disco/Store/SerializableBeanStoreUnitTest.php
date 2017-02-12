@@ -19,7 +19,7 @@ use Doctrine\Instantiator\Exception\InvalidArgumentException;
 /**
  * Unit tests for {@link \bitExpert\Disco\Store\SerializableBeanStoreUnitTest}.
  */
-class SerializableBeanStoreUnitTest extends \PHPUnit_Framework_TestCase
+class SerializableBeanStoreUnitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SerializableBeanStore

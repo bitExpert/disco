@@ -15,7 +15,7 @@ namespace bitExpert\Disco\Annotations;
 /**
  * Unit tests for {@link \bitExpert\Disco\Annotations\Bean}.
  */
-class BeanUnitTest extends \PHPUnit_Framework_TestCase
+class BeanUnitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

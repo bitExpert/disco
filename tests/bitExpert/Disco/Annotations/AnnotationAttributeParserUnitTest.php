@@ -15,7 +15,7 @@ namespace bitExpert\Disco\Annotations;
 /**
  * Unit tests for {@link \bitExpert\Disco\Annotations\AnnotationsAttributeParser}.
  */
-class AnnotationAttributeParserUnitTest extends \PHPUnit_Framework_TestCase
+class AnnotationAttributeParserUnitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

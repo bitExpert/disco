@@ -32,7 +32,7 @@ use stdClass;
 /**
  * Unit tests for {@link \bitExpert\Disco\AnnotationBeanFactory}.
  */
-class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
+class AnnotationBeanFactoryUnitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AnnotationBeanFactory

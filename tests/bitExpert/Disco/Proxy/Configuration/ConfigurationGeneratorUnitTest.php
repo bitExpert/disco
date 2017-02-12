@@ -24,7 +24,7 @@ use ProxyManager\Generator\ClassGenerator;
 /**
  * Unit tests for {@link \bitExpert\Disco\Proxy\Configuration\ConfigurationGenerator}.
  */
-class ConfigurationGeneratorUnitTest extends \PHPUnit_Framework_TestCase
+class ConfigurationGeneratorUnitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigurationGenerator
@@ -101,7 +101,7 @@ class ConfigurationGeneratorUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function parsingConfigurationWithoutAnyErrorsSucceeds()
     {
-        $this->classGenerator->expects(static::any())
+        $this->classGenerator->expects(static::atLeastOnce())
             ->method('addMethodFromGenerator');
 
         $reflClass = new \ReflectionClass(BeanConfiguration::class);

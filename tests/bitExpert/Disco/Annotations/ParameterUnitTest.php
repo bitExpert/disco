@@ -15,7 +15,7 @@ namespace bitExpert\Disco\Annotations;
 /**
  * Unit tests for {@link \bitExpert\Disco\Annotations\Parameter}.
  */
-class ParameterUnitTest extends \PHPUnit_Framework_TestCase
+class ParameterUnitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

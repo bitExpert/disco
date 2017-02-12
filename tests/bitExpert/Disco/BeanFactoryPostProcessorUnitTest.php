@@ -18,7 +18,7 @@ use ReflectionProperty;
 /**
  * Unit tests for {@link \bitExpert\Disco\BeanFactoryPostProcessor}.
  */
-class BeanFactoryPostProcessorUnitTest extends \PHPUnit_Framework_TestCase
+class BeanFactoryPostProcessorUnitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
