@@ -30,6 +30,7 @@ class ConfigurationGeneratorUnitTest extends \PHPUnit\Framework\TestCase
      * @var ConfigurationGenerator
      */
     private $configGenerator;
+
     /**
      * @var ClassGenerator|PHPUnit_Framework_MockObject_MockObject
      */
@@ -101,7 +102,7 @@ class ConfigurationGeneratorUnitTest extends \PHPUnit\Framework\TestCase
      */
     public function parsingConfigurationWithoutAnyErrorsSucceeds()
     {
-        $this->classGenerator->expects(static::atLeastOnce())
+        $this->classGenerator->expects(self::atLeastOnce())
             ->method('addMethodFromGenerator');
 
         $reflClass = new \ReflectionClass(BeanConfiguration::class);

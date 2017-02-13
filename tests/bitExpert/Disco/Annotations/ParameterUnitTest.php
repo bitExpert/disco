@@ -23,7 +23,7 @@ class ParameterUnitTest extends \PHPUnit\Framework\TestCase
      */
     public function missingNameWillThrowAnnotationException()
     {
-        $parameter = new Parameter();
+        new Parameter();
     }
 
     /**

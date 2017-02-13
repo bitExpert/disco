@@ -23,7 +23,6 @@ class AnnotationAttributeParserUnitTest extends \PHPUnit\Framework\TestCase
      */
     public function requireGetsRecognizedCorrectly($parameterValue, $expectedValue)
     {
-
         self::assertSame($expectedValue, AnnotationAttributeParser::parseBooleanValue($parameterValue));
     }
 
