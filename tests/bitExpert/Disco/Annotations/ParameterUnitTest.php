@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Unit tests for {@link \bitExpert\Disco\Annotations\Parameter}.
  */
-class ParameterUnitTest extends \PHPUnit\Framework\TestCase
+class ParameterUnitTest extends TestCase
 {
     /**
      * @test

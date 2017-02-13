@@ -15,11 +15,12 @@ namespace bitExpert\Disco\Store;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
 use Doctrine\Instantiator\Exception\InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for {@link \bitExpert\Disco\Store\SerializableBeanStoreUnitTest}.
  */
-class SerializableBeanStoreUnitTest extends \PHPUnit\Framework\TestCase
+class SerializableBeanStoreUnitTest extends TestCase
 {
     /**
      * @var SerializableBeanStore

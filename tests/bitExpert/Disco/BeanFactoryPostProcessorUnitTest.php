@@ -13,12 +13,13 @@ declare(strict_types=1);
 namespace bitExpert\Disco;
 
 use bitExpert\Disco\Helper\BeanFactoryAwareService;
+use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 
 /**
  * Unit tests for {@link \bitExpert\Disco\BeanFactoryPostProcessor}.
  */
-class BeanFactoryPostProcessorUnitTest extends \PHPUnit\Framework\TestCase
+class BeanFactoryPostProcessorUnitTest extends TestCase
 {
     /**
      * @test

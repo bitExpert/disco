@@ -18,13 +18,14 @@ use bitExpert\Disco\Config\InvalidConfiguration;
 use bitExpert\Disco\Config\MissingBeanAnnotationConfiguration;
 use bitExpert\Disco\Config\MissingReturnTypeConfiguration;
 use bitExpert\Disco\Config\NonExistentReturnTypeConfiguration;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use ProxyManager\Generator\ClassGenerator;
 
 /**
  * Unit tests for {@link \bitExpert\Disco\Proxy\Configuration\ConfigurationGenerator}.
  */
-class ConfigurationGeneratorUnitTest extends \PHPUnit\Framework\TestCase
+class ConfigurationGeneratorUnitTest extends TestCase
 {
     /**
      * @var ConfigurationGenerator

@@ -15,6 +15,7 @@ namespace bitExpert\Disco;
 use bitExpert\Disco\Store\SerializableBeanStore;
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\Common\Cache\VoidCache;
+use PHPUnit\Framework\TestCase;
 use ProxyManager\Autoloader\Autoloader;
 use ProxyManager\Autoloader\AutoloaderInterface;
 use ProxyManager\FileLocator\FileLocator;
@@ -24,7 +25,7 @@ use ProxyManager\Inflector\ClassNameInflector;
 /**
  * Unit tests for {@link \bitExpert\Disco\BeanFactoryConfiguration}.
  */
-class BeanFactoryConfigurationUnitTest extends \PHPUnit\Framework\TestCase
+class BeanFactoryConfigurationUnitTest extends TestCase
 {
     /**
      * @test
