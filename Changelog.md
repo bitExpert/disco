@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.8.0
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#90](https://github.com/bitExpert/disco/pull/90) Migrate container-interop dependency to PSR-11
+
+### Fixed
+
+- Nothing.
+
 ## 0.7.0
 
 ### Added
