@@ -16,7 +16,7 @@ use bitExpert\Disco\BeanException;
 use bitExpert\Disco\BeanNotFoundException;
 
 /**
- * Interface similar to {@link \Interop\Container\ContainerInterface}. The interface is needed
+ * Interface similar to {@link \Psr\Container\ContainerInterface}. The interface is needed
  * to be able to retrieve aliased beans from the generated configuration class.
  */
 interface AliasContainerInterface

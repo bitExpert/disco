@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco;
 
-use Interop\Container\Exception\NotFoundException;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Exception being thrown if called / referenced bean does not exist in the
  * {@link \bitExpert\Disco\BeanFactory}.
  */
-class BeanNotFoundException extends BeanException implements NotFoundException
+class BeanNotFoundException extends BeanException implements NotFoundExceptionInterface
 {
 }
