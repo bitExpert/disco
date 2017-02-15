@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Unit tests for {@link \bitExpert\Disco\Annotations\Parameter}.
  */
-class ParameterUnitTest extends \PHPUnit_Framework_TestCase
+class ParameterUnitTest extends TestCase
 {
     /**
      * @test
@@ -23,7 +25,7 @@ class ParameterUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function missingNameWillThrowAnnotationException()
     {
-        $parameter = new Parameter();
+        new Parameter();
     }
 
     /**

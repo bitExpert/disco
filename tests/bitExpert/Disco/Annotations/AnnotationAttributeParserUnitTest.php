@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Unit tests for {@link \bitExpert\Disco\Annotations\AnnotationsAttributeParser}.
  */
-class AnnotationAttributeParserUnitTest extends \PHPUnit_Framework_TestCase
+class AnnotationAttributeParserUnitTest extends TestCase
 {
     /**
      * @test
@@ -23,7 +25,6 @@ class AnnotationAttributeParserUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function requireGetsRecognizedCorrectly($parameterValue, $expectedValue)
     {
-
         self::assertSame($expectedValue, AnnotationAttributeParser::parseBooleanValue($parameterValue));
     }
 

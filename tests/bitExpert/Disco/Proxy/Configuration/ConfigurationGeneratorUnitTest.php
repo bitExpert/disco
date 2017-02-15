@@ -18,18 +18,20 @@ use bitExpert\Disco\Config\InvalidConfiguration;
 use bitExpert\Disco\Config\MissingBeanAnnotationConfiguration;
 use bitExpert\Disco\Config\MissingReturnTypeConfiguration;
 use bitExpert\Disco\Config\NonExistentReturnTypeConfiguration;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use ProxyManager\Generator\ClassGenerator;
 
 /**
  * Unit tests for {@link \bitExpert\Disco\Proxy\Configuration\ConfigurationGenerator}.
  */
-class ConfigurationGeneratorUnitTest extends \PHPUnit_Framework_TestCase
+class ConfigurationGeneratorUnitTest extends TestCase
 {
     /**
      * @var ConfigurationGenerator
      */
     private $configGenerator;
+
     /**
      * @var ClassGenerator|PHPUnit_Framework_MockObject_MockObject
      */
@@ -101,7 +103,7 @@ class ConfigurationGeneratorUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function parsingConfigurationWithoutAnyErrorsSucceeds()
     {
-        $this->classGenerator->expects(static::any())
+        $this->classGenerator->expects(self::atLeastOnce())
             ->method('addMethodFromGenerator');
 
         $reflClass = new \ReflectionClass(BeanConfiguration::class);
