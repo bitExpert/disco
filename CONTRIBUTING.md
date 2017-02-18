@@ -109,7 +109,7 @@ $ git rebase origin/master
 $ git push {username} master:master
 ```
 
-If you're tracking other branches — for example, the "develop" branch, where new feature development occurs — you'll want to do the same operations for that branch; simply substitute  "develop" for "master".
+If you're tracking other branches you'll want to do the same operations for those branches; simply substitute the branch names for "master".
 
 ### Working on a patch
 
@@ -118,7 +118,7 @@ This simplifies the task of code review as well as the task of merging your chan
 
 A typical workflow will then consist of the following:
 
-1. Create a new local branch based off either your master or develop branch.
+1. Create a new local branch based off your master branch.
 2. Switch to your new local branch. (This step can be combined with the
    previous step with the use of `git checkout -b`.)
 3. Do some work, commit, repeat as necessary.
@@ -166,8 +166,8 @@ Navigate to your repository, select the branch you just created, and then select
 
 Which branch should you issue a pull request against?
 
-- For fixes against the stable release, issue the pull request against the "master" branch.
-- For new features, or fixes that introduce new elements to the public API (such as new public methods or properties), issue the pull request against the "develop" branch.
+- For fixes against the stable release, issue the pull request against the latest release branch.
+- For new features, or fixes that introduce new elements to the public API (such as new public methods or properties), issue the pull request against the "master" branch.
 
 ### Branch Cleanup
 
