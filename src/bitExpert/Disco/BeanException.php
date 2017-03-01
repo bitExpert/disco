@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco;
 
-use Interop\Container\Exception\ContainerException;
+use Psr\Container\ContainerExceptionInterface;
 
 /**
  * Superclass for all exceptions thrown in the \bitExpert\Disco package and it`s
  * subpackages.
  */
-class BeanException extends \RuntimeException implements ContainerException
+class BeanException extends \RuntimeException implements ContainerExceptionInterface
 {
 }

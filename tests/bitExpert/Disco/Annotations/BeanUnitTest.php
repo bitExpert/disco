@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Unit tests for {@link \bitExpert\Disco\Annotations\Bean}.
  */
-class BeanUnitTest extends \PHPUnit_Framework_TestCase
+class BeanUnitTest extends TestCase
 {
     /**
      * @test

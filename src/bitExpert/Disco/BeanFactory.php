@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * This interface is implemented by objects that hold a number of bean definitions,

@@ -25,6 +25,7 @@ use bitExpert\Disco\Config\WrongReturnTypeConfiguration;
 use bitExpert\Disco\Helper\BeanFactoryAwareService;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
+use PHPUnit\Framework\TestCase;
 use ProxyManager\Proxy\ValueHolderInterface;
 use ProxyManager\Proxy\VirtualProxyInterface;
 use stdClass;
@@ -32,7 +33,7 @@ use stdClass;
 /**
  * Unit tests for {@link \bitExpert\Disco\AnnotationBeanFactory}.
  */
-class AnnotationBeanFactoryUnitTest extends \PHPUnit_Framework_TestCase
+class AnnotationBeanFactoryUnitTest extends TestCase
 {
     /**
      * @var AnnotationBeanFactory

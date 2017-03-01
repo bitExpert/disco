@@ -1,6 +1,6 @@
 # bitexpert/disco
 
-This package provides a [container-interop](https://github.com/container-interop/container-interop) compatible,
+This package provides a [PSR-11](http://www.php-fig.org/psr/psr-11/) compatible,
 annotation-based dependency injection container. Have a look at the [disco-demos](https://github.com/bitExpert/disco-demos) project to find out how to use Disco.
 
 [![Build Status](https://travis-ci.org/bitExpert/disco.svg?branch=master)](https://travis-ci.org/bitExpert/disco)
@@ -99,6 +99,11 @@ Then point your browser to [http://localhost:8080/](http://localhost:8080/)
 Please feel free to fork and extend existing or add new features and send
 a pull request with your changes! To establish a consistent code quality,
 please provide unit tests for all your changes and adapt the documentation.
+
+## Want To Contribute?
+
+If you feel that you have something to share, then we’d love to have you.
+Check out [the contributing guide](CONTRIBUTING.md) to find out how, as well as what we expect from you.
 
 ## Resources
 
