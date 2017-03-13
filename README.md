@@ -1,7 +1,6 @@
 # bitexpert/disco
 
-This package provides a [PSR-11](http://www.php-fig.org/psr/psr-11/) compatible,
-annotation-based dependency injection container. Have a look at the [disco-demos](https://github.com/bitExpert/disco-demos) project to find out how to use Disco.
+This package provides a [PSR-11](http://www.php-fig.org/psr/psr-11/) compatible, annotation-based dependency injection container. Have a look at the [disco-demos](https://github.com/bitExpert/disco-demos) project to find out how to use Disco.
 
 [![Build Status](https://travis-ci.org/bitExpert/disco.svg?branch=master)](https://travis-ci.org/bitExpert/disco)
 [![Dependency Status](https://www.versioneye.com/user/projects/563e5b144d415e0018000121/badge.svg?style=flat)](https://www.versioneye.com/user/projects/563e5b144d415e0018000121)
@@ -9,7 +8,7 @@ annotation-based dependency injection container. Have a look at the [disco-demos
 ## Installation
 
 The preferred way of installing `bitexpert/disco` is through Composer.
-Simply add `bitexpert/disco` as a dependency:
+You can add `bitexpert/disco` as a dependency, as follows:
 
 ```
 composer.phar require bitexpert/disco
@@ -17,12 +16,9 @@ composer.phar require bitexpert/disco
 
 ## Usage
 
-To instanciate Disco use the following code in your bootstrapping logic.
-Create an instance of the `\bitExpert\Disco\AnnotationBeanFactory` and
-register the instance with the `\bitExpert\Disco\BeanFactoryRegistry`.
-The second step is important as Disco needs to grab the active container
-instance in a few locations where it does not have access to the
-container instance itself.
+To instantiate Disco use the following code in your bootstrapping logic.
+Create an instance of the `\bitExpert\Disco\AnnotationBeanFactory` and register the instance with the `\bitExpert\Disco\BeanFactoryRegistry`.
+The second step is important as Disco needs to grab the active container instance in a few locations where it does not have access to the container instance itself.
 
 ```php
 <?php
@@ -31,8 +27,7 @@ $beanFactory = new \bitExpert\Disco\AnnotationBeanFactory(MyConfiguration::class
 \bitExpert\Disco\BeanFactoryRegistry::register($beanFactory);
 ```
 
-Next up you need to create a configuration class `MyConfiguration`. The
-class needs to be marked with a @Configuration annotation.
+Next up you need to create a configuration class `MyConfiguration` and document it with a `@Configuration` annotation.
 
 ```php
 <?php
@@ -47,10 +42,8 @@ class MyConfiguration
 }
 ```
 
-To declare an configuration entry, simply add a method to your
-`MyConfiguration` class and annotate the method with the `@Bean` annotation.
-This registers the instance with Disco and uses the type specified by
-the method’s return value. The primary identifier is the method name:
+To declare a configuration entry, 1) add a method to your `MyConfiguration` class, and 2) annotate the method with the `@Bean` annotation.
+Doing this registers the instance with Disco and uses the type specified by the method’s return value. The primary identifier is the method name:
 
 ```php
 <?php
@@ -74,8 +67,7 @@ class MyConfiguration
 }
 ```
 
-To let Disco return the entry with the id `mySampleService` call the
-`get()` method of `\bitExpert\Disco\AnnotationBeanFactory`:
+To let Disco return the entry with the id `mySampleService` call the `get()` method of `\bitExpert\Disco\AnnotationBeanFactory`, as follows:
 
 ```php
 <?php
@@ -96,9 +88,7 @@ Then point your browser to [http://localhost:8080/](http://localhost:8080/)
 
 ## Contribute
 
-Please feel free to fork and extend existing or add new features and send
-a pull request with your changes! To establish a consistent code quality,
-please provide unit tests for all your changes and adapt the documentation.
+Please feel free to fork and extend existing or add new features and send a pull request with your changes! To establish a consistent code quality, please provide unit tests for all your changes and adapt the documentation.
 
 ## Want To Contribute?
 
