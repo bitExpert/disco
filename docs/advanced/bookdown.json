@@ -1,0 +1,9 @@
+{
+  "title": "Advanced usage",
+  "content": [
+    "bean-post-processor.md",
+    "session-aware-beans.md",
+    "structure-config.md",
+    "production-tuning.md"
+  ]
+}

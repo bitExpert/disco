@@ -24,7 +24,8 @@
     "monolog/monolog": "^1.21.0",
     "phing/phing": "^2.14.0",
     "bitexpert/phing-securitychecker": "^0.2.1",
-    "phpbench/phpbench": "^0.13.0"
+    "phpbench/phpbench": "^0.13.0",
+    "bookdown/bookdown": "@dev"
   },
   "autoload": {
     "psr-4": {

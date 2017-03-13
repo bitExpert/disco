@@ -1,0 +1,9 @@
+{
+  "title": "Disco",
+  "content": [
+    "intro/bookdown.json",
+    "basic/bookdown.json",
+    "advanced/bookdown.json"
+  ],
+  "target": "./html"
+}
