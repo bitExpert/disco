@@ -4,6 +4,7 @@ This package provides a [PSR-11](http://www.php-fig.org/psr/psr-11/) compatible,
 
 [![Build Status](https://travis-ci.org/bitExpert/disco.svg?branch=master)](https://travis-ci.org/bitExpert/disco)
 [![Dependency Status](https://www.versioneye.com/user/projects/563e5b144d415e0018000121/badge.svg?style=flat)](https://www.versioneye.com/user/projects/563e5b144d415e0018000121)
+[![Coverage Status](https://coveralls.io/repos/github/bitExpert/disco/badge.svg?branch=master)](https://coveralls.io/github/bitExpert/disco?branch=master)
 
 ## Installation
 
