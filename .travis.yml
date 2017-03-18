@@ -22,3 +22,7 @@ script:
 
 after_script:
     - if [[ $TEST_COVERAGE == 'true' ]]; then ./vendor/bin/coveralls -v ; fi
+
+notifications:
+  irc: "irc.freenode.org#disco.dev"
+  email: false
