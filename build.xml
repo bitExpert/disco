@@ -34,4 +34,13 @@
               checkreturn="true">
         </exec>
     </target>
+
+    <target name="unit-with-coverage">
+        <exec executable="./vendor/bin/phpunit"
+              passthru="true"
+              checkreturn="true">
+            <arg value="--coverage-clover" /> 
+            <arg value="clover.xml"/>
+        </exec>
+    </target>
 </project>
