@@ -19,7 +19,10 @@ use PHPUnit\Framework\TestCase;
  */
 class BeanFactoryAwareTraitUnitTest extends TestCase
 {
-    public function testSetBeanFactory()
+    /**
+     * @test
+     */
+    public function setBeanFactory()
     {
         $beanFactory = $this->createMock(BeanFactory::class);
         $trait = $this->getMockForTrait(BeanFactoryAwareTrait::class);
