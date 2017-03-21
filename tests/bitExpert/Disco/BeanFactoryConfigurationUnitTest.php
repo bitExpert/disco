@@ -104,4 +104,25 @@ class BeanFactoryConfigurationUnitTest extends TestCase
 
         self::assertSame($beanStore, $config->getSessionBeanStore());
     }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    public function injectedInvalidProxyTargetDirThrowsException()
+    {
+        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+        $config->setProxyTargetDir('/abc');
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    public function injectedNotWritableProxyTargetDirThrowsException()
+    {
+        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+        // Todo Use vfsStream for this test case
+        $config->setProxyTargetDir('/');
+    }
 }
