@@ -183,7 +183,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 $methodReflection,
                 $beanAnnotation,
                 $parametersAnnotation,
-                $beanType,
+                $method->getReturnType(),
                 $forceLazyInitProperty,
                 $sessionBeansProperty,
                 $postProcessorsProperty,

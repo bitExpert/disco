@@ -103,10 +103,31 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
+     * @expectedExceptionMessageRegExp /^\[Semantical Error\] The annotation "@foo"/
      */
     public function sameAliasUsedForMultipleBeansThrowsException()
     {
         $reflClass = new \ReflectionClass(BeanConfigurationWithConflictingAliases::class);
+        $this->configGenerator->generate($reflClass, $this->classGenerator);
+    }
+
+    /**
+     * @test
+     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
+     * @expectedExceptionMessageRegExp /^\[Semantical Error\] The annotation "@foo"/
+     */
+    public function unknownAnnotationThrowsException()
+    {
+        /**
+         * @foo
+         */
+        $configObject = new class {
+            public function foo() : string
+            {
+                return 'foo';
+            }
+        };
+        $reflClass = new \ReflectionObject($configObject);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
     }
 
