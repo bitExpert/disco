@@ -20,7 +20,7 @@ use bitExpert\Disco\Config\MissingReturnTypeConfiguration;
 use bitExpert\Disco\Config\NonExistentReturnTypeConfiguration;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
-use ProxyManager\Generator\ClassGenerator;
+use Zend\Code\Generator\ClassGenerator;
 
 /**
  * Unit tests for {@link \bitExpert\Disco\Proxy\Configuration\ConfigurationGenerator}.
