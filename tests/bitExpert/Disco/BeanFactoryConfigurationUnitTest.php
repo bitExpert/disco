@@ -13,8 +13,7 @@ declare(strict_types=1);
 namespace bitExpert\Disco;
 
 use bitExpert\Disco\Store\SerializableBeanStore;
-use Doctrine\Common\Cache\FilesystemCache;
-use Doctrine\Common\Cache\VoidCache;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use ProxyManager\Autoloader\Autoloader;
 use ProxyManager\Autoloader\AutoloaderInterface;
@@ -95,6 +94,25 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     /**
      * @test
      */
+    public function existingProxyAutoloaderCanBeUnregistered()
+    {
+        $autoloader1 = $this->createMock(AutoloaderInterface::class);
+        $autoloader2 = $this->createMock(AutoloaderInterface::class);
+
+        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+        // Set first proxy autoloader
+        $config->setProxyAutoloader($autoloader1);
+        // Set second proxy autoloader to unregister the first one
+        // TODO Add spy for spl_autoload_unregister to see if it got invoked
+        $config->setProxyAutoloader($autoloader2);
+        $proxyManagerConfig = $config->getProxyManagerConfiguration();
+
+        self::assertSame($autoloader2, $proxyManagerConfig->getProxyAutoloader());
+    }
+
+    /**
+     * @test
+     */
     public function configuredBeanStoreInstanceCanBererieved()
     {
         $beanStore = new SerializableBeanStore();
@@ -122,7 +140,7 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     public function injectedNotWritableProxyTargetDirThrowsException()
     {
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
-        // Todo Use vfsStream for this test case
-        $config->setProxyTargetDir('/');
+        $path = vfsStream::setup('root', 0x111);
+        $config->setProxyTargetDir($path->url());
     }
 }

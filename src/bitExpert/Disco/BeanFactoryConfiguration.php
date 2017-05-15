@@ -20,7 +20,6 @@ use ProxyManager\Configuration;
 use ProxyManager\FileLocator\FileLocator;
 use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
 use ProxyManager\GeneratorStrategy\GeneratorStrategyInterface;
-use RuntimeException;
 
 /**
  * BeanFactory configuration class.
@@ -134,20 +133,12 @@ class BeanFactoryConfiguration
     public function setProxyAutoloader(AutoloaderInterface $autoloader)
     {
         if ($this->proxyAutoloader instanceof AutoloaderInterface) {
-            if (!spl_autoload_unregister($this->proxyAutoloader)) {
-                throw new RuntimeException(
-                    sprintf('Cannot unregister autoloader "%s"', get_class($this->proxyAutoloader))
-                );
-            }
+            spl_autoload_unregister($this->proxyAutoloader);
         }
 
         $this->proxyAutoloader = $autoloader;
 
-        if (!spl_autoload_register($this->proxyAutoloader, false)) {
-            throw new RuntimeException(
-                sprintf('Cannot register autoloader "%s"', get_class($this->proxyAutoloader))
-            );
-        }
+        spl_autoload_register($this->proxyAutoloader);
     }
 
     /**
