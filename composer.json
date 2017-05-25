@@ -26,7 +26,8 @@
     "bitexpert/phing-securitychecker": "^0.2.1",
     "phpbench/phpbench": "^0.13.0",
     "bookdown/bookdown": "@dev",
-    "mikey179/vfsStream": "^1.6"
+    "mikey179/vfsStream": "^1.6",
+    "codeception/aspect-mock": "^2.0"
   },
   "autoload": {
     "psr-4": {
