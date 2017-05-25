@@ -101,6 +101,7 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
+     * @expectedExceptionMessageRegExp /^\[Semantical Error\] The annotation "@foo"/
      */
     public function unknownAnnotationThrowsException()
     {
