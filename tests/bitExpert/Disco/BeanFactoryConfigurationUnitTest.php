@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco;
 
-use AspectMock\Test as AspectMock;
 use bitExpert\Disco\Store\SerializableBeanStore;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
@@ -90,6 +89,8 @@ class BeanFactoryConfigurationUnitTest extends TestCase
             count($autoloaderFunctionsBeforeBeanFactoryInit) + 1,
             $autoloaderFunctionsAfterBeanFactoryInit
         );
+        self::assertNotContains($autoloader, $autoloaderFunctionsBeforeBeanFactoryInit);
+        self::assertContains($autoloader, $autoloaderFunctionsAfterBeanFactoryInit);
     }
 
     /**
@@ -97,25 +98,21 @@ class BeanFactoryConfigurationUnitTest extends TestCase
      */
     public function existingProxyAutoloaderCanBeUnregistered()
     {
-        $unregisterSpy = AspectMock::func(__NAMESPACE__, 'spl_autoload_unregister', function ($autoloader) {
-            return \spl_autoload_unregister($autoloader);
-        });
-
         $autoloader1 = $this->createMock(AutoloaderInterface::class);
         $autoloader2 = $this->createMock(AutoloaderInterface::class);
 
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+
         // Set first proxy autoloader
         $config->setProxyAutoloader($autoloader1);
         // Set second proxy autoloader to unregister the first one
         $config->setProxyAutoloader($autoloader2);
-        $unregisterSpy->verifyInvokedOnce([$autoloader1]);
 
         $proxyManagerConfig = $config->getProxyManagerConfiguration();
 
         self::assertSame($autoloader2, $proxyManagerConfig->getProxyAutoloader());
-
-        AspectMock::clean();
+        self::assertContains($autoloader2, spl_autoload_functions());
+        self::assertNotContains($autoloader1, spl_autoload_functions());
     }
 
     /**

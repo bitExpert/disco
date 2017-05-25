@@ -13,12 +13,6 @@ declare(strict_types=1);
 // include and configure Composer autoloader
 include(__DIR__ . '/../vendor/autoload.php');
 
-$kernel = \AspectMock\Kernel::getInstance();
-$kernel->init([
-    'debug' => true,
-    'includePaths' => [__DIR__.'/../src/']
-]);
-
 // configure the Simple Logging Facade for PSR-3 loggers with a Monolog backend
 \bitExpert\Slf4PsrLog\LoggerFactory::registerFactoryCallback(function ($channel) {
     if (!\Monolog\Registry::hasLogger($channel)) {
