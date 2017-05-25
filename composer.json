@@ -25,7 +25,8 @@
     "phing/phing": "^2.16.0",
     "bitexpert/phing-securitychecker": "^0.2.1",
     "phpbench/phpbench": "^0.13.0",
-    "bookdown/bookdown": "@dev"
+    "bookdown/bookdown": "@dev",
+    "mikey179/vfsStream": "^1.6"
   },
   "autoload": {
     "psr-4": {

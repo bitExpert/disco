@@ -13,8 +13,7 @@ declare(strict_types=1);
 namespace bitExpert\Disco;
 
 use bitExpert\Disco\Store\SerializableBeanStore;
-use Doctrine\Common\Cache\FilesystemCache;
-use Doctrine\Common\Cache\VoidCache;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use ProxyManager\Autoloader\Autoloader;
 use ProxyManager\Autoloader\AutoloaderInterface;
@@ -90,6 +89,30 @@ class BeanFactoryConfigurationUnitTest extends TestCase
             count($autoloaderFunctionsBeforeBeanFactoryInit) + 1,
             $autoloaderFunctionsAfterBeanFactoryInit
         );
+        self::assertNotContains($autoloader, $autoloaderFunctionsBeforeBeanFactoryInit);
+        self::assertContains($autoloader, $autoloaderFunctionsAfterBeanFactoryInit);
+    }
+
+    /**
+     * @test
+     */
+    public function existingProxyAutoloaderCanBeUnregistered()
+    {
+        $autoloader1 = $this->createMock(AutoloaderInterface::class);
+        $autoloader2 = $this->createMock(AutoloaderInterface::class);
+
+        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+
+        // Set first proxy autoloader
+        $config->setProxyAutoloader($autoloader1);
+        // Set second proxy autoloader to unregister the first one
+        $config->setProxyAutoloader($autoloader2);
+
+        $proxyManagerConfig = $config->getProxyManagerConfiguration();
+
+        self::assertSame($autoloader2, $proxyManagerConfig->getProxyAutoloader());
+        self::assertContains($autoloader2, spl_autoload_functions());
+        self::assertNotContains($autoloader1, spl_autoload_functions());
     }
 
     /**
@@ -103,5 +126,28 @@ class BeanFactoryConfigurationUnitTest extends TestCase
         $config->setSessionBeanStore($beanStore);
 
         self::assertSame($beanStore, $config->getSessionBeanStore());
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionCode 10
+     */
+    public function injectedInvalidProxyTargetDirThrowsException()
+    {
+        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+        $config->setProxyTargetDir('/abc');
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionCode 20
+     */
+    public function injectedNotWritableProxyTargetDirThrowsException()
+    {
+        $config = new BeanFactoryConfiguration(sys_get_temp_dir());
+        $path = vfsStream::setup('root', 0x111);
+        $config->setProxyTargetDir($path->url());
     }
 }
