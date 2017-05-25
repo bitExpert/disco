@@ -38,6 +38,5 @@ class LazyBeanGeneratorUnitTest extends TestCase
 
         $proxyGenerator = new LazyBeanGenerator();
         $proxyGenerator->generate($reflectionClass, $classGenerator);
-
     }
 }

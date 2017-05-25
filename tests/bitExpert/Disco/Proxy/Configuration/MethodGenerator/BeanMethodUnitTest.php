@@ -35,7 +35,10 @@ class BeanMethodUnitTest extends TestCase
      */
     public function generateMethodWithBodyOfUnknownBeanType()
     {
-        $methodReflection = new MethodReflection(MissingReturnTypeConfiguration::class, 'nonSingletonNonLazyRequestBean');
+        $methodReflection = new MethodReflection(
+            MissingReturnTypeConfiguration::class,
+            'nonSingletonNonLazyRequestBean'
+        );
 
         $methodGenerator = BeanMethod::generateMethod(
             $methodReflection,
