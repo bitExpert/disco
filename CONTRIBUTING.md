@@ -141,7 +141,7 @@ $ git commit
 
 ...write your log message...
 
-```console
+``` console
 $ git push {username} hotfix/9295:hotfix/9295
 Counting objects: 38, done.
 Delta compression using up to 2 threads.
@@ -151,7 +151,8 @@ Total 20 (delta 12), reused 0 (delta 0)
 To ssh://git@github.com/{username}/disco.git
    b5583aa..4f51698  HEAD -> master
 ```
-### Sending a PR
+
+### Sending a PR
 
 Before sending a PR, run `composer.phar validate && composer.phar check`, as the Travis build will also run the command and will fail if the composer.lock file is not up-to-date with the changes in the composer.json file.
 
