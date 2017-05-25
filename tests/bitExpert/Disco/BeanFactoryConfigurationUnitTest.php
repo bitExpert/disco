@@ -134,7 +134,7 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     /**
      * @test
      * @expectedException \InvalidArgumentException
-     * @expectedException
+     * @expectedExceptionCode 10
      */
     public function injectedInvalidProxyTargetDirThrowsException()
     {
@@ -145,6 +145,7 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     /**
      * @test
      * @expectedException \InvalidArgumentException
+     * @expectedExceptionCode 20
      */
     public function injectedNotWritableProxyTargetDirThrowsException()
     {

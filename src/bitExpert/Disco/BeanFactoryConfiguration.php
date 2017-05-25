@@ -96,7 +96,8 @@ class BeanFactoryConfiguration
                 sprintf(
                     'Proxy target directory "%s" does not exist!',
                     $proxyTargetDir
-                )
+                ),
+                10
             );
         }
 
@@ -105,7 +106,8 @@ class BeanFactoryConfiguration
                 sprintf(
                     'Proxy target directory "%s" is not writable!',
                     $proxyTargetDir
-                )
+                ),
+                20
             );
         }
 
