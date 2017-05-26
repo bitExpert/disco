@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "67703608088b6f52931631c59cc86c0a",
+    "content-hash": "031c383618bd15790cfa98e2e4ec0dd9",
     "packages": [
         {
             "name": "bitexpert/slf4psrlog",
@@ -733,27 +733,26 @@
         },
         {
             "name": "bitexpert/phing-securitychecker",
-            "version": "0.2.1",
+            "version": "v0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bitExpert/phing-securitychecker.git",
-                "reference": "f135525228c0ce9b54e03f5fb5f7e5e408942ff1"
+                "reference": "1c059c24af59ad12e50a56c5894ecf5d06eb01df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bitExpert/phing-securitychecker/zipball/f135525228c0ce9b54e03f5fb5f7e5e408942ff1",
-                "reference": "f135525228c0ce9b54e03f5fb5f7e5e408942ff1",
+                "url": "https://api.github.com/repos/bitExpert/phing-securitychecker/zipball/1c059c24af59ad12e50a56c5894ecf5d06eb01df",
+                "reference": "1c059c24af59ad12e50a56c5894ecf5d06eb01df",
                 "shasum": ""
             },
             "require": {
                 "phing/phing": "^2.8.0",
-                "php": "^5.5|^7.0",
-                "sensiolabs/security-checker": "v3.0.2"
+                "php": "^7.0",
+                "sensiolabs/security-checker": "^4.0"
             },
             "require-dev": {
                 "phpdocumentor/phpdocumentor": "^2.8",
-                "phpunit/php-code-coverage": "^2.1.0",
-                "phpunit/phpunit": "^4.8",
+                "phpunit/phpunit": "^6.0",
                 "squizlabs/php_codesniffer": "^2.3"
             },
             "type": "library",
@@ -778,7 +777,7 @@
                 "Security Checker",
                 "phing"
             ],
-            "time": "2015-11-07T19:14:18+00:00"
+            "time": "2017-05-26T08:53:20+00:00"
         },
         {
             "name": "bookdown/bookdown",
@@ -953,6 +952,65 @@
                 "silex"
             ],
             "time": "2012-12-19T10:50:58+00:00"
+        },
+        {
+            "name": "composer/ca-bundle",
+            "version": "1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/ca-bundle.git",
+                "reference": "b17e6153cb7f33c7e44eb59578dc12eee5dc8e12"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/b17e6153cb7f33c7e44eb59578dc12eee5dc8e12",
+                "reference": "b17e6153cb7f33c7e44eb59578dc12eee5dc8e12",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "ext-pcre": "*",
+                "php": "^5.3.2 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.5",
+                "psr/log": "^1.0",
+                "symfony/process": "^2.5 || ^3.0"
+            },
+            "suggest": {
+                "symfony/process": "This is necessary to reliably check whether openssl_x509_parse is vulnerable on older php versions, but can be ignored on PHP 5.5.6+"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\CaBundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Lets you find a path to the system CA bundle, and includes a fallback to the Mozilla CA bundle.",
+            "keywords": [
+                "cabundle",
+                "cacert",
+                "certificate",
+                "ssl",
+                "tls"
+            ],
+            "time": "2017-03-06T11:59:08+00:00"
         },
         {
             "name": "container-interop/container-interop",
@@ -3666,20 +3724,21 @@
         },
         {
             "name": "sensiolabs/security-checker",
-            "version": "v3.0.2",
+            "version": "v4.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "21696b0daa731064c23cfb694c60a2584a7b6e93"
+                "reference": "9e69eddf3bc49d1ee5c7908564da3141796d4bbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/21696b0daa731064c23cfb694c60a2584a7b6e93",
-                "reference": "21696b0daa731064c23cfb694c60a2584a7b6e93",
+                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/9e69eddf3bc49d1ee5c7908564da3141796d4bbc",
+                "reference": "9e69eddf3bc49d1ee5c7908564da3141796d4bbc",
                 "shasum": ""
             },
             "require": {
-                "symfony/console": "~2.0|~3.0"
+                "composer/ca-bundle": "^1.0",
+                "symfony/console": "~2.7|~3.0"
             },
             "bin": [
                 "security-checker"
@@ -3687,7 +3746,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "4.0-dev"
                 }
             },
             "autoload": {
@@ -3706,7 +3765,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2015-11-07T08:07:40+00:00"
+            "time": "2017-03-31T14:50:32+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

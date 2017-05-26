@@ -23,7 +23,7 @@
     "phpdocumentor/phpdocumentor": "v2.9.0",
     "monolog/monolog": "^1.22.1",
     "phing/phing": "^2.16.0",
-    "bitexpert/phing-securitychecker": "^0.2.1",
+    "bitexpert/phing-securitychecker": "^0.3.0",
     "phpbench/phpbench": "^0.13.0",
     "bookdown/bookdown": "@dev"
   },
