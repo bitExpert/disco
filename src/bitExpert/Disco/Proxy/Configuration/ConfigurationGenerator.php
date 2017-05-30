@@ -135,31 +135,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 $parametersAnnotation = new Parameters();
             }
 
-            $beanType = $method->getReturnType();
-            if (null === $beanType) {
-                throw new InvalidProxiedClassException(
-                    sprintf(
-                        'Method "%s" on "%s" is missing the return type hint!',
-                        $method->getName(),
-                        $originalClass->getName()
-                    )
-                );
-            }
-
-            $beanType = (string) $beanType;
-            if (!in_array($beanType, ['array', 'callable', 'bool', 'float', 'int', 'string']) &&
-                !class_exists($beanType) &&
-                !interface_exists($beanType)
-            ) {
-                throw new InvalidProxiedClassException(
-                    sprintf(
-                        'Return type of method "%s" on "%s" cannot be found! Did you use the full qualified name?',
-                        $method->getName(),
-                        $originalClass->getName()
-                    )
-                );
-            }
-
             $methodReflection = new MethodReflection(
                 $method->class,
                 $method->getName()
@@ -168,7 +143,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 $methodReflection,
                 $beanAnnotation,
                 $parametersAnnotation,
-                $beanType,
+                $method->getReturnType(),
                 $forceLazyInitProperty,
                 $sessionBeansProperty,
                 $postProcessorsProperty,
