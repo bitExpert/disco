@@ -46,6 +46,8 @@ use Zend\Code\Reflection\MethodReflection;
  */
 class ConfigurationGenerator implements ProxyGeneratorInterface
 {
+    private const NATIVE_RETURN_TYPES = ['array', 'callable', 'bool', 'float', 'int', 'string'];
+
     /**
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\ConfigurationGenerator}.
      */
@@ -125,12 +127,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 );
             }
 
-            foreach ($beanAnnotation->getAliases() as $beanAlias) {
-                if(!isset($aliases[$beanAlias->getName()])) {
-                    $aliases[$beanAlias->getName()] = $method->getName();
-                }
-            }
-
             /* @var \bitExpert\Disco\Annotations\Parameters $parametersAnnotation */
             $parametersAnnotation = $reader->getMethodAnnotation($method, Parameters::class);
             if (null === $parametersAnnotation) {
@@ -149,7 +145,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             }
 
             $beanType = (string) $beanType;
-            if (!in_array($beanType, ['array', 'callable', 'bool', 'float', 'int', 'string']) &&
+            if (!in_array($beanType, self::NATIVE_RETURN_TYPES) &&
                 !class_exists($beanType) &&
                 !interface_exists($beanType)
             ) {
@@ -160,6 +156,38 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                         $originalClass->getName()
                     )
                 );
+            }
+
+            foreach ($beanAnnotation->getAliases() as $beanAlias) {
+                if ($beanAlias->isTypeAlias()) {
+                    if (in_array($beanType, self::NATIVE_RETURN_TYPES)) {
+                        throw new InvalidProxiedClassException(
+                            sprintf(
+                                'Native PHP type cannot be used as alias. Check return type of method "%s" on "%s"!',
+                                $method->getName(),
+                                $originalClass->getName()
+                            )
+                        );
+                    }
+
+                    $alias = $beanType;
+                } else {
+                    $alias = $beanAlias->getName();
+                }
+
+                if (isset($aliases[$alias])) {
+                    throw new InvalidProxiedClassException(
+                        sprintf(
+                            'Alias "%s" of method "%s" on "%s" is already used by another Bean!'
+                            . ' Did you use a type alias twice?',
+                            $alias,
+                            $method->getName(),
+                            $originalClass->getName()
+                        )
+                    );
+                }
+
+                $aliases[$alias] = $method->getName();
             }
 
             $methodReflection = new MethodReflection(

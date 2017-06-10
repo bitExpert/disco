@@ -20,7 +20,8 @@ use Doctrine\Common\Annotations\AnnotationException;
  * @Annotation
  * @Target({"ANNOTATION"})
  * @Attributes({
- *   @Attribute("name", type = "string")
+ *   @Attribute("name", type = "string"),
+ *   @Attribute("type", type = "bool"),
  * })
  */
 final class Alias
@@ -31,6 +32,11 @@ final class Alias
     private $name;
 
     /**
+     * @var bool
+     */
+    private $type;
+
+    /**
      * Creates a new {@link \bitExpert\Disco\Annotations\Bean\Alias}.
      *
      * @param array $attributes
@@ -39,20 +45,32 @@ final class Alias
     public function __construct(array $attributes = [])
     {
         $this->name = null;
+        $this->type = false;
 
-        if (!isset($attributes['value'])) {
-            throw new AnnotationException("No attributes value passed to " . __METHOD__);
+        if (isset($attributes['value']['type'])) {
+            $this->type = AnnotationAttributeParser::parseBooleanValue($attributes['value']['type']);
         }
 
-        if(!isset($attributes['value']['name'])) {
-            throw new AnnotationException("Alias name missing");
+        if (isset($attributes['value']['name'])) {
+            if ($this->type) {
+                throw new AnnotationException("Type alias should not have a name!");
+            }
+
+            $this->name = $attributes['value']['name'];
         }
 
-        $this->name = $attributes['value']['name'];
+        if (!$this->type && !$this->name) {
+            throw new AnnotationException("Alias should either be a named alias or a type alias!");
+        }
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
+    }
+
+    public function isTypeAlias(): bool
+    {
+        return $this->type;
     }
 }

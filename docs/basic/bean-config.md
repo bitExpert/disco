@@ -195,14 +195,15 @@ As a drawback you are quite limited when it comes to bean names. To quote
 the [PHP manual](http://php.net/manual/en/functions.user-defined.php): "A valid function name starts with a letter or underscore,
 followed by any number of letters, numbers, or underscores".
 
-This led to introducing aliases for beans. Each bean can have one alias,
-in case of collisions the first defined alias wins. Simply add the `alias`
-attribute to the `@Bean` annotation to define the alias:
+This led to introducing aliases for beans. Each bean can have multiple aliases and two types of aliases are possible.
+In case of collisions (same alias used for different beans) Disco will throw an exception. You're asked to avoid/resolve such conflicts.
+Simply add the `aliases` attribute to the `@Bean` annotation to define a list of `@Alias`:
 
 ```php
 <?php
 
 use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Àlias;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
@@ -212,8 +213,13 @@ use bitExpert\Disco\Helper\SampleService;
 class MyConfiguration
 {
     /**
-     * @Bean({"alias" = "\Identifier\With\Namespace"})
-     */
+         * @Bean({
+         *   "aliases"={
+         *      @Alias({"name" = "\Identifier\With\Namespace"}),
+         *      @Alias({"type" = true})
+         *   }
+         * })
+         */
     public function mySampleService() : SampleService
     {
         return new SampleService();
@@ -221,9 +227,31 @@ class MyConfiguration
 }
 ```
 
-Now you can either pass `mySampleService` or `\Identifier\With\Namespace"` to
+Now you can either pass `mySampleService` or `\Identifier\With\Namespace"` or `bitExpert\Disco\Helper\SampleService` to
 the `\bitExpert\Disco\AnnotationBeanFactory::get()` or `\bitExpert\Disco\AnnotationBeanFactory::has()`
 calls.
+
+The example uses both available alias types. Let's look at them one after the other.
+
+### Named Alias
+
+`@Alias({"name" = "\Identifier\With\Namespace"})`
+
+This alias type is pretty much self explaining. What you define as name can later be used to get the service from the bean factory.
+
+### Return Type Alias
+
+`@Alias({"type" = true})`
+
+Setting the `type` attribute to `true` (name attribute must be omitted in this case) 
+tells Disco to use the return type of the method as an alias.
+This is very useful because you can work with PHP's `::class` language construct like in this example: `$annotationBeanFactory->get(SampleService::class)`.
+If you now refactor `SampleService` (rename or move to other namespace) a modern IDE will automatically change the alias
+and your code continues to work. Classes or interfaces can be used as an alias, but not native PHP types like array, bool, int, float, string.
+
+### Mix and Match
+
+You can use many named aliases and/or one type alias per bean.
 
 Aliases also work for protected beans, exposing the bean by the given alias
 but not by their method name!
