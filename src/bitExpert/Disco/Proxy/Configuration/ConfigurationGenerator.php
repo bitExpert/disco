@@ -53,6 +53,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
     {
         // registers all required annotations
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Bean.php');
+        AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Alias.php');
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/BeanPostProcessor.php');
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Configuration.php');
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Parameters.php');
@@ -124,9 +125,10 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 );
             }
 
-            // if alias is defined append it to the aliases list
-            if ($beanAnnotation->getAlias() !== '' && !isset($aliases[$beanAnnotation->getAlias()])) {
-                $aliases[$beanAnnotation->getAlias()] = $method->getName();
+            foreach ($beanAnnotation->getAliases() as $beanAlias) {
+                if(!isset($aliases[$beanAlias->getName()])) {
+                    $aliases[$beanAlias->getName()] = $method->getName();
+                }
             }
 
             /* @var \bitExpert\Disco\Annotations\Parameters $parametersAnnotation */

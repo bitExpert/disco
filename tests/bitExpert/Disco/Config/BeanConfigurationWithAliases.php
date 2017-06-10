@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Config;
 
 use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Alias;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\InitializedService;
 use bitExpert\Disco\Helper\MasterService;
@@ -24,40 +25,29 @@ use bitExpert\Disco\Helper\SampleService;
 class BeanConfigurationWithAliases
 {
     /**
-     * @Bean({"alias"="\my\Custom\Namespace"})
+     * @Bean({
+     *     "singelton"=true,
+     *     "aliases"={
+     *          @Alias({"name" = "\my\Custom\Namespace"}),
+     *          @Alias({"name" = "my::Custom::Namespace"}),
+     *          @Alias({"name" = "Alias_With_Underscore"}),
+     *          @Alias({"name" = "123456"}),
+     *     }
+     * })
      */
-    public function sampleServiceWithBackSlashesInAlias() : SampleService
-    {
-        return new SampleService();
-    }
-
-    /**
-     * @Bean({"alias"="my::Custom::Namespace"})
-     */
-    public function sampleServiceWithColonInAlias() : SampleService
-    {
-        return new SampleService();
-    }
-
-    /**
-     * @Bean({"alias"="Alias_With_Underscore"})
-     */
-    public function sampleServiceWithUnderscoreInAlias() : SampleService
-    {
-        return new SampleService();
-    }
-
-    /**
-     * @Bean({"alias"="123456"})
-     */
-    public function sampleServiceWithNumericAlias() : SampleService
+    public function sampleServiceWithAliases() : SampleService
     {
         return new SampleService();
     }
 
 
+
     /**
-     * @Bean({"alias"="aliasIsPublicForInternalService"})
+     * @Bean({
+     *     "aliases"={
+     *          @Alias({"name"="aliasIsPublicForInternalService"})
+     *     }
+     * })
      */
     protected function internalServiceWithAlias() : SampleService
     {

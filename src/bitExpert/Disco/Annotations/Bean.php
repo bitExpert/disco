@@ -23,7 +23,7 @@ use Doctrine\Common\Annotations\AnnotationException;
  *   @Attribute("scope", type = "string"),
  *   @Attribute("singleton", type = "bool"),
  *   @Attribute("lazy", type = "bool"),
- *   @Attribute("alias", type = "string"),
+ *   @Attribute("aliases", type = "array<\bitExpert\Disco\Annotations\Alias>"),
  * })
  */
 final class Bean
@@ -43,9 +43,9 @@ final class Bean
      */
     protected $lazy;
     /**
-     * @var string
+     * @var Alias[]
      */
-    protected $alias;
+    protected $aliases;
 
     /**
      * Creates a new {@link \bitExpert\Disco\Annotations\Bean}.
@@ -59,7 +59,7 @@ final class Bean
         $this->scope = self::SCOPE_REQUEST;
         $this->singleton = true;
         $this->lazy = false;
-        $this->alias = '';
+        $this->aliases = [];
 
         if (isset($attributes['value'])) {
             if (isset($attributes['value']['scope']) && (strtolower($attributes['value']['scope']) === 'session')) {
@@ -74,8 +74,8 @@ final class Bean
                 $this->lazy = AnnotationAttributeParser::parseBooleanValue($attributes['value']['lazy']);
             }
 
-            if (isset($attributes['value']['alias'])) {
-                $this->alias = $attributes['value']['alias'];
+            if (isset($attributes['value']['aliases'])) {
+                $this->aliases = $attributes['value']['aliases'];
             }
         }
     }
@@ -121,11 +121,11 @@ final class Bean
     }
 
     /**
-     * Returns the alias for the bean instance. Returns an empty string when no alias was set.
-     * @return string
+     * Returns the list of aliases for the bean instance. Returns an empty array when no alias was set.
+     * @return Alias[]
      */
-    public function getAlias(): string
+    public function getAliases(): array
     {
-        return $this->alias;
+        return $this->aliases;
     }
 }
