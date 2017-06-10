@@ -15,29 +15,23 @@ namespace bitExpert\Disco\Config;
 use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Alias;
 use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\InitializedService;
-use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
 use bitExpert\Disco\Helper\SampleServiceInterface;
 
 /**
  * @Configuration
  */
-class BeanConfigurationWithAliases
+class BeanConfigurationWithConflictingAliases
 {
     /**
      * @Bean({
-     *   "singelton"=true,
      *   "aliases"={
-     *      @Alias({"name" = "\my\Custom\Namespace"}),
-     *      @Alias({"name" = "my::Custom::Namespace"}),
-     *      @Alias({"name" = "Alias_With_Underscore"}),
-     *      @Alias({"name" = "123456"}),
-     *      @Alias({"type" = true})
+     *     @Alias({"type"=true})
      *   }
      * })
+     * @return SampleServiceInterface
      */
-    public function sampleServiceWithAliases() : SampleService
+    public function sampleService1(): SampleServiceInterface
     {
         return new SampleService();
     }
@@ -50,19 +44,7 @@ class BeanConfigurationWithAliases
      * })
      * @return SampleServiceInterface
      */
-    public function sampleServiceWithInterfaceReturnTypeAlias() : SampleServiceInterface
-    {
-        return new SampleService();
-    }
-
-    /**
-     * @Bean({
-     *   "aliases"={
-     *      @Alias({"name"="aliasIsPublicForInternalService"})
-     *   }
-     * })
-     */
-    protected function internalServiceWithAlias() : SampleService
+    public function sampleService2(): SampleServiceInterface
     {
         return new SampleService();
     }

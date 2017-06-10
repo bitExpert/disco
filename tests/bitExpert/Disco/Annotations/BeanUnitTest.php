@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
-use bitExpert\Disco\Annotations\Alias;
 use PHPUnit\Framework\TestCase;
 
 /**
