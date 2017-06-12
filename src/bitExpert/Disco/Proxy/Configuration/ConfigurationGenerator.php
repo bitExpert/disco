@@ -162,11 +162,12 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 if (isset($aliases[$alias])) {
                     throw new InvalidProxiedClassException(
                         sprintf(
-                            'Alias "%s" of method "%s" on "%s" is already used by another Bean!'
+                            'Alias "%s" of method "%s" on "%s" is already used by method "%s" of another Bean!'
                             . ' Did you use a type alias twice?',
                             $alias,
                             $method->getName(),
-                            $originalClass->getName()
+                            $originalClass->getName(),
+                            $aliases[$alias]
                         )
                     );
                 }
