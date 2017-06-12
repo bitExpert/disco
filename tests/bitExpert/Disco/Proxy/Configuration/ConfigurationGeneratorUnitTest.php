@@ -104,16 +104,6 @@ class ConfigurationGeneratorUnitTest extends TestCase
      * @test
      * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
      */
-    public function nativeReturnTypeWithTypeAliasThrowsException()
-    {
-        $reflClass = new \ReflectionClass(BeanConfigurationWithNativeTypeAlias::class);
-        $this->configGenerator->generate($reflClass, $this->classGenerator);
-    }
-
-    /**
-     * @test
-     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
-     */
     public function sameAliasUsedForMultipleBeansThrowsException()
     {
         $reflClass = new \ReflectionClass(BeanConfigurationWithConflictingAliases::class);
