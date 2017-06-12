@@ -56,7 +56,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Alias.php');
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/BeanPostProcessor.php');
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Configuration.php');
-        AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Parameters.php');
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Parameter.php');
     }
 
@@ -125,12 +124,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 );
             }
 
-            /* @var \bitExpert\Disco\Annotations\Parameters $parametersAnnotation */
-            $parametersAnnotation = $reader->getMethodAnnotation($method, Parameters::class);
-            if (null === $parametersAnnotation) {
-                $parametersAnnotation = new Parameters();
-            }
-
             $beanType = $method->getReturnType();
             if (null === $beanType) {
                 throw new InvalidProxiedClassException(
@@ -182,7 +175,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             $proxyMethod = BeanMethod::generateMethod(
                 $methodReflection,
                 $beanAnnotation,
-                $parametersAnnotation,
                 $method->getReturnType(),
                 $forceLazyInitProperty,
                 $sessionBeansProperty,

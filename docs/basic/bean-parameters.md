@@ -1,13 +1,12 @@
 # Bean parameters
 
 Bean instances can be parametrized by a given configuration array. To
-access configuration elements add both the ```@Parameters``` and the
-```@Parameter``` annotation to your bean configuration method.
+access configuration elements add an ```parameters``` attribute to your
+bean configuration method which holds a collection of ```@Parameter```
+annotations.
 
-The ```@Parameters``` annotation acts as a collection holding one or more
-```@Parameter``` annotations. The ```@Parameter``` annotation requires
-at least a name which will be used as key to look for in the configuration
-array.
+The ```@Parameter``` annotation requires at least a name which will be
+used as key to look for in the configuration array.
 
 In the following example the value of configuration key `test` gets passed
 to the bean configuration method as method parameter. The configuration
@@ -18,6 +17,7 @@ method:
 <?php
 
 use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Parameter;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
@@ -27,9 +27,10 @@ use bitExpert\Disco\Helper\SampleService;
 class MyConfiguration
 {
     /**
-     * @Bean
-     * @Parameters({
-     *  @Parameter({"name" = "test"})
+     * @Bean({
+     *   "parameters"={
+     *      @Parameter({"name" = "test"})
+     *   }
      * })
      */
     public function mySampleService($test = '') : SampleService
@@ -64,6 +65,7 @@ configuration method instead:
 <?php
 
 use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Parameter;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
@@ -73,9 +75,10 @@ use bitExpert\Disco\Helper\SampleService;
 class MyConfiguration
 {
     /**
-     * @Bean
-     * @Parameters({
-     *  @Parameter({"name" = "test", "default" = "Some default value"})
+     * @Bean({
+     *   "parameters"={
+     *      @Parameter({"name" = "test", "default" = "Some default value"})
+     *   }
      * })
      */
     public function mySampleService($test = '') : SampleService
@@ -117,6 +120,7 @@ Use the '.' notation to access the nested elements:
 <?php
 
 use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Parameter;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
@@ -126,9 +130,10 @@ use bitExpert\Disco\Helper\SampleService;
 class MyConfiguration
 {
     /**
-     * @Bean
-     * @Parameters({
-     *  @Parameter({"name" = "nested.key"})
+     * @Bean({
+     *   "parameters"={
+     *      @Parameter({"name" = "nested.key"})
+     *   }
      * })
      */
     public function mySampleService($test = '') : SampleService

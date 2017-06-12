@@ -24,6 +24,7 @@ use Doctrine\Common\Annotations\AnnotationException;
  *   @Attribute("singleton", type = "bool"),
  *   @Attribute("lazy", type = "bool"),
  *   @Attribute("aliases", type = "array<\bitExpert\Disco\Annotations\Alias>"),
+ *   @Attribute("parameters", type = "array<\bitExpert\Disco\Annotations\Parameter>")
  * })
  */
 final class Bean
@@ -46,6 +47,10 @@ final class Bean
      * @var Alias[]
      */
     protected $aliases;
+    /**
+     * @var Parameter[]
+     */
+    protected $parameters;
 
     /**
      * Creates a new {@link \bitExpert\Disco\Annotations\Bean}.
@@ -60,6 +65,7 @@ final class Bean
         $this->singleton = true;
         $this->lazy = false;
         $this->aliases = [];
+        $this->parameters = [];
 
         if (isset($attributes['value'])) {
             if (isset($attributes['value']['scope']) && (strtolower($attributes['value']['scope']) === 'session')) {
@@ -76,6 +82,10 @@ final class Bean
 
             if (isset($attributes['value']['aliases'])) {
                 $this->aliases = $attributes['value']['aliases'];
+            }
+
+            if (isset($attributes['value']['parameters'])) {
+                $this->parameters = $attributes['value']['parameters'];
             }
         }
     }
@@ -122,10 +132,21 @@ final class Bean
 
     /**
      * Returns the list of aliases for the bean instance. Returns an empty array when no alias was set.
+     *
      * @return Alias[]
      */
     public function getAliases(): array
     {
         return $this->aliases;
+    }
+
+    /**
+     * Returns the list of parameters for the bean instance. Returns an empty array when no parameters were set.
+     *
+     * @return Parameter[]
+     */
+    public function getParameters(): array
+    {
+        return $this->parameters;
     }
 }
