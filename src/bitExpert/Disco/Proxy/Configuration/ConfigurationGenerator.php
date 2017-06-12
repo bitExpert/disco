@@ -53,6 +53,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
     {
         // registers all required annotations
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Bean.php');
+        AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Alias.php');
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/BeanPostProcessor.php');
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Configuration.php');
         AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Parameters.php');
@@ -124,11 +125,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 );
             }
 
-            // if alias is defined append it to the aliases list
-            if ($beanAnnotation->getAlias() !== '' && !isset($aliases[$beanAnnotation->getAlias()])) {
-                $aliases[$beanAnnotation->getAlias()] = $method->getName();
-            }
-
             /* @var \bitExpert\Disco\Annotations\Parameters $parametersAnnotation */
             $parametersAnnotation = $reader->getMethodAnnotation($method, Parameters::class);
             if (null === $parametersAnnotation) {
@@ -158,6 +154,25 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                         $originalClass->getName()
                     )
                 );
+            }
+
+            foreach ($beanAnnotation->getAliases() as $beanAlias) {
+                $alias = $beanAlias->isTypeAlias()? $beanType : $beanAlias->getName();
+
+                if (isset($aliases[$alias])) {
+                    throw new InvalidProxiedClassException(
+                        sprintf(
+                            'Alias "%s" of method "%s" on "%s" is already used by method "%s" of another Bean!'
+                            . ' Did you use a type alias twice?',
+                            $alias,
+                            $method->getName(),
+                            $originalClass->getName(),
+                            $aliases[$alias]
+                        )
+                    );
+                }
+
+                $aliases[$alias] = $method->getName();
             }
 
             $methodReflection = new MethodReflection(

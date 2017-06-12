@@ -25,6 +25,7 @@ use bitExpert\Disco\Config\WrongReturnTypeConfiguration;
 use bitExpert\Disco\Helper\BeanFactoryAwareService;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Disco\Helper\SampleServiceInterface;
 use PHPUnit\Framework\TestCase;
 use ProxyManager\Proxy\ValueHolderInterface;
 use ProxyManager\Proxy\VirtualProxyInterface;
@@ -582,6 +583,8 @@ class AnnotationBeanFactoryUnitTest extends TestCase
             ['my::Custom::Namespace', SampleService::class],
             ['Alias_With_Underscore', SampleService::class],
             ['123456', SampleService::class],
+            [SampleService::class, SampleService::class],
+            [SampleServiceInterface::class, SampleService::class],
         ];
     }
 }

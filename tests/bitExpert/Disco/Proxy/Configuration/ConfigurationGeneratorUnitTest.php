@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Proxy\Configuration;
 
 use bitExpert\Disco\Config\BeanConfiguration;
+use bitExpert\Disco\Config\BeanConfigurationWithConflictingAliases;
+use bitExpert\Disco\Config\BeanConfigurationWithNativeTypeAlias;
 use bitExpert\Disco\Config\InterfaceConfiguration;
 use bitExpert\Disco\Config\InvalidConfiguration;
 use bitExpert\Disco\Config\MissingBeanAnnotationConfiguration;
@@ -95,6 +97,16 @@ class ConfigurationGeneratorUnitTest extends TestCase
     public function nonExistentClassInReturnTypeThrowsException()
     {
         $reflClass = new \ReflectionClass(NonExistentReturnTypeConfiguration::class);
+        $this->configGenerator->generate($reflClass, $this->classGenerator);
+    }
+
+    /**
+     * @test
+     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
+     */
+    public function sameAliasUsedForMultipleBeansThrowsException()
+    {
+        $reflClass = new \ReflectionClass(BeanConfigurationWithConflictingAliases::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
     }
 

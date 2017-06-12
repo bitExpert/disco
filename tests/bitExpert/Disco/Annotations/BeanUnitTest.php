@@ -30,7 +30,7 @@ class BeanUnitTest extends TestCase
         self::assertFalse($bean->isSession());
         self::assertTrue($bean->isSingleton());
         self::assertFalse($bean->isLazy());
-        self::assertEmpty($bean->getAlias());
+        self::assertEmpty($bean->getAliases());
     }
 
     /**
@@ -180,8 +180,13 @@ class BeanUnitTest extends TestCase
      */
     public function aliasingBean()
     {
-        $bean = new Bean(['value' => ['alias' => 'someAlias']]);
+        $bean = new Bean(['value' => ['aliases' => [
+            new Alias(['value' => ['name' => 'someAlias']]),
+            new Alias(['value' => ['name' => 'yetAnotherAlias']])
+        ]]]);
 
-        self::assertSame($bean->getAlias(), 'someAlias');
+        self::assertEquals(array_map(function (Alias $alias) {
+            return $alias->getName();
+        }, $bean->getAliases()), ['someAlias', 'yetAnotherAlias']);
     }
 }
