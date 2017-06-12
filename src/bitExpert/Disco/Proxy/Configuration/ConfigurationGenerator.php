@@ -46,8 +46,6 @@ use Zend\Code\Reflection\MethodReflection;
  */
 class ConfigurationGenerator implements ProxyGeneratorInterface
 {
-    private const NATIVE_RETURN_TYPES = ['array', 'callable', 'bool', 'float', 'int', 'string'];
-
     /**
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\ConfigurationGenerator}.
      */
@@ -145,7 +143,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             }
 
             $beanType = (string) $beanType;
-            if (!in_array($beanType, self::NATIVE_RETURN_TYPES) &&
+            if (!in_array($beanType, ['array', 'callable', 'bool', 'float', 'int', 'string']) &&
                 !class_exists($beanType) &&
                 !interface_exists($beanType)
             ) {
@@ -159,21 +157,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             }
 
             foreach ($beanAnnotation->getAliases() as $beanAlias) {
-                if ($beanAlias->isTypeAlias()) {
-                    if (in_array($beanType, self::NATIVE_RETURN_TYPES)) {
-                        throw new InvalidProxiedClassException(
-                            sprintf(
-                                'Native PHP type cannot be used as alias. Check return type of method "%s" on "%s"!',
-                                $method->getName(),
-                                $originalClass->getName()
-                            )
-                        );
-                    }
-
-                    $alias = $beanType;
-                } else {
-                    $alias = $beanAlias->getName();
-                }
+                $alias = $beanAlias->isTypeAlias()? $beanType : $beanAlias->getName();
 
                 if (isset($aliases[$alias])) {
                     throw new InvalidProxiedClassException(
