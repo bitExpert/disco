@@ -42,7 +42,6 @@ class BeanMethod extends MethodGenerator
      *
      * @param MethodReflection $originalMethod
      * @param Bean $beanMetadata
-     * @param Parameters $methodParameters
      * @param ReflectionType|null $beanType
      * @param ForceLazyInitProperty $forceLazyInitProperty
      * @param SessionBeansProperty $sessionBeansProperty
@@ -51,11 +50,12 @@ class BeanMethod extends MethodGenerator
      * @param GetParameter $parameterValuesMethod
      * @param WrapBeanAsLazy $wrapBeanAsLazy
      * @return BeanMethod|MethodGenerator
+     * @throws \Zend\Code\Generator\Exception\InvalidArgumentException
+     * @throws \ProxyManager\Exception\InvalidProxiedClassException
      */
     public static function generateMethod(
         MethodReflection $originalMethod,
         Bean $beanMetadata,
-        Parameters $methodParameters,
         ?ReflectionType $beanType,
         ForceLazyInitProperty $forceLazyInitProperty,
         SessionBeansProperty $sessionBeansProperty,
@@ -76,7 +76,7 @@ class BeanMethod extends MethodGenerator
         $beanType = (string) $beanType;
 
         $method = static::fromReflection($originalMethod);
-        $methodParams = static::convertMethodParamsToString($methodParameters, $parameterValuesMethod);
+        $methodParams = static::convertMethodParamsToString($beanMetadata->getParameters(), $parameterValuesMethod);
         $beanId = $originalMethod->name;
         $body = '';
 
@@ -159,11 +159,11 @@ class BeanMethod extends MethodGenerator
      * @return string
      */
     protected static function convertMethodParamsToString(
-        Parameters $methodParameters,
+        array $methodParameters,
         GetParameter $parameterValuesMethod
     ) : string {
         $parameters = [];
-        foreach ($methodParameters->value as $methodParameter) {
+        foreach ($methodParameters as $methodParameter) {
             /** @var $methodParameter Parameter */
             $name = $methodParameter->getName();
             $defaultValue = $methodParameter->getDefaultValue();

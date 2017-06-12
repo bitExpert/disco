@@ -16,7 +16,6 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\BeanPostProcessor;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Annotations\Parameter;
-use bitExpert\Disco\Annotations\Parameters;
 use bitExpert\Disco\Helper\ParameterizedSampleServiceBeanPostProcessor;
 use bitExpert\Disco\Helper\SampleService;
 
@@ -42,9 +41,10 @@ class BeanConfigurationWithParameterizedPostProcessor
     }
 
     /**
-     * @Bean
-     * @Parameters({
-     *  @Parameter({"name" = "test"})
+     * @Bean({
+     *   "parameters"={
+     *      @Parameter({"name" = "test"})
+     *   }
      * })
      */
     public function dependency($test = '') : \stdClass

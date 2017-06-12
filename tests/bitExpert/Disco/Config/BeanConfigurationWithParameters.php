@@ -15,7 +15,6 @@ namespace bitExpert\Disco\Config;
 use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Annotations\Parameter;
-use bitExpert\Disco\Annotations\Parameters;
 use bitExpert\Disco\Helper\SampleService;
 
 /**
@@ -24,9 +23,11 @@ use bitExpert\Disco\Helper\SampleService;
 class BeanConfigurationWithParameters
 {
     /**
-     * @Bean({"singleton"=false})
-     * @Parameters({
-     *  @Parameter({"name" = "test"})
+     * @Bean({
+     *   "singleton"=false,
+     *   "parameters"={
+     *     @Parameter({"name" = "test"})
+     *   }
      * })
      */
     public function sampleServiceWithParam($test = '') : SampleService
@@ -37,9 +38,11 @@ class BeanConfigurationWithParameters
     }
 
     /**
-     * @Bean({"singleton"=false})
-     * @Parameters({
-     *  @Parameter({"name" = "test", "default" = null})
+     * @Bean({
+     *   "singleton"=false,
+     *   "parameters"={
+     *     @Parameter({"name" = "test", "default" = null})
+     *   }
      * })
      */
     public function sampleServiceWithParamNull($test = '') : SampleService
@@ -50,9 +53,11 @@ class BeanConfigurationWithParameters
     }
 
     /**
-     * @Bean({"singleton"=false})
-     * @Parameters({
-     *  @Parameter({"name" = "test", "default" = true})
+     * @Bean({
+     *   "singleton"=false,
+     *   "parameters"={
+     *     @Parameter({"name" = "test", "default" = true})
+     *   }
      * })
      */
     public function sampleServiceWithParamBool($test = '') : SampleService
@@ -63,9 +68,11 @@ class BeanConfigurationWithParameters
     }
 
     /**
-     * @Bean({"singleton"=false})
-     * @Parameters({
-     *  @Parameter({"name" = "test", "default" = 0})
+     * @Bean({
+     *   "singleton"=false,
+     *   "parameters"={
+     *     @Parameter({"name" = "test", "default" = 0})
+     *   }
      * })
      */
     public function sampleServiceWithParamEmpty($test = '') : SampleService
@@ -76,9 +83,11 @@ class BeanConfigurationWithParameters
     }
 
     /**
-     * @Bean({"singleton"=false})
-     * @Parameters({
-     *  @Parameter({"name" = "test.nested.key"})
+     * @Bean({
+     *   "singleton"=false,
+     *   "parameters"={
+     *     @Parameter({"name" = "test.nested.key"})
+     *   }
      * })
      */
     public function sampleServiceWithNestedParamKey($test = '') : SampleService
@@ -89,9 +98,11 @@ class BeanConfigurationWithParameters
     }
 
     /**
-     * @Bean({"singleton"=false})
-     * @Parameters({
-     *  @Parameter({"name" = "test", "default" = "myDefaultValue"})
+     * @Bean({
+     *   "singleton"=false,
+     *   "parameters"={
+     *     @Parameter({"name" = "test", "default" = "myDefaultValue"})
+     *   }
      * })
      */
     public function sampleServiceWithParamDefaultValue($test = '') : SampleService
@@ -102,9 +113,11 @@ class BeanConfigurationWithParameters
     }
 
     /**
-     * @Bean({"singleton"=false})
-     * @Parameters({
-     *  @Parameter({"name" = "test", "required" = false})
+     * @Bean({
+     *   "singleton"=false,
+     *   "parameters"={
+     *     @Parameter({"name" = "test", "required" = false})
+     *   }
      * })
      */
     public function sampleServiceWithoutRequiredParam($test = '') : SampleService
