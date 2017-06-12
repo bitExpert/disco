@@ -63,10 +63,10 @@ be marked with the `@Bean` annotation. The `\bitExpert\Disco\AnnotationBeanFacto
 will throw an exception when public or protected methods without a `@Bean`
 annotation are found.
 
-## container-interop
+## PSR-11
 
-Disco implements the [container-interop](https://github.com/container-interop/container-interop) interface.
-That means you can use Disco in any application that can deal with container-interop,
+Disco implements the [PSR-11](http://www.php-fig.org/psr/psr-11/) interface.
+That means you can use Disco in any application that can deal with PSR-11 containers,
 e.g. [zend-expressive](https://github.com/zendframework/zend-expressive).
 
 In a nutshell the container-interop project provides a interface for DI
@@ -75,10 +75,7 @@ containers that consists of two methods:
 ```php
 <?php
 
-namespace Interop\Container;
-
-use Interop\Container\Exception\ContainerException;
-use Interop\Container\Exception\NotFoundException;
+namespace Psr\Container;
 
 interface ContainerInterface
 {
@@ -86,18 +83,22 @@ interface ContainerInterface
      * Finds an entry of the container by its identifier and returns it.
      *
      * @param string $id Identifier of the entry to look for.
-     * @throws NotFoundException  No entry was found for this identifier.
-     * @throws ContainerException Error while retrieving the entry.
+     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
+     * @throws ContainerExceptionInterface Error while retrieving the entry.
+     *
      * @return mixed Entry.
      */
     public function get($id);
 
     /**
-     * Returns true if the container can return an entry for the given
-     * identifier. Returns false otherwise.
+     * Returns true if the container can return an entry for the given identifier.
+     * Returns false otherwise.
+     *
+     * `has($id)` returning true does not mean that `get($id)` will not throw an exception.
+     * It does however mean that `get($id)` will not throw a `NotFoundExceptionInterface`.
      *
      * @param string $id Identifier of the entry to look for.
-     * @return boolean
+     * @return bool
      */
     public function has($id);
 }

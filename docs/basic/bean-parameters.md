@@ -1,9 +1,8 @@
 # Bean parameters
 
-Bean instances can be parametrized by a given configuration array. To
-access configuration elements add an ```parameters``` attribute to your
-bean configuration method which holds a collection of ```@Parameter```
-annotations.
+Bean instances can be parametrized by a given configuration. To access
+the configuration add an ```parameters``` attribute to your bean configuration
+method which holds a collection of ```@Parameter``` annotations.
 
 The ```@Parameter``` annotation requires at least a name which will be
 used as key to look for in the configuration array.

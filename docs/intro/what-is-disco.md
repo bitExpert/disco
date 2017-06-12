@@ -1,7 +1,6 @@
 # What Is Disco?
 
-Disco is a [container-interop](https://github.com/container-interop/container-interop) compatible,
-annotation-based dependency injection container.
+Disco is a a [PSR-11](http://www.php-fig.org/psr/psr-11/) compatible, annotation-based dependency injection container.
 
 ## Why Disco?
 

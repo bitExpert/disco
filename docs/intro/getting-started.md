@@ -2,10 +2,9 @@
 
 ## Prerequisites
 
-Disco needs at least [PHP](http://php.net) 7.1 to run. Disco relies on the
-[return type declarations](http://php.net/manual/en/functions.returning-values.php#functions.returning-values.type-declaration)
-feature introduced with PHP 7.0 as well as the `ocramius/proxy-manager` package which in the current version is only compatible
-with PHP 7.1.
+Disco needs at least [PHP](http://php.net) 7.1 to run. Disco relies on the [return type declarations](http://php.net/manual/en/functions.returning-values.php#functions.returning-values.type-declaration)
+feature introduced with PHP 7.0 as well as the `ocramius/proxy-manager` package
+which in the latest version is only compatible with PHP 7.1.
 
 ## Installation
 
