@@ -68,8 +68,8 @@ class BeanMethod extends MethodGenerator
             throw new InvalidProxiedClassException(
                 sprintf(
                     'Method "%s" on "%s" is missing the return type hint!',
-                    $originalMethod->getName(),
-                    $originalMethod->getDeclaringClass()->getName()
+                    $originalMethod->name,
+                    $originalMethod->class
                 )
             );
         }
