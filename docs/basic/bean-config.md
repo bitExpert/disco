@@ -217,13 +217,13 @@ use bitExpert\Disco\Helper\SampleService;
 class MyConfiguration
 {
     /**
-         * @Bean({
-         *   "aliases"={
-         *      @Alias({"name" = "\Identifier\With\Namespace"}),
-         *      @Alias({"type" = true})
-         *   }
-         * })
-         */
+      * @Bean({
+      *   "aliases"={
+      *      @Alias({"name" = "\Identifier\With\Namespace"}),
+      *      @Alias({"type" = true})
+      *   }
+      * })
+      */
     public function mySampleService() : SampleService
     {
         return new SampleService();

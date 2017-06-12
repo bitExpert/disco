@@ -1,4 +1,44 @@
-# Upgrade to 0.5.0
+# Upgrade to Disco 0.9.0
+
+## BC BREAK: Rasing minimum PHP version to 7.1
+
+With the 0.9.0 release of Disco support for PHP 7.0 is dropped. Disco
+will only work in PHP 7.1 environments due to it's dependency of the
+latest stable version of `ocramius/proxy-manager`.
+
+## BC BREAK: Bean Aliases
+
+Bean aliases are no longer defined by the `alias` attribute. The attribute
+is named `aliases` and holds an array of `@Alias` annotations. The new
+syntax looks like this:
+```php
+    /**
+      * @Bean({
+      *   "aliases"={
+      *      @Alias({"name" = "\Identifier\With\Namespace"}),
+      *      @Alias({"type" = true})
+      *   }
+      * })
+      */
+```
+
+## BC BREAK: Parameters
+
+To be consistent to the way aliases are defined the parameter handling
+changed. The `@Parameters` annotation got removed. Parameters are defined
+by adding a `parameters` attribute to the `@Bean` annotation which holds
+the `@Parameter` collection. The new syntax looks like this:
+```php
+    /**
+     * @Bean({
+     *   "parameters"={
+     *      @Parameter({"name" = "test"})
+     *   }
+     * })
+     */
+```
+
+# Upgrade to Disco 0.5.0
 
 ## BC BREAK: Rasing minimum PHP version to 7.0
 
