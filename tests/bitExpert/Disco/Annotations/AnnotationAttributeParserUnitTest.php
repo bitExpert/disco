@@ -15,7 +15,7 @@ namespace bitExpert\Disco\Annotations;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit tests for {@link \bitExpert\Disco\Annotations\AnnotationsAttributeParser}.
+ * Unit tests for {@link \bitExpert\Disco\Annotations\AnnotationAttributeParser}.
  */
 class AnnotationAttributeParserUnitTest extends TestCase
 {

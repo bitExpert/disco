@@ -39,6 +39,45 @@ class BeanConfigurationWithParameters
     /**
      * @Bean({"singleton"=false})
      * @Parameters({
+     *  @Parameter({"name" = "test", "default" = null})
+     * })
+     */
+    public function sampleServiceWithParamNull($test = '') : SampleService
+    {
+        $service = new SampleService();
+        $service->setTest($test);
+        return $service;
+    }
+
+    /**
+     * @Bean({"singleton"=false})
+     * @Parameters({
+     *  @Parameter({"name" = "test", "default" = true})
+     * })
+     */
+    public function sampleServiceWithParamBool($test = '') : SampleService
+    {
+        $service = new SampleService();
+        $service->setTest($test);
+        return $service;
+    }
+
+    /**
+     * @Bean({"singleton"=false})
+     * @Parameters({
+     *  @Parameter({"name" = "test", "default" = 0})
+     * })
+     */
+    public function sampleServiceWithParamEmpty($test = '') : SampleService
+    {
+        $service = new SampleService();
+        $service->setTest($test);
+        return $service;
+    }
+
+    /**
+     * @Bean({"singleton"=false})
+     * @Parameters({
      *  @Parameter({"name" = "test.nested.key"})
      * })
      */

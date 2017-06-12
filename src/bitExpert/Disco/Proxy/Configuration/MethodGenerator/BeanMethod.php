@@ -21,10 +21,11 @@ use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanFactoryConfigurati
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ForceLazyInitProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
-use bitExpert\Disco\Proxy\Configuration\MethodGenerator\WrapBeanAsLazy;
 use bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory;
+use ProxyManager\Exception\InvalidProxiedClassException;
 use ProxyManager\Generator\MethodGenerator;
 use ProxyManager\Proxy\LazyLoadingInterface;
+use ReflectionType;
 use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Reflection\MethodReflection;
 
@@ -42,7 +43,7 @@ class BeanMethod extends MethodGenerator
      * @param MethodReflection $originalMethod
      * @param Bean $beanMetadata
      * @param Parameters $methodParameters
-     * @param $beanType
+     * @param ReflectionType|null $beanType
      * @param ForceLazyInitProperty $forceLazyInitProperty
      * @param SessionBeansProperty $sessionBeansProperty
      * @param BeanPostProcessorsProperty $postProcessorsProperty
@@ -55,7 +56,7 @@ class BeanMethod extends MethodGenerator
         MethodReflection $originalMethod,
         Bean $beanMetadata,
         Parameters $methodParameters,
-        $beanType,
+        ?ReflectionType $beanType,
         ForceLazyInitProperty $forceLazyInitProperty,
         SessionBeansProperty $sessionBeansProperty,
         BeanPostProcessorsProperty $postProcessorsProperty,
@@ -63,6 +64,17 @@ class BeanMethod extends MethodGenerator
         GetParameter $parameterValuesMethod,
         WrapBeanAsLazy $wrapBeanAsLazy
     ) {
+        if (null === $beanType) {
+            throw new InvalidProxiedClassException(
+                sprintf(
+                    'Method "%s" on "%s" is missing the return type hint!',
+                    $originalMethod->getName(),
+                    $originalMethod->getDeclaringClass()->getName()
+                )
+            );
+        }
+        $beanType = (string) $beanType;
+
         $method = static::fromReflection($originalMethod);
         $methodParams = static::convertMethodParamsToString($methodParameters, $parameterValuesMethod);
         $beanId = $originalMethod->name;
@@ -99,12 +111,13 @@ class BeanMethod extends MethodGenerator
             }
         } else {
             // return type is unknown, throw an exception
-            $body .= '$message = sprintf(' . PHP_EOL;
-            $body .= '    \'Either return type declaration missing or unknown for bean with id "' . $beanId .
-                '": %s\',' . PHP_EOL;
-            $body .= '    $e->getMessage()' . PHP_EOL;
-            $body .= ');' . PHP_EOL;
-            $body .= 'throw new \\' . BeanException::class . '($message, 0, $e);' . PHP_EOL;
+            throw new InvalidProxiedClassException(
+                sprintf(
+                    'Return type of method "%s" on "%s" cannot be found! Did you use the full qualified name?',
+                    $originalMethod->getName(),
+                    $originalMethod->getDeclaringClass()->getName()
+                )
+            );
         }
 
         $method->setBody($body);
