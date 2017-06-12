@@ -63,6 +63,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
      * {@inheritDoc}
      * @throws InvalidProxiedClassException
      * @throws InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function generate(ReflectionClass $originalClass, ClassGenerator $classGenerator)
     {
@@ -89,7 +90,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             throw new InvalidProxiedClassException(
                 sprintf(
                     '"%s" seems not to be a valid configuration class. @Configuration annotation missing!',
-                    $originalClass->getName()
+                    $originalClass->name
                 )
             );
         }
@@ -118,39 +119,17 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 throw new InvalidProxiedClassException(
                     sprintf(
                         'Method "%s" on "%s" is missing the @Bean annotation!',
-                        $method->getName(),
-                        $originalClass->getName()
-                    )
-                );
-            }
-
-            $beanType = $method->getReturnType();
-            if (null === $beanType) {
-                throw new InvalidProxiedClassException(
-                    sprintf(
-                        'Method "%s" on "%s" is missing the return type hint!',
-                        $method->getName(),
-                        $originalClass->getName()
-                    )
-                );
-            }
-
-            $beanType = (string) $beanType;
-            if (!in_array($beanType, ['array', 'callable', 'bool', 'float', 'int', 'string']) &&
-                !class_exists($beanType) &&
-                !interface_exists($beanType)
-            ) {
-                throw new InvalidProxiedClassException(
-                    sprintf(
-                        'Return type of method "%s" on "%s" cannot be found! Did you use the full qualified name?',
-                        $method->getName(),
-                        $originalClass->getName()
+                        $method->name,
+                        $originalClass->name
                     )
                 );
             }
 
             foreach ($beanAnnotation->getAliases() as $beanAlias) {
-                $alias = $beanAlias->isTypeAlias()? $beanType : $beanAlias->getName();
+                $alias = $beanAlias->isTypeAlias() ? (string) $method->getReturnType() : $beanAlias->getName();
+                if (empty($alias)) {
+                    continue;
+                }
 
                 if (isset($aliases[$alias])) {
                     throw new InvalidProxiedClassException(
@@ -158,19 +137,19 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                             'Alias "%s" of method "%s" on "%s" is already used by method "%s" of another Bean!'
                             . ' Did you use a type alias twice?',
                             $alias,
-                            $method->getName(),
-                            $originalClass->getName(),
+                            $method->name,
+                            $originalClass->name,
                             $aliases[$alias]
                         )
                     );
                 }
 
-                $aliases[$alias] = $method->getName();
+                $aliases[$alias] = $method->name;
             }
 
             $methodReflection = new MethodReflection(
                 $method->class,
-                $method->getName()
+                $method->name
             );
             $proxyMethod = BeanMethod::generateMethod(
                 $methodReflection,
