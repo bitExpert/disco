@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
+use bitExpert\Disco\Helper\SampleService;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 
 /**
  * Unit tests for {@link \bitExpert\Disco\Annotations\Bean}.
@@ -31,6 +33,7 @@ class BeanUnitTest extends TestCase
         self::assertTrue($bean->isSingleton());
         self::assertFalse($bean->isLazy());
         self::assertEmpty($bean->getAliases());
+        self::assertEmpty($bean->getParameters());
     }
 
     /**
@@ -178,7 +181,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function aliasingBean()
+    public function configuredAliasesGetReturned()
     {
         $bean = new Bean(['value' => ['aliases' => [
             new Alias(['value' => ['name' => 'someAlias']]),
@@ -188,5 +191,42 @@ class BeanUnitTest extends TestCase
         self::assertEquals(array_map(function (Alias $alias) {
             return $alias->getName();
         }, $bean->getAliases()), ['someAlias', 'yetAnotherAlias']);
+    }
+
+    /**
+     * @test
+     * @expectedException TypeError
+     */
+    public function throwsExceptionIfAliasTypeDoesNotMatch()
+    {
+        $bean = new Bean(['value' => ['aliases' => [
+            new SampleService()
+        ]]]);
+    }
+
+    /**
+     * @test
+     */
+    public function configuredParametersGetReturned()
+    {
+        $bean = new Bean(['value' => ['parameters' => [
+            new Parameter(['value' => ['name' => 'parameterName']]),
+            new Parameter(['value' => ['name' => 'yetAnotherParameter']])
+        ]]]);
+
+        self::assertEquals(array_map(function (Parameter $parameter) {
+            return $parameter->getName();
+        }, $bean->getParameters()), ['parameterName', 'yetAnotherParameter']);
+    }
+
+    /**
+     * @test
+     * @expectedException TypeError
+     */
+    public function throwsExceptionIfParameterTypeDoesNotMatch()
+    {
+        $bean = new Bean(['value' => ['parameters' => [
+            new SampleService()
+        ]]]);
     }
 }
