@@ -12,10 +12,34 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
+use Doctrine\Common\Annotations\Annotation\Attribute;
+use Doctrine\Common\Annotations\Annotation\Attributes;
+use Doctrine\Common\Annotations\AnnotationException;
+
 /**
  * @Annotation
  * @Target({"METHOD"})
+ * @Attributes({
+ *   @Attribute("parameters", type = "array<\bitExpert\Disco\Annotations\Parameter>")
+ * })
  */
-final class BeanPostProcessor
+final class BeanPostProcessor extends ParameterAwareAnnotation
 {
+
+    /**
+     * Creates a new {@link \bitExpert\Disco\Annotations\BeanPostProcessor}.
+     *
+     * @param array $attributes
+     * @throws AnnotationException
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct();
+
+        if (isset($attributes['value'], $attributes['value']['parameters']) and
+            is_array($attributes['value']['parameters'])
+        ) {
+            $this->setParameters(...$attributes['value']['parameters']);
+        }
+    }
 }

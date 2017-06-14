@@ -19,6 +19,7 @@ use bitExpert\Disco\Config\BeanConfigurationWithAliases;
 use bitExpert\Disco\Config\BeanConfigurationWithParameterizedPostProcessor;
 use bitExpert\Disco\Config\BeanConfigurationWithParameters;
 use bitExpert\Disco\Config\BeanConfigurationWithPostProcessor;
+use bitExpert\Disco\Config\BeanConfigurationWithPostProcessorAndParameterizedDependency;
 use bitExpert\Disco\Config\BeanConfigurationWithPrimitives;
 use bitExpert\Disco\Config\BeanConfigurationWithProtectedMethod;
 use bitExpert\Disco\Config\WrongReturnTypeConfiguration;
@@ -266,10 +267,26 @@ class AnnotationBeanFactoryUnitTest extends TestCase
     /**
      * @test
      */
-    public function beanFactoryPostProcessorIsInitializedAfterParametersAreSet()
+    public function beanFactoryPostProcessorAcceptsParameters()
     {
         $this->beanFactory = new AnnotationBeanFactory(
             BeanConfigurationWithParameterizedPostProcessor::class,
+            ['test' => 'injectedValue']
+        );
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        /** @var SampleService $bean */
+        $bean = $this->beanFactory->get('nonSingletonNonLazyRequestBean');
+        self::assertEquals('injectedValue', $bean->test);
+    }
+
+    /**
+     * @test
+     */
+    public function beanFactoryPostProcessorCanBeConfiguredWithParameterizedDependency()
+    {
+        $this->beanFactory = new AnnotationBeanFactory(
+            BeanConfigurationWithPostProcessorAndParameterizedDependency::class,
             ['test' => 'injectedValue']
         );
         BeanFactoryRegistry::register($this->beanFactory);

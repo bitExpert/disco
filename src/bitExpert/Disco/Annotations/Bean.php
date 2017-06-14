@@ -27,7 +27,7 @@ use Doctrine\Common\Annotations\AnnotationException;
  *   @Attribute("parameters", type = "array<\bitExpert\Disco\Annotations\Parameter>")
  * })
  */
-final class Bean
+final class Bean extends ParameterAwareAnnotation
 {
     const SCOPE_REQUEST = 1;
     const SCOPE_SESSION = 2;
@@ -47,10 +47,6 @@ final class Bean
      * @var Alias[]
      */
     protected $aliases;
-    /**
-     * @var Parameter[]
-     */
-    protected $parameters;
 
     /**
      * Creates a new {@link \bitExpert\Disco\Annotations\Bean}.
@@ -60,12 +56,12 @@ final class Bean
      */
     public function __construct(array $attributes = [])
     {
+        parent::__construct();
         // initialize default values
         $this->scope = self::SCOPE_REQUEST;
         $this->singleton = true;
         $this->lazy = false;
         $this->aliases = [];
-        $this->parameters = [];
 
         if (isset($attributes['value'])) {
             if (isset($attributes['value']['scope']) && (strtolower($attributes['value']['scope']) === 'session')) {
@@ -80,12 +76,12 @@ final class Bean
                 $this->lazy = AnnotationAttributeParser::parseBooleanValue($attributes['value']['lazy']);
             }
 
-            if (isset($attributes['value']['aliases'])) {
-                $this->aliases = $attributes['value']['aliases'];
+            if (isset($attributes['value']['aliases']) and is_array($attributes['value']['aliases'])) {
+                $this->setAliases(...$attributes['value']['aliases']);
             }
 
-            if (isset($attributes['value']['parameters'])) {
-                $this->parameters = $attributes['value']['parameters'];
+            if (isset($attributes['value']['parameters']) and is_array($attributes['value']['parameters'])) {
+                $this->setParameters(...$attributes['value']['parameters']);
             }
         }
     }
@@ -95,7 +91,7 @@ final class Bean
      *
      * @return bool
      */
-    public function isRequest() : bool
+    public function isRequest(): bool
     {
         return $this->scope === self::SCOPE_REQUEST;
     }
@@ -105,7 +101,7 @@ final class Bean
      *
      * @return bool
      */
-    public function isSession() : bool
+    public function isSession(): bool
     {
         return $this->scope === self::SCOPE_SESSION;
     }
@@ -115,7 +111,7 @@ final class Bean
      *
      * @return bool
      */
-    public function isSingleton() : bool
+    public function isSingleton(): bool
     {
         return $this->singleton;
     }
@@ -125,7 +121,7 @@ final class Bean
      *
      * @return bool
      */
-    public function isLazy() : bool
+    public function isLazy(): bool
     {
         return $this->lazy;
     }
@@ -141,12 +137,12 @@ final class Bean
     }
 
     /**
-     * Returns the list of parameters for the bean instance. Returns an empty array when no parameters were set.
+     * Helper methd to ensure that the passed aliases are of {@link \bitExpert\Disco\Annotations\Alias} type.
      *
-     * @return Parameter[]
+     * @param Alias[] $aliases
      */
-    public function getParameters(): array
+    private function setAliases(Alias ...$aliases): void
     {
-        return $this->parameters;
+        $this->aliases = $aliases;
     }
 }

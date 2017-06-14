@@ -13,8 +13,6 @@ declare(strict_types = 1);
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
 use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Parameter;
-use bitExpert\Disco\Annotations\Parameters;
 use bitExpert\Disco\BeanException;
 use bitExpert\Disco\InitializedBean;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanFactoryConfigurationProperty;
@@ -23,9 +21,9 @@ use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ForceLazyInitProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
 use bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory;
 use ProxyManager\Exception\InvalidProxiedClassException;
-use ProxyManager\Generator\MethodGenerator;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use ReflectionType;
+use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Reflection\MethodReflection;
 
@@ -35,7 +33,7 @@ use Zend\Code\Reflection\MethodReflection;
  * as taking the configuration options like lazy creation or session-awareness of the bean into
  * account. These configuration options are defined via annotations.
  */
-class BeanMethod extends MethodGenerator
+class BeanMethod extends ParameterAwareMethodGenerator
 {
     /**
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanMethod}.
@@ -49,7 +47,7 @@ class BeanMethod extends MethodGenerator
      * @param BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty
      * @param GetParameter $parameterValuesMethod
      * @param WrapBeanAsLazy $wrapBeanAsLazy
-     * @return BeanMethod|MethodGenerator
+     * @return MethodGenerator
      * @throws \Zend\Code\Generator\Exception\InvalidArgumentException
      * @throws \ProxyManager\Exception\InvalidProxiedClassException
      */
@@ -148,44 +146,6 @@ class BeanMethod extends MethodGenerator
         }
 
         return $method;
-    }
-
-    /**
-     * Converts the Parameter annotations to the respective getParameter() method calls to retrieve the configuration
-     * values.
-     *
-     * @param Parameters $methodParameters
-     * @param GetParameter $parameterValuesMethod
-     * @return string
-     */
-    protected static function convertMethodParamsToString(
-        array $methodParameters,
-        GetParameter $parameterValuesMethod
-    ) : string {
-        $parameters = [];
-        foreach ($methodParameters as $methodParameter) {
-            /** @var $methodParameter Parameter */
-            $name = $methodParameter->getName();
-            $defaultValue = $methodParameter->getDefaultValue();
-            $required = $methodParameter->isRequired() ? 'true' : 'false';
-            if (is_string($defaultValue)) {
-                $defaultValue = '"' . $defaultValue . '"';
-            } elseif (is_null($defaultValue)) {
-                $defaultValue = 'null';
-            } elseif (is_bool($defaultValue)) {
-                $defaultValue = ($defaultValue) ? 'true' : 'false';
-            }
-
-            if (!empty($defaultValue)) {
-                $parameters[] = '$this->' . $parameterValuesMethod->getName() . '("' . $name . '", ' . $required .
-                    ', ' . $defaultValue . ')';
-            } else {
-                $parameters[] = '$this->' . $parameterValuesMethod->getName() . '("' . $name . '", ' . $required .
-                    ')';
-            }
-        }
-
-        return implode(', ', $parameters);
     }
 
     /**

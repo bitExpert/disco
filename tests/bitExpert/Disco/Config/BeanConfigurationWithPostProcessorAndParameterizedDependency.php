@@ -22,18 +22,14 @@ use bitExpert\Disco\Helper\SampleService;
 /**
  * @Configuration
  */
-class BeanConfigurationWithParameterizedPostProcessor
+class BeanConfigurationWithPostProcessorAndParameterizedDependency
 {
     /**
-     * @BeanPostProcessor({
-     *   "parameters"={
-     *      @Parameter({"name" = "test"})
-     *   }
-     * })
+     * @BeanPostProcessor
      */
-    public function sampleServiceBeanPostProcessor($test = ''): ParameterizedSampleServiceBeanPostProcessor
+    public function sampleServiceBeanPostProcessor(): ParameterizedSampleServiceBeanPostProcessor
     {
-        return new ParameterizedSampleServiceBeanPostProcessor($test);
+        return new ParameterizedSampleServiceBeanPostProcessor($this->dependency());
     }
 
     /**
@@ -42,5 +38,19 @@ class BeanConfigurationWithParameterizedPostProcessor
     public function nonSingletonNonLazyRequestBean(): SampleService
     {
         return new SampleService();
+    }
+
+    /**
+     * @Bean({
+     *   "parameters"={
+     *      @Parameter({"name" = "test"})
+     *   }
+     * })
+     */
+    public function dependency($test = ''): \stdClass
+    {
+        $object = new \stdClass();
+        $object->property = $test;
+        return $object;
     }
 }
