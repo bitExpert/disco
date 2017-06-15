@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.9.0
+
+### Added
+
+- [#101](https://github.com/bitExpert/disco/pull/101) Allow parameters in BeanPostProcessor configuration
+- [#100](https://github.com/bitExpert/disco/pull/100) Convert @Parameters annotation to "parameters" attribute of @Bean annotation
+- [#99](https://github.com/bitExpert/disco/pull/99) Allow multiple aliases per bean and add return type aliases
+- [#97](https://github.com/bitExpert/disco/pull/97) Fix of markdown for "Sending a PR" headline
+- [#93](https://github.com/bitExpert/disco/pull/93) Enable coveralls support
+- [#91](https://github.com/bitExpert/disco/pull/91) Remove the develop branch references from the contribution guide
+- [#89](https://github.com/bitExpert/disco/pull/89) Update to PHPUnit 6
+- [#82](https://github.com/bitExpert/disco/pull/82) Add bookdown docs and restructure main README.md file
+
+### Deprecated
+
+- [#102](https://github.com/bitExpert/disco/pull/102) Remove BeanFactoryPostProcessor
+- [#95](https://github.com/bitExpert/disco/pull/95) Upgrade to ProxyManager 2.1.x to allow to set the minimum PHP version to 7.1
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 0.8.0
 
 ### Added
