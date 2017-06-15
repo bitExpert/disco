@@ -38,6 +38,13 @@ the `@Parameter` collection. The new syntax looks like this:
      */
 ```
 
+## BC BREAK: Removal of BeanFactoryPostProcessor
+
+Injecting a container into a bean (service) is considered a bad practice,
+thus the BeanFactoryPostProcessor implementation is removed. The general
+post processor logic is still in place, a custom BeanFactoryPostProcessor
+implementation can still be used.
+
 # Upgrade to Disco 0.5.0
 
 ## BC BREAK: Rasing minimum PHP version to 7.0

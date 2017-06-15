@@ -23,7 +23,6 @@ use bitExpert\Disco\Config\BeanConfigurationWithPostProcessorAndParameterizedDep
 use bitExpert\Disco\Config\BeanConfigurationWithPrimitives;
 use bitExpert\Disco\Config\BeanConfigurationWithProtectedMethod;
 use bitExpert\Disco\Config\WrongReturnTypeConfiguration;
-use bitExpert\Disco\Helper\BeanFactoryAwareService;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
 use bitExpert\Disco\Helper\SampleServiceInterface;
@@ -249,19 +248,6 @@ class AnnotationBeanFactoryUnitTest extends TestCase
 
         $bean = $this->beanFactory->get('nonSingletonLazyRequestBean');
         self::assertEquals('postProcessed', $bean->test);
-    }
-
-    /**
-     * @test
-     */
-    public function beanFactoryPostProcessorHookRuns()
-    {
-        $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithPostProcessor::class);
-        BeanFactoryRegistry::register($this->beanFactory);
-
-        /** @var BeanFactoryAwareService $bean */
-        $bean = $this->beanFactory->get('beanFactoryAwareBean');
-        self::assertInstanceOf(BeanFactory::class, $bean->getBeanFactory());
     }
 
     /**

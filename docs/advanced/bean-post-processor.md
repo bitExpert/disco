@@ -58,11 +58,3 @@ Disco will call every post processor for every new bean instance created.
 In case of a singleton bean the call for each post processor will happen once,
 in case of a lazy bean the call will happen when the "real" instance gets
 created. Disco will manage this all for you.
-
-# BeanFactoryPostProcessor
-
-Disco comes with one post processor implementation out-of-the-box:
-`\bitExpert\Disco\BeanFactoryPostProcessor`. This post processor will only
-run for classes implementing the `\bitExpert\Disco\BeanFactoryAware`
-interface. As the name implies it will inject the current BeanFactory
-instance into the created bean instance.
