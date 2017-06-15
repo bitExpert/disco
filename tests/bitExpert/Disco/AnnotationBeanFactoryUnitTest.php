@@ -407,6 +407,7 @@ class AnnotationBeanFactoryUnitTest extends TestCase
 
         self::assertNotSame($bean1->service, $bean2->service);
     }
+
     /**
      * @test
      */

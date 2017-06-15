@@ -20,7 +20,7 @@ trait NonSingletonNonLazyRequestBean
     /**
      * @Bean({"singleton"=false, "lazy"=false, "scope"="request"})
      */
-    public function nonSingletonNonLazyRequestBeanInTrait() : SampleService
+    public function nonSingletonNonLazyRequestBeanInTrait(): SampleService
     {
         return new SampleService();
     }

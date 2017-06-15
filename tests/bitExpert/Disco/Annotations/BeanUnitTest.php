@@ -183,14 +183,24 @@ class BeanUnitTest extends TestCase
      */
     public function configuredAliasesGetReturned()
     {
-        $bean = new Bean(['value' => ['aliases' => [
-            new Alias(['value' => ['name' => 'someAlias']]),
-            new Alias(['value' => ['name' => 'yetAnotherAlias']])
-        ]]]);
+        $bean = new Bean([
+            'value' => [
+                'aliases' => [
+                    new Alias(['value' => ['name' => 'someAlias']]),
+                    new Alias(['value' => ['name' => 'yetAnotherAlias']])
+                ]
+            ]
+        ]);
 
-        self::assertEquals(array_map(function (Alias $alias) {
-            return $alias->getName();
-        }, $bean->getAliases()), ['someAlias', 'yetAnotherAlias']);
+        self::assertEquals(
+            array_map(
+                function (Alias $alias) {
+                    return $alias->getName();
+                },
+                $bean->getAliases()
+            ),
+            ['someAlias', 'yetAnotherAlias']
+        );
     }
 
     /**
@@ -199,9 +209,13 @@ class BeanUnitTest extends TestCase
      */
     public function throwsExceptionIfAliasTypeDoesNotMatch()
     {
-        $bean = new Bean(['value' => ['aliases' => [
-            new SampleService()
-        ]]]);
+        $bean = new Bean([
+            'value' => [
+                'aliases' => [
+                    new SampleService()
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -209,14 +223,24 @@ class BeanUnitTest extends TestCase
      */
     public function configuredParametersGetReturned()
     {
-        $bean = new Bean(['value' => ['parameters' => [
-            new Parameter(['value' => ['name' => 'parameterName']]),
-            new Parameter(['value' => ['name' => 'yetAnotherParameter']])
-        ]]]);
+        $bean = new Bean([
+            'value' => [
+                'parameters' => [
+                    new Parameter(['value' => ['name' => 'parameterName']]),
+                    new Parameter(['value' => ['name' => 'yetAnotherParameter']])
+                ]
+            ]
+        ]);
 
-        self::assertEquals(array_map(function (Parameter $parameter) {
-            return $parameter->getName();
-        }, $bean->getParameters()), ['parameterName', 'yetAnotherParameter']);
+        self::assertEquals(
+            array_map(
+                function (Parameter $parameter) {
+                    return $parameter->getName();
+                },
+                $bean->getParameters()
+            ),
+            ['parameterName', 'yetAnotherParameter']
+        );
     }
 
     /**
@@ -225,8 +249,12 @@ class BeanUnitTest extends TestCase
      */
     public function throwsExceptionIfParameterTypeDoesNotMatch()
     {
-        $bean = new Bean(['value' => ['parameters' => [
-            new SampleService()
-        ]]]);
+        $bean = new Bean([
+            'value' => [
+                'parameters' => [
+                    new SampleService()
+                ]
+            ]
+        ]);
     }
 }

@@ -47,18 +47,18 @@ class LazyBeanFactory extends AbstractBaseFactory
     /**
      * {@inheritDoc}
      */
-    protected function getGenerator() : ProxyGeneratorInterface
-    {
-        return $this->generator ?: $this->generator = new LazyBeanGenerator();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function createProxy($className, Closure $initializer)
     {
         $proxyClassName = $this->generateProxy($className);
 
         return new $proxyClassName($this->beanId, $initializer);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getGenerator(): ProxyGeneratorInterface
+    {
+        return $this->generator ?: $this->generator = new LazyBeanGenerator();
     }
 }

@@ -87,6 +87,16 @@ final class Bean extends ParameterAwareAnnotation
     }
 
     /**
+     * Helper methd to ensure that the passed aliases are of {@link \bitExpert\Disco\Annotations\Alias} type.
+     *
+     * @param Alias[] $aliases
+     */
+    private function setAliases(Alias ...$aliases): void
+    {
+        $this->aliases = $aliases;
+    }
+
+    /**
      * Returns true if the current scope if of type Scope::REQUEST.
      *
      * @return bool
@@ -134,15 +144,5 @@ final class Bean extends ParameterAwareAnnotation
     public function getAliases(): array
     {
         return $this->aliases;
-    }
-
-    /**
-     * Helper methd to ensure that the passed aliases are of {@link \bitExpert\Disco\Annotations\Alias} type.
-     *
-     * @param Alias[] $aliases
-     */
-    private function setAliases(Alias ...$aliases): void
-    {
-        $this->aliases = $aliases;
     }
 }

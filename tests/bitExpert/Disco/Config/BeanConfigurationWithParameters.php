@@ -30,7 +30,7 @@ class BeanConfigurationWithParameters
      *   }
      * })
      */
-    public function sampleServiceWithParam($test = '') : SampleService
+    public function sampleServiceWithParam($test = ''): SampleService
     {
         $service = new SampleService();
         $service->setTest($test);
@@ -45,7 +45,7 @@ class BeanConfigurationWithParameters
      *   }
      * })
      */
-    public function sampleServiceWithParamNull($test = '') : SampleService
+    public function sampleServiceWithParamNull($test = ''): SampleService
     {
         $service = new SampleService();
         $service->setTest($test);
@@ -60,7 +60,7 @@ class BeanConfigurationWithParameters
      *   }
      * })
      */
-    public function sampleServiceWithParamBool($test = '') : SampleService
+    public function sampleServiceWithParamBool($test = ''): SampleService
     {
         $service = new SampleService();
         $service->setTest($test);
@@ -75,7 +75,7 @@ class BeanConfigurationWithParameters
      *   }
      * })
      */
-    public function sampleServiceWithParamEmpty($test = '') : SampleService
+    public function sampleServiceWithParamEmpty($test = ''): SampleService
     {
         $service = new SampleService();
         $service->setTest($test);
@@ -90,7 +90,7 @@ class BeanConfigurationWithParameters
      *   }
      * })
      */
-    public function sampleServiceWithNestedParamKey($test = '') : SampleService
+    public function sampleServiceWithNestedParamKey($test = ''): SampleService
     {
         $service = new SampleService();
         $service->setTest($test);
@@ -105,7 +105,7 @@ class BeanConfigurationWithParameters
      *   }
      * })
      */
-    public function sampleServiceWithParamDefaultValue($test = '') : SampleService
+    public function sampleServiceWithParamDefaultValue($test = ''): SampleService
     {
         $service = new SampleService();
         $service->setTest($test);
@@ -120,7 +120,7 @@ class BeanConfigurationWithParameters
      *   }
      * })
      */
-    public function sampleServiceWithoutRequiredParam($test = '') : SampleService
+    public function sampleServiceWithoutRequiredParam($test = ''): SampleService
     {
         $service = new SampleService();
         $service->setTest($test);

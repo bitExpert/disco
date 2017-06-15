@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace bitExpert\Disco;
 
@@ -69,18 +69,6 @@ class BeanFactoryConfiguration
         $this->setProxyTargetDir($proxyTargetDir);
         $this->setSessionBeanStore(new SerializableBeanStore());
         $this->setProxyWriterGenerator(new FileWriterGeneratorStrategy($proxyFileLocator));
-    }
-
-
-    /**
-     * Sets the {@link \bitExpert\Disco\Store\BeanStore} instance used to store the
-     * session-aware beans.
-     *
-     * @param BeanStore $sessionBeanStore
-     */
-    public function setSessionBeanStore(BeanStore $sessionBeanStore)
-    {
-        $this->sessionBeanStore = $sessionBeanStore;
     }
 
     /**
@@ -149,7 +137,7 @@ class BeanFactoryConfiguration
      *
      * @return Configuration
      */
-    public function getProxyManagerConfiguration() : Configuration
+    public function getProxyManagerConfiguration(): Configuration
     {
         $proxyManagerConfiguration = new Configuration();
         $proxyManagerConfiguration->setProxiesTargetDir($this->proxyTargetDir);
@@ -171,8 +159,19 @@ class BeanFactoryConfiguration
      *
      * @return BeanStore
      */
-    public function getSessionBeanStore() : BeanStore
+    public function getSessionBeanStore(): BeanStore
     {
         return $this->sessionBeanStore;
+    }
+
+    /**
+     * Sets the {@link \bitExpert\Disco\Store\BeanStore} instance used to store the
+     * session-aware beans.
+     *
+     * @param BeanStore $sessionBeanStore
+     */
+    public function setSessionBeanStore(BeanStore $sessionBeanStore)
+    {
+        $this->sessionBeanStore = $sessionBeanStore;
     }
 }

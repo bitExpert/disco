@@ -38,5 +38,5 @@ interface AliasContainerInterface
      * @param string $alias Identifier of the entry to look for
      * @return boolean
      */
-    public function hasAlias(string $alias) : bool;
+    public function hasAlias(string $alias): bool;
 }

@@ -32,6 +32,6 @@ class BeanPostProcessorsProperty extends PropertyGenerator
 
         $this->setDefaultValue([]);
         $this->setVisibility(self::VISIBILITY_PRIVATE);
-        $this->setDocBlock('@var '.\bitExpert\Disco\BeanFactoryPostProcessor::class.'[]');
+        $this->setDocBlock('@var ' . \bitExpert\Disco\BeanFactoryPostProcessor::class . '[]');
     }
 }

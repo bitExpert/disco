@@ -24,7 +24,7 @@ class NonExistentReturnTypeConfiguration
     /**
      * @Bean({"singleton"=false, "lazy"=false, "scope"="request"})
      */
-    public function nonSingletonNonLazyRequestBean() : \MyOtherClass
+    public function nonSingletonNonLazyRequestBean(): \MyOtherClass
     {
         return new SampleService();
     }

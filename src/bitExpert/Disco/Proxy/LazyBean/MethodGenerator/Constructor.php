@@ -51,8 +51,8 @@ class Constructor extends MethodGenerator
         }
 
         $this->setDocBlock(
-            '@override constructor for lazy initialization'. PHP_EOL . PHP_EOL
-            . '@param \string \$beanId'. PHP_EOL
+            '@override constructor for lazy initialization' . PHP_EOL . PHP_EOL
+            . '@param \string \$beanId' . PHP_EOL
             . '@param \Closure|null \$initializer'
         );
         $this->setBody(

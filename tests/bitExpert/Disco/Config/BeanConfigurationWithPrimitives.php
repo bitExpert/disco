@@ -14,7 +14,6 @@ namespace bitExpert\Disco\Config;
 
 use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Annotations\Parameter;
 use bitExpert\Disco\Annotations\Parameters;
 use bitExpert\Disco\Helper\SampleService;
 
@@ -26,7 +25,7 @@ class BeanConfigurationWithPrimitives
     /**
      * @Bean
      */
-    public function arrayPrimitive() : array
+    public function arrayPrimitive(): array
     {
         return [];
     }
@@ -34,7 +33,7 @@ class BeanConfigurationWithPrimitives
     /**
      * @Bean
      */
-    public function callablePrimitive() : callable
+    public function callablePrimitive(): callable
     {
         return function () {
         };
@@ -43,7 +42,7 @@ class BeanConfigurationWithPrimitives
     /**
      * @Bean
      */
-    public function boolPrimitive() : bool
+    public function boolPrimitive(): bool
     {
         return true;
     }
@@ -51,7 +50,7 @@ class BeanConfigurationWithPrimitives
     /**
      * @Bean
      */
-    public function floatPrimitive() : float
+    public function floatPrimitive(): float
     {
         return 1.23;
     }
@@ -59,25 +58,26 @@ class BeanConfigurationWithPrimitives
     /**
      * @Bean
      */
-    public function intPrimitive() : int
+    public function intPrimitive(): int
     {
         return 5;
-    }
-    /**
-     * @Bean
-     */
-    public function stringPrimitive() : string
-    {
-        return 'Disco';
     }
 
     /**
      * @Bean
      */
-    public function serviceWithStringInjected() : SampleService
+    public function serviceWithStringInjected(): SampleService
     {
         $service = new SampleService();
         $service->setTest($this->stringPrimitive());
         return $service;
+    }
+
+    /**
+     * @Bean
+     */
+    public function stringPrimitive(): string
+    {
+        return 'Disco';
     }
 }

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
@@ -38,13 +38,13 @@ class GetAlias extends MethodGenerator
         $aliasParameter = new ParameterGenerator('alias');
         $aliasParameter->setType('string');
 
-        $body = 'if ($this->hasAlias($'.$aliasParameter->getName().')) {' . PHP_EOL;
-        $body .= '    $methodname = $this->' . $aliasesProperty->getName() . '[$'.$aliasParameter->getName().'];' .
+        $body = 'if ($this->hasAlias($' . $aliasParameter->getName() . ')) {' . PHP_EOL;
+        $body .= '    $methodname = $this->' . $aliasesProperty->getName() . '[$' . $aliasParameter->getName() . '];' .
             PHP_EOL;
         $body .= '    return $this->$methodname();' . PHP_EOL;
         $body .= '}' . PHP_EOL . PHP_EOL;
-        $body .= 'throw new '.BeanNotFoundException::class.'(sprintf(\'Alias "%s" is not defined!\', $'.
-            $aliasParameter->getName().'));' . PHP_EOL;
+        $body .= 'throw new ' . BeanNotFoundException::class . '(sprintf(\'Alias "%s" is not defined!\', $' .
+            $aliasParameter->getName() . '));' . PHP_EOL;
 
         $this->setParameter($aliasParameter);
         $this->setVisibility(self::VISIBILITY_PUBLIC);

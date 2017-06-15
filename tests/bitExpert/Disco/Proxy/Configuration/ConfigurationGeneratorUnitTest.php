@@ -120,8 +120,9 @@ class ConfigurationGeneratorUnitTest extends TestCase
         /**
          * @foo
          */
-        $configObject = new class {
-            public function foo() : string
+        $configObject = new class
+        {
+            public function foo(): string
             {
                 return 'foo';
             }

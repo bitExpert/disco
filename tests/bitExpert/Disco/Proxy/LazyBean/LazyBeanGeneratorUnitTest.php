@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Proxy\LazyBean;
 
 use Iterator;
+use PHPUnit\Framework\TestCase;
 use ProxyManager\Proxy\VirtualProxyInterface;
 use ReflectionClass;
-use PHPUnit\Framework\TestCase;
 use Zend\Code\Generator\ClassGenerator;
 
 /**
@@ -30,8 +30,8 @@ class LazyBeanGeneratorUnitTest extends TestCase
     {
         $classGenerator = $this->createMock(ClassGenerator::class);
         $classGenerator->expects(self::once())
-        ->method('setImplementedInterfaces')
-        ->with(array(VirtualProxyInterface::class, Iterator::class));
+            ->method('setImplementedInterfaces')
+            ->with(array(VirtualProxyInterface::class, Iterator::class));
 
         $reflectionClass = new ReflectionClass(Iterator::class);
         self::assertTrue($reflectionClass->isInterface());

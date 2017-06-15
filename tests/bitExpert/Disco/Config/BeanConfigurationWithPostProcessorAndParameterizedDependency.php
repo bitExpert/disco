@@ -33,14 +33,6 @@ class BeanConfigurationWithPostProcessorAndParameterizedDependency
     }
 
     /**
-     * @Bean
-     */
-    public function nonSingletonNonLazyRequestBean(): SampleService
-    {
-        return new SampleService();
-    }
-
-    /**
      * @Bean({
      *   "parameters"={
      *      @Parameter({"name" = "test"})
@@ -52,5 +44,13 @@ class BeanConfigurationWithPostProcessorAndParameterizedDependency
         $object = new \stdClass();
         $object->property = $test;
         return $object;
+    }
+
+    /**
+     * @Bean
+     */
+    public function nonSingletonNonLazyRequestBean(): SampleService
+    {
+        return new SampleService();
     }
 }

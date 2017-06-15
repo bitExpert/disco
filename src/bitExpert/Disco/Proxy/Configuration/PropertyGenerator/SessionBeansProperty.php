@@ -31,6 +31,6 @@ class SessionBeansProperty extends PropertyGenerator
         parent::__construct(UniqueIdentifierGenerator::getIdentifier('sessionBeans'));
 
         $this->setVisibility(self::VISIBILITY_PRIVATE);
-        $this->setDocBlock('@var '.\bitExpert\Disco\Store\BeanStore::class);
+        $this->setDocBlock('@var ' . \bitExpert\Disco\Store\BeanStore::class);
     }
 }

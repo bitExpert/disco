@@ -32,6 +32,6 @@ class BeanFactoryConfigurationProperty extends PropertyGenerator
         parent::__construct(UniqueIdentifierGenerator::getIdentifier('config'));
 
         $this->setVisibility(self::VISIBILITY_PRIVATE);
-        $this->setDocBlock('@var '.BeanFactoryConfiguration::class);
+        $this->setDocBlock('@var ' . BeanFactoryConfiguration::class);
     }
 }

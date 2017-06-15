@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
@@ -31,7 +31,7 @@ class ParameterAwareMethodGenerator extends MethodGenerator
     protected static function convertMethodParamsToString(
         array $methodParameters,
         GetParameter $parameterValuesMethod
-    ) : string {
+    ): string {
         $parameters = [];
         foreach ($methodParameters as $methodParameter) {
             /** @var $methodParameter Parameter */

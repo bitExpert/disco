@@ -20,7 +20,7 @@ final class AnnotationAttributeParser
      * @param string|bool $value
      * @return bool
      */
-    public static function parseBooleanValue($value) : bool
+    public static function parseBooleanValue($value): bool
     {
         if (is_bool($value)) {
             return $value;

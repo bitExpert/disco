@@ -55,7 +55,7 @@ class ConfigurationFactory extends AbstractBaseFactory
     /**
      * {@inheritDoc}
      */
-    protected function getGenerator() : ProxyGeneratorInterface
+    protected function getGenerator(): ProxyGeneratorInterface
     {
         return $this->generator;
     }

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
@@ -41,8 +41,8 @@ class HasAlias extends MethodGenerator
         $this->setVisibility(self::VISIBILITY_PUBLIC);
         $this->setReturnType('bool');
         $this->setBody(
-            'return !empty($'.$aliasParameter->getName().') && '.
-            'isset($this->' . $aliasesProperty->getName() . '[$'.$aliasParameter->getName().']);'
+            'return !empty($' . $aliasParameter->getName() . ') && ' .
+            'isset($this->' . $aliasesProperty->getName() . '[$' . $aliasParameter->getName() . ']);'
         );
     }
 }

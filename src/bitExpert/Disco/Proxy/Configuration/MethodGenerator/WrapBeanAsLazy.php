@@ -39,17 +39,17 @@ class WrapBeanAsLazy extends MethodGenerator
         $this->setParameter(new ParameterGenerator('beanType'));
         $this->setParameter(new ParameterGenerator('instance'));
 
-        $content = '$factory = new \\'.\bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory::class.'($beanId, $this->'.
-            $beanFactoryConfigurationProperty->getName().'->getProxyManagerConfiguration());'. PHP_EOL;
-        $content .= '$initializer = function (&$wrappedObject, \\'.\ProxyManager\Proxy\LazyLoadingInterface::class.
-            ' $proxy, $method, array $parameters, &$initializer) use($instance) {'. PHP_EOL;
-        $content .= '    $initializer = null;'. PHP_EOL;
-        $content .= '    $wrappedObject = $instance;'. PHP_EOL;
-        $content .= '    return true;'. PHP_EOL;
-        $content .= '};'. PHP_EOL;
+        $content = '$factory = new \\' . \bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory::class . '($beanId, $this->' .
+            $beanFactoryConfigurationProperty->getName() . '->getProxyManagerConfiguration());' . PHP_EOL;
+        $content .= '$initializer = function (&$wrappedObject, \\' . \ProxyManager\Proxy\LazyLoadingInterface::class .
+            ' $proxy, $method, array $parameters, &$initializer) use($instance) {' . PHP_EOL;
+        $content .= '    $initializer = null;' . PHP_EOL;
+        $content .= '    $wrappedObject = $instance;' . PHP_EOL;
+        $content .= '    return true;' . PHP_EOL;
+        $content .= '};' . PHP_EOL;
         $content .= PHP_EOL;
 
-        $content .= '$initializer->bindTo($this);'. PHP_EOL;
+        $content .= '$initializer->bindTo($this);' . PHP_EOL;
         $content .= 'return $factory->createProxy($beanType, $initializer);' . PHP_EOL;
 
         $this->setVisibility(self::VISIBILITY_PROTECTED);

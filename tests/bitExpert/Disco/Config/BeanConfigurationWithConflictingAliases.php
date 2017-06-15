@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Alias;
+use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 use bitExpert\Disco\Helper\SampleServiceInterface;

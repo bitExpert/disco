@@ -14,8 +14,6 @@ namespace bitExpert\Disco\Config;
 
 use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\InitializedService;
-use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
 
 /**
@@ -26,7 +24,7 @@ class BeanConfigurationPersistence
     /**
      * @Bean
      */
-    public function sampleService() : SampleService
+    public function sampleService(): SampleService
     {
         return new SampleService();
     }

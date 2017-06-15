@@ -28,7 +28,7 @@ class BeanConfigurationWithPostProcessor
     /**
      * @BeanPostProcessor
      */
-    public function sampleServiceBeanPostProcessor() : SampleServiceBeanPostProcessor
+    public function sampleServiceBeanPostProcessor(): SampleServiceBeanPostProcessor
     {
         return new SampleServiceBeanPostProcessor();
     }
@@ -36,7 +36,7 @@ class BeanConfigurationWithPostProcessor
     /**
      * @Bean
      */
-    public function nonSingletonNonLazyRequestBean() : SampleService
+    public function nonSingletonNonLazyRequestBean(): SampleService
     {
         return new SampleService();
     }
@@ -44,7 +44,7 @@ class BeanConfigurationWithPostProcessor
     /**
      * @Bean({"lazy"=true})
      */
-    public function nonSingletonLazyRequestBean() : SampleService
+    public function nonSingletonLazyRequestBean(): SampleService
     {
         return new SampleService();
     }

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
@@ -129,7 +129,7 @@ class BeanMethod extends ParameterAwareMethodGenerator
      * {@inheritDoc}
      * @throws \Zend\Code\Generator\Exception\InvalidArgumentException
      */
-    public static function fromReflection(MethodReflection $reflectionMethod) : MethodGenerator
+    public static function fromReflection(MethodReflection $reflectionMethod): MethodGenerator
     {
         $method = parent::fromReflection($reflectionMethod);
 
@@ -172,7 +172,7 @@ class BeanMethod extends ParameterAwareMethodGenerator
         SessionBeansProperty $sessionBeansProperty,
         BeanPostProcessorsProperty $postProcessorsProperty,
         BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty
-    ) : string {
+    ): string {
         $content = '';
 
         if ($beanMetadata->isSession()) {
@@ -245,6 +245,35 @@ class BeanMethod extends ParameterAwareMethodGenerator
     }
 
     /**
+     * Helper method to generate the code to initialize a bean.
+     *
+     * @param string $padding
+     * @param string $beanId
+     * @param string $methodParams
+     * @param BeanPostProcessorsProperty $postProcessorsProperty
+     * @return string
+     */
+    protected static function generateBeanCreationCode(
+        string $padding,
+        string $beanId,
+        string $methodParams,
+        BeanPostProcessorsProperty $postProcessorsProperty
+    ): string {
+        $content = $padding . '$instance = parent::' . $beanId . '(' . $methodParams . ');' . PHP_EOL;
+        $content .= $padding . 'if ($instance instanceof \\' . InitializedBean::class . ') {
+        ' . PHP_EOL;
+        $content .= $padding . '    $instance->postInitialization();' . PHP_EOL;
+        $content .= $padding . '}' . PHP_EOL;
+        $content .= PHP_EOL;
+        $content .= $padding . 'foreach ($this->' . $postProcessorsProperty->getName() . ' as $postProcessor) {
+        ' .
+            PHP_EOL;
+        $content .= $padding . '    $postProcessor->postProcess($instance, "' . $beanId . '");' . PHP_EOL;
+        $content .= $padding . '}' . PHP_EOL;
+        return $content;
+    }
+
+    /**
      * Helper method to generate the method body for managing non-lazy bean instances.
      *
      * @param string $padding
@@ -268,7 +297,7 @@ class BeanMethod extends ParameterAwareMethodGenerator
         SessionBeansProperty $sessionBeansProperty,
         BeanPostProcessorsProperty $postProcessorsProperty,
         WrapBeanAsLazy $wrapBeanAsLazy
-    ) : string {
+    ): string {
         $content = $padding . '$backupForceLazyInit = $this->' . $forceLazyInitProperty->getName() . ';' . PHP_EOL;
 
         if ($beanMetadata->isSession()) {
@@ -309,36 +338,6 @@ class BeanMethod extends ParameterAwareMethodGenerator
         $content .= $padding . 'return ($backupForceLazyInit) ? $this->' . $wrapBeanAsLazy->getName() . '("' .
             $beanId . '", "' . $beanType . '", $instance) : $instance;' . PHP_EOL;
 
-        return $content;
-    }
-
-
-    /**
-     * Helper method to generate the code to initialize a bean.
-     *
-     * @param string $padding
-     * @param string $beanId
-     * @param string $methodParams
-     * @param BeanPostProcessorsProperty $postProcessorsProperty
-     * @return string
-     */
-    protected static function generateBeanCreationCode(
-        string $padding,
-        string $beanId,
-        string $methodParams,
-        BeanPostProcessorsProperty $postProcessorsProperty
-    ) : string {
-        $content = $padding . '$instance = parent::' . $beanId . '(' . $methodParams . ');' . PHP_EOL;
-        $content .= $padding . 'if ($instance instanceof \\' . InitializedBean::class . ') {
-        ' . PHP_EOL;
-        $content .= $padding . '    $instance->postInitialization();' . PHP_EOL;
-        $content .= $padding . '}' . PHP_EOL;
-        $content .= PHP_EOL;
-        $content .= $padding . 'foreach ($this->' . $postProcessorsProperty->getName() . ' as $postProcessor) {
-        ' .
-            PHP_EOL;
-        $content .= $padding . '    $postProcessor->postProcess($instance, "' . $beanId . '");' . PHP_EOL;
-        $content .= $padding . '}' . PHP_EOL;
         return $content;
     }
 }

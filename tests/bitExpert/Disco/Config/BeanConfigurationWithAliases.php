@@ -12,11 +12,9 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Alias;
+use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\InitializedService;
-use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
 use bitExpert\Disco\Helper\SampleServiceInterface;
 
@@ -37,7 +35,7 @@ class BeanConfigurationWithAliases
      *   }
      * })
      */
-    public function sampleServiceWithAliases() : SampleService
+    public function sampleServiceWithAliases(): SampleService
     {
         return new SampleService();
     }
@@ -50,7 +48,7 @@ class BeanConfigurationWithAliases
      * })
      * @return SampleServiceInterface
      */
-    public function sampleServiceWithInterfaceReturnTypeAlias() : SampleServiceInterface
+    public function sampleServiceWithInterfaceReturnTypeAlias(): SampleServiceInterface
     {
         return new SampleService();
     }
@@ -62,7 +60,7 @@ class BeanConfigurationWithAliases
      *   }
      * })
      */
-    protected function internalServiceWithAlias() : SampleService
+    protected function internalServiceWithAlias(): SampleService
     {
         return new SampleService();
     }
