@@ -25,9 +25,12 @@ class BeanFactoryRegistry
     protected static $beanFactory = null;
 
     /**
+     * Registers a {@link \bitExpert\Disco\BeanFactory} instance in the registry to make the instance
+     * globally available.
+     *
      * @param BeanFactory $beanFactory
      */
-    public static function register(BeanFactory $beanFactory)
+    public static function register(BeanFactory $beanFactory): void
     {
         self::$beanFactory = $beanFactory;
     }
@@ -37,7 +40,7 @@ class BeanFactoryRegistry
      *
      * @return BeanFactory|null
      */
-    public static function getInstance()
+    public static function getInstance(): ?BeanFactory
     {
         return self::$beanFactory;
     }
