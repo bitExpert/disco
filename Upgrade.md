@@ -22,6 +22,10 @@ syntax looks like this:
       */
 ```
 
+In previous releases the first defined alias was used, the other were
+ignored. Since this release an exception gets thrown when an alias already
+is defined.
+
 ## BC BREAK: Parameters
 
 To be consistent to the way aliases are defined the parameter handling
