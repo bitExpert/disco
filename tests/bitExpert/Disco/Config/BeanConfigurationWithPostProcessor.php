@@ -34,14 +34,6 @@ class BeanConfigurationWithPostProcessor
     }
 
     /**
-     * @BeanPostProcessor
-     */
-    public function beanFactoryBeanPostProcessor() : BeanFactoryPostProcessor
-    {
-        return new BeanFactoryPostProcessor();
-    }
-
-    /**
      * @Bean
      */
     public function nonSingletonNonLazyRequestBean() : SampleService
@@ -55,13 +47,5 @@ class BeanConfigurationWithPostProcessor
     public function nonSingletonLazyRequestBean() : SampleService
     {
         return new SampleService();
-    }
-
-    /**
-     * @Bean
-     */
-    public function beanFactoryAwareBean() : BeanFactoryAwareService
-    {
-        return new BeanFactoryAwareService();
     }
 }
