@@ -15,10 +15,10 @@ method:
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Parameter;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Parameter;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
 
 /**
  * @Configuration
@@ -41,7 +41,7 @@ class MyConfiguration
 }
 ```
 
-The configuration array gets passed to the `\bitExpert\Disco\AnnotationBeanFactory`
+The configuration array gets passed to the `\bitExpert\Techno\AnnotationBeanFactory`
 instance as second constructor parameter:
 
 ```php
@@ -49,24 +49,24 @@ instance as second constructor parameter:
 
 $parameters = ['test' => 'This is a test.'];
 
-$beanFactory = new \bitExpert\Disco\AnnotationBeanFactory(MyConfiguration::class, $parameters);
-\bitExpert\Disco\BeanFactoryRegistry::register($beanFactory);
+$beanFactory = new \bitExpert\Techno\AnnotationBeanFactory(MyConfiguration::class, $parameters);
+\bitExpert\Techno\BeanFactoryRegistry::register($beanFactory);
 ```
 
 ## Default Parameter Values
 
 Whenever a requested configuration key is not found - the key does not
-exist or the value is null or empty - Disco will throw an exception. This
+exist or the value is null or empty - Techno will throw an exception. This
 can be avoided by defining a default value that gets passed to the bean
 configuration method instead:
 
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Parameter;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Parameter;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
 
 /**
  * @Configuration
@@ -118,10 +118,10 @@ Use the '.' notation to access the nested elements:
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Parameter;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Parameter;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
 
 /**
  * @Configuration

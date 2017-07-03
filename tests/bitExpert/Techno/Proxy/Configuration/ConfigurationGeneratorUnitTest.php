@@ -1,0 +1,145 @@
+<?php
+
+/*
+ * This file is part of the Techno package.
+ *
+ * (c) bitExpert AG
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+declare(strict_types=1);
+
+namespace bitExpert\Techno\Proxy\Configuration;
+
+use bitExpert\Techno\Config\BeanConfiguration;
+use bitExpert\Techno\Config\BeanConfigurationWithConflictingAliases;
+use bitExpert\Techno\Config\BeanConfigurationWithNativeTypeAlias;
+use bitExpert\Techno\Config\InterfaceConfiguration;
+use bitExpert\Techno\Config\InvalidConfiguration;
+use bitExpert\Techno\Config\MissingBeanAnnotationConfiguration;
+use bitExpert\Techno\Config\MissingReturnTypeConfiguration;
+use bitExpert\Techno\Config\NonExistentReturnTypeConfiguration;
+use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+use Zend\Code\Generator\ClassGenerator;
+
+/**
+ * Unit tests for {@link \bitExpert\Techno\Proxy\Configuration\ConfigurationGenerator}.
+ */
+class ConfigurationGeneratorUnitTest extends TestCase
+{
+    /**
+     * @var ConfigurationGenerator
+     */
+    private $configGenerator;
+
+    /**
+     * @var ClassGenerator|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $classGenerator;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->configGenerator = new ConfigurationGenerator();
+        $this->classGenerator = $this->createMock(ClassGenerator::class);
+    }
+
+    /**
+     * @test
+     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
+     */
+    public function configClassWithoutAnAnnotationThrowsException()
+    {
+        $reflClass = new \ReflectionClass(InvalidConfiguration::class);
+        $this->configGenerator->generate($reflClass, $this->classGenerator);
+    }
+
+    /**
+     * @test
+     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
+     */
+    public function passingInterfaceAsConfigClassThrowsException()
+    {
+        $reflClass = new \ReflectionClass(InterfaceConfiguration::class);
+        $this->configGenerator->generate($reflClass, $this->classGenerator);
+    }
+
+    /**
+     * @test
+     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
+     */
+    public function missingBeanAnnotationThrowsException()
+    {
+        $reflClass = new \ReflectionClass(MissingBeanAnnotationConfiguration::class);
+        $this->configGenerator->generate($reflClass, $this->classGenerator);
+    }
+
+    /**
+     * @test
+     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
+     */
+    public function missingReturnTypeOfBeanDeclarationThrowsException()
+    {
+        $reflClass = new \ReflectionClass(MissingReturnTypeConfiguration::class);
+        $this->configGenerator->generate($reflClass, $this->classGenerator);
+    }
+
+    /**
+     * @test
+     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
+     */
+    public function nonExistentClassInReturnTypeThrowsException()
+    {
+        $reflClass = new \ReflectionClass(NonExistentReturnTypeConfiguration::class);
+        $this->configGenerator->generate($reflClass, $this->classGenerator);
+    }
+
+    /**
+     * @test
+     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
+     */
+    public function sameAliasUsedForMultipleBeansThrowsException()
+    {
+        $reflClass = new \ReflectionClass(BeanConfigurationWithConflictingAliases::class);
+        $this->configGenerator->generate($reflClass, $this->classGenerator);
+    }
+
+    /**
+     * @test
+     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
+     * @expectedExceptionMessageRegExp /^\[Semantical Error\] The annotation "@foo"/
+     */
+    public function unknownAnnotationThrowsException()
+    {
+        /**
+         * @foo
+         */
+        $configObject = new class
+        {
+            public function foo(): string
+            {
+                return 'foo';
+            }
+        };
+        $reflClass = new \ReflectionObject($configObject);
+        $this->configGenerator->generate($reflClass, $this->classGenerator);
+    }
+
+    /**
+     * @test
+     */
+    public function parsingConfigurationWithoutAnyErrorsSucceeds()
+    {
+        $this->classGenerator->expects(self::atLeastOnce())
+            ->method('addMethodFromGenerator');
+
+        $reflClass = new \ReflectionClass(BeanConfiguration::class);
+        $this->configGenerator->generate($reflClass, $this->classGenerator);
+    }
+}

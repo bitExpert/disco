@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Disco package.
+ * This file is part of the Techno package.
  *
  * (c) bitExpert AG
  *
@@ -10,12 +10,12 @@
  */
 declare(strict_types=1);
 
-namespace bitExpert\Disco\Bench;
+namespace bitExpert\Techno\Bench;
 
-use bitExpert\Disco\AnnotationBeanFactory;
-use bitExpert\Disco\BeanFactoryConfiguration;
-use bitExpert\Disco\BeanFactoryRegistry;
-use bitExpert\Disco\BenchConfig\BenchmarkConfiguration;
+use bitExpert\Techno\AnnotationBeanFactory;
+use bitExpert\Techno\BeanFactoryConfiguration;
+use bitExpert\Techno\BeanFactoryRegistry;
+use bitExpert\Techno\BenchConfig\BenchmarkConfiguration;
 use ProxyManager\Autoloader\Autoloader;
 use ProxyManager\FileLocator\FileLocator;
 use ProxyManager\Inflector\ClassNameInflector;
@@ -25,7 +25,7 @@ use ProxyManager\Inflector\ClassNameInflector;
  * @Iterations(20)
  * @Warmup(2)
  */
-class BenchmarkDisco
+class BenchmarkTechno
 {
     public function provideUseAutoloader() : array
     {
@@ -45,7 +45,7 @@ class BenchmarkDisco
         ];
     }
 
-    public function createDiscoInstance(bool $useAutoloader = false) : AnnotationBeanFactory
+    public function createTechnoInstance(bool $useAutoloader = false) : AnnotationBeanFactory
     {
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
         if($useAutoloader) {
@@ -57,20 +57,20 @@ class BenchmarkDisco
             );
         }
 
-        $disco = new AnnotationBeanFactory(BenchmarkConfiguration::class, [], $config);
-        BeanFactoryRegistry::register($disco);
-        return $disco;
+        $techno = new AnnotationBeanFactory(BenchmarkConfiguration::class, [], $config);
+        BeanFactoryRegistry::register($techno);
+        return $techno;
     }
 
     /**
      * @ParamProviders({"provideUseAutoloader", "provideIds"})
      */
-    public function benchDisco($params)
+    public function benchTechno($params)
     {
-        /** @var AnnotationBeanFactory $disco */
-        $disco = $this->createDiscoInstance((bool) $params['useAutoloader']);
+        /** @var AnnotationBeanFactory $techno */
+        $techno = $this->createTechnoInstance((bool) $params['useAutoloader']);
         $beanId = $params['beanId'];
 
-        $instance = $disco->get($beanId);
+        $instance = $techno->get($beanId);
     }
 }

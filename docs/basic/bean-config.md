@@ -7,16 +7,16 @@ different requests.
 ## Singleton Beans
 
 By default a bean instance is configured to be returned as a singleton
-instance which means multiple calls to `\bitExpert\Disco\AnnotationBeanFactory::get()`
+instance which means multiple calls to `\bitExpert\Techno\AnnotationBeanFactory::get()`
 will retrieve the very same instance. The explicit bean configuration
 to return singleton instances would read as follows:
 
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
 
 /**
  * @Configuration
@@ -34,15 +34,15 @@ class MyConfiguration
 ```
 
 In case you explicitly want to return a new instance for every
-`\bitExpert\Disco\AnnotationBeanFactory::get()` call, set the singleton
+`\bitExpert\Techno\AnnotationBeanFactory::get()` call, set the singleton
 attribute to `false`.
 
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
 
 /**
  * @Configuration
@@ -61,7 +61,7 @@ class MyConfiguration
 
 ## Lazy Beans
 
-By default Disco will return non-lazy bean instances, which means you will
+By default Techno will return non-lazy bean instances, which means you will
 get the exact same instance as you have defined in your configuration
 code. The explicit bean configuration to return non-lazy instances
 would read as follows:
@@ -69,9 +69,9 @@ would read as follows:
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
 
 /**
  * @Configuration
@@ -89,17 +89,17 @@ class MyConfiguration
 ```
 
 In case the construction of your bean is quite time consuming - e.g. a
-call to a remote service is made - you can instruct Disco to return a
+call to a remote service is made - you can instruct Techno to return a
 lazy instance of your bean, the concrete instance gets created upon the
-first method call. Simply set the lazy attribute to `true` to let Disco
+first method call. Simply set the lazy attribute to `true` to let Techno
 wrap your bean as a lazy instance:
 
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
 
 /**
  * @Configuration
@@ -116,19 +116,19 @@ class MyConfiguration
 }
 ```
 
-For the lazy bean management Disco uses [ocramius/proxy-manager](https://github.com/Ocramius/ProxyManager), so the
-same rules apply for Disco as for Proxy Manager when it comes to creating
+For the lazy bean management Techno uses [ocramius/proxy-manager](https://github.com/Ocramius/ProxyManager), so the
+same rules apply for Techno as for Proxy Manager when it comes to creating
 lazy instances. For examle you are not able to return a lazy instance of
 a final class as the class cannot be extended - which is the basic
 principle when it comes to creating lazy instances.
 
 ## Bean scopes
 
-Beans in Disco can either live in the request scope or the session scope.
+Beans in Techno can either live in the request scope or the session scope.
 Request scoped beans are created newly for every new request, whilest session
 scoped beans persist beyond a page refresh.
 
-Disco itself is not responsible for managing session state in any way but
+Techno itself is not responsible for managing session state in any way but
 will allow you to grab session instances from the container, persists them and
 retrieve them during the new request.
 
@@ -138,9 +138,9 @@ for every new request:
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
 
 /**
  * @Configuration
@@ -157,15 +157,15 @@ class MyConfiguration
 }
 ```
 
-To let Disco create a session scoped bean, simply set the `scope`
+To let Techno create a session scoped bean, simply set the `scope`
 attribute to `session`:
 
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
 
 /**
  * @Configuration
@@ -197,7 +197,7 @@ followed by any number of letters, numbers, or underscores".
 
 This led to introducing aliases for beans. Each bean can have multiple
 aliases and two types of aliases are possible. In case of collisions
-(same alias is used for different beans) Disco will throw an exception.
+(same alias is used for different beans) Techno will throw an exception.
 You're asked to avoid/resolve such conflicts.
 
 Simply add the `aliases` attribute to the `@Bean` annotation to define a
@@ -206,10 +206,10 @@ list of `@Alias`:
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Àlias;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Àlias;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
 
 /**
  * @Configuration
@@ -232,8 +232,8 @@ class MyConfiguration
 ```
 
 Now you can either pass `mySampleService` or `\Identifier\With\Namespace`
-or `bitExpert\Disco\Helper\SampleService` to the `\bitExpert\Disco\AnnotationBeanFactory::get()`
-or `\bitExpert\Disco\AnnotationBeanFactory::has()` calls.
+or `bitExpert\Techno\Helper\SampleService` to the `\bitExpert\Techno\AnnotationBeanFactory::get()`
+or `\bitExpert\Techno\AnnotationBeanFactory::has()` calls.
 
 The example uses both available alias types. Let's look at them one after the other.
 
@@ -249,7 +249,7 @@ can later be used to get the service from the bean factory.
 `@Alias({"type" = true})`
 
 Setting the `type` attribute to `true` (name attribute must be omitted in this case) 
-tells Disco to use the return type of the method as an alias.
+tells Techno to use the return type of the method as an alias.
 
 This is very useful because you can work with PHP's `::class` language construct
 like in this example: `$annotationBeanFactory->get(SampleService::class)`.
