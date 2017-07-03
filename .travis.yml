@@ -7,7 +7,7 @@ matrix:
         - TEST_COVERAGE=true
 install:
   - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev satooshi/php-coveralls ; fi
-  
+
 before_script:
   - composer self-update
   - composer install --prefer-source
@@ -23,5 +23,5 @@ after_script:
     - if [[ $TEST_COVERAGE == 'true' ]]; then ./vendor/bin/coveralls -v ; fi
 
 notifications:
-  irc: "irc.freenode.org#disco.dev"
+  irc: "irc.freenode.org#techno.dev"
   email: false

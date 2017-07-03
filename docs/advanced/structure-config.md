@@ -16,9 +16,9 @@ type thus you are bound to return the same instance.
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
 
 /**
  * @Configuration
@@ -56,9 +56,9 @@ statement in your config class.
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
 
 /**
  * @Configuration

@@ -1,5 +1,5 @@
 {
-  "name": "bitexpert/disco",
+  "name": "bitexpert/techno",
   "description": "Dependency Injection Container",
   "minimum-stability": "stable",
   "license": "Apache-2.0",
@@ -30,12 +30,12 @@
   },
   "autoload": {
     "psr-4": {
-      "bitExpert\\Disco\\": "src/bitExpert/Disco"
+      "bitExpert\\Techno\\": "src/bitExpert/Techno"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "bitExpert\\Disco\\": ["tests/bitExpert/Disco", "benchmarks/bitExpert/Disco"]
+      "bitExpert\\Techno\\": ["tests/bitExpert/Techno", "benchmarks/bitExpert/Techno"]
     }
   },
   "scripts": {

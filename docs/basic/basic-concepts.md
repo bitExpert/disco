@@ -2,11 +2,11 @@
 
 ## @Bean and @Configuration
 
-The central artifacts used in Disco's PHP based configuration language
+The central artifacts used in Techno's PHP based configuration language
 are `@Configuration`-annotated classes and `@Bean`-annotated methods.
 
 The `@Bean` annotation is used to indicate that a method instantiates,
-configures and initializes a new object which is managed by Disco.
+configures and initializes a new object which is managed by Techno.
 
 Annotating a class with `@Configuration` indicates that its primary
 purpose is as a source of bean definitions. The simplest possible
@@ -15,7 +15,7 @@ purpose is as a source of bean definitions. The simplest possible
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Techno\Annotations\Configuration;
 
 /**
  * @Configuration
@@ -28,16 +28,16 @@ class MyConfiguration
 ## Using the @Bean annotation
 
 To declare a bean, simply annotate a method with the `@Bean` annotation.
-You use this method to register a bean instance within Disco of the type
+You use this method to register a bean instance within Techno of the type
 specified as the method’s return value. The bean identifier is the method
 name. The following is a simple example of a `@Bean` method declaration:
 
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
 
 /**
  * @Configuration
@@ -54,19 +54,19 @@ class MyConfiguration
 }
 ```
 
-Beans with a `public` visibility can be retrieved via the `\bitExpert\Disco\AnnotationBeanFactory`.
+Beans with a `public` visibility can be retrieved via the `\bitExpert\Techno\AnnotationBeanFactory`.
 Beans with a `protected` visibility are so-called internal dependencies
-and thus cannot be retrieved via the `\bitExpert\Disco\AnnotationBeanFactory`.
+and thus cannot be retrieved via the `\bitExpert\Techno\AnnotationBeanFactory`.
 
 Both the public and protected methods of the configuration class have to
-be marked with the `@Bean` annotation. The `\bitExpert\Disco\AnnotationBeanFactory`
+be marked with the `@Bean` annotation. The `\bitExpert\Techno\AnnotationBeanFactory`
 will throw an exception when public or protected methods without a `@Bean`
 annotation are found.
 
 ## PSR-11
 
-Disco implements the [PSR-11](http://www.php-fig.org/psr/psr-11/) interface.
-That means you can use Disco in any application that can deal with PSR-11 containers,
+Techno implements the [PSR-11](http://www.php-fig.org/psr/psr-11/) interface.
+That means you can use Techno in any application that can deal with PSR-11 containers,
 e.g. [zend-expressive](https://github.com/zendframework/zend-expressive).
 
 In a nutshell the container-interop project provides a interface for DI

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="disco" basedir="." default="security:check">
+<project name="techno" basedir="." default="security:check">
     <property name="securitychecker.endpoint" value="http://security.sensiolabs.org/check_lock" />
     <import file="vendor/bitexpert/phing-securitychecker/build.xml" />
 
@@ -40,7 +40,7 @@
         <exec executable="./vendor/bin/phpunit"
               passthru="true"
               checkreturn="true">
-            <arg value="--coverage-clover" /> 
+            <arg value="--coverage-clover" />
             <arg value="clover.xml"/>
         </exec>
     </target>

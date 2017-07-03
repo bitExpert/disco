@@ -8,10 +8,10 @@ name.
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Helper\SampleService;
-use bitExpert\Disco\Helper\MasterService;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\Helper\SampleService;
+use bitExpert\Techno\Helper\MasterService;
 
 /**
  * @Configuration
@@ -36,7 +36,7 @@ class MyConfiguration
 }
 ```
 
-Disco will respect the bean configuration of `mySampleService` when it
+Techno will respect the bean configuration of `mySampleService` when it
 gets injected as a dependency - e.g. when `mySampleService` is configured
-to return a non-singleton instance, Disco will provide a new instance
+to return a non-singleton instance, Techno will provide a new instance
 for every call of `$this->mySampleService()`.

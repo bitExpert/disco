@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Disco package.
+ * This file is part of the Techno package.
  *
  * (c) bitExpert AG
  *
@@ -10,20 +10,20 @@
  */
 declare(strict_types=1);
 
-namespace bitExpert\Disco\BenchConfig;
+namespace bitExpert\Techno\BenchConfig;
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\BenchHelper\A;
-use bitExpert\Disco\BenchHelper\B;
-use bitExpert\Disco\BenchHelper\C;
-use bitExpert\Disco\BenchHelper\D;
-use bitExpert\Disco\BenchHelper\E;
-use bitExpert\Disco\BenchHelper\F;
-use bitExpert\Disco\BenchHelper\G;
-use bitExpert\Disco\BenchHelper\H;
-use bitExpert\Disco\BenchHelper\I;
-use bitExpert\Disco\BenchHelper\J;
+use bitExpert\Techno\Annotations\Bean;
+use bitExpert\Techno\Annotations\Configuration;
+use bitExpert\Techno\BenchHelper\A;
+use bitExpert\Techno\BenchHelper\B;
+use bitExpert\Techno\BenchHelper\C;
+use bitExpert\Techno\BenchHelper\D;
+use bitExpert\Techno\BenchHelper\E;
+use bitExpert\Techno\BenchHelper\F;
+use bitExpert\Techno\BenchHelper\G;
+use bitExpert\Techno\BenchHelper\H;
+use bitExpert\Techno\BenchHelper\I;
+use bitExpert\Techno\BenchHelper\J;
 
 /**
  * @Configuration

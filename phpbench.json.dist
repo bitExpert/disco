@@ -1,13 +1,13 @@
 {
   "bootstrap": "vendor/autoload.php",
-  "path": "benchmarks/bitExpert/Disco/Bench",
+  "path": "benchmarks/bitExpert/Techno/Bench",
   "retry_threshold": 5,
   "progress": "dots",
   "outputs": {
     "benchmark": {
       "extends": "markdown",
       "file": "benchmark.md",
-      "title": "Disco"
+      "title": "Techno"
     }
   }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Disco package.
+ * This file is part of the Techno package.
  *
  * (c) bitExpert AG
  *
@@ -10,7 +10,7 @@
  */
 declare(strict_types=1);
 
-namespace bitExpert\Disco\BenchHelper;
+namespace bitExpert\Techno\BenchHelper;
 
 class B
 {
@@ -20,7 +20,7 @@ class B
     private $a;
 
     /**
-     * Creates a new {@link \bitExpert\Disco\BenchHelper\B}.
+     * Creates a new {@link \bitExpert\Techno\BenchHelper\B}.
      *
      * @param A $a
      */
