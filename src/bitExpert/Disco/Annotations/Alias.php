@@ -44,7 +44,6 @@ final class Alias
      */
     public function __construct(array $attributes = [])
     {
-        $this->name = null;
         $this->type = false;
 
         if (isset($attributes['value']['type'])) {
@@ -53,14 +52,14 @@ final class Alias
 
         if (isset($attributes['value']['name'])) {
             if ($this->type) {
-                throw new AnnotationException("Type alias should not have a name!");
+                throw new AnnotationException('Type alias should not have a name!');
             }
 
             $this->name = $attributes['value']['name'];
         }
 
         if (!$this->type && !$this->name) {
-            throw new AnnotationException("Alias should either be a named alias or a type alias!");
+            throw new AnnotationException('Alias should either be a named alias or a type alias!');
         }
     }
 

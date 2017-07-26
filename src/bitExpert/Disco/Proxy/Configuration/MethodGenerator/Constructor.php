@@ -67,6 +67,6 @@ class Constructor extends MethodGenerator
         $this->setParameter($beanFactoryConfigurationParameter);
         $this->setParameter($parametersParameter);
         $this->setBody($body);
-        $this->setDocBlock("@override constructor");
+        $this->setDocBlock('@override constructor');
     }
 }

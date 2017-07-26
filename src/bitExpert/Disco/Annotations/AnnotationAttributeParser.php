@@ -22,12 +22,16 @@ final class AnnotationAttributeParser
      */
     public static function parseBooleanValue($value): bool
     {
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             return $value;
-        } elseif (is_string($value)) {
-            $value = strtolower($value);
-            return ('true' === $value);
-        } elseif (is_object($value) || is_array($value) || is_callable($value)) {
+        }
+
+        if (\is_string($value)) {
+            $value = \strtolower($value);
+            return 'true' === $value;
+        }
+
+        if (\is_object($value) || \is_array($value) || \is_callable($value)) {
             return false;
         }
 
