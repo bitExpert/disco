@@ -58,7 +58,7 @@ class AliasUnitTest extends TestCase
     public function aliasShouldBeNamedOrTypeAlias()
     {
         self::expectException(AnnotationException::class);
-        self::expectExceptionMessage("Alias should either be a named alias or a type alias!");
+        self::expectExceptionMessage('Alias should either be a named alias or a type alias!');
         new Alias();
     }
 }

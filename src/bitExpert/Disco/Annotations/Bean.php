@@ -57,6 +57,7 @@ final class Bean extends ParameterAwareAnnotation
     public function __construct(array $attributes = [])
     {
         parent::__construct();
+
         // initialize default values
         $this->scope = self::SCOPE_REQUEST;
         $this->singleton = true;
@@ -64,7 +65,7 @@ final class Bean extends ParameterAwareAnnotation
         $this->aliases = [];
 
         if (isset($attributes['value'])) {
-            if (isset($attributes['value']['scope']) && (strtolower($attributes['value']['scope']) === 'session')) {
+            if (isset($attributes['value']['scope']) && \strtolower($attributes['value']['scope']) === 'session') {
                 $this->scope = self::SCOPE_SESSION;
             }
 
@@ -76,11 +77,11 @@ final class Bean extends ParameterAwareAnnotation
                 $this->lazy = AnnotationAttributeParser::parseBooleanValue($attributes['value']['lazy']);
             }
 
-            if (isset($attributes['value']['aliases']) and is_array($attributes['value']['aliases'])) {
+            if (isset($attributes['value']['aliases']) && \is_array($attributes['value']['aliases'])) {
                 $this->setAliases(...$attributes['value']['aliases']);
             }
 
-            if (isset($attributes['value']['parameters']) and is_array($attributes['value']['parameters'])) {
+            if (isset($attributes['value']['parameters']) && \is_array($attributes['value']['parameters'])) {
                 $this->setParameters(...$attributes['value']['parameters']);
             }
         }

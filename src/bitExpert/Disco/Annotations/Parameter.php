@@ -30,15 +30,15 @@ final class Parameter
     /**
      * @var string
      */
-    protected $name;
+    private $name;
     /**
      * @var mixed
      */
-    protected $defaultValue;
+    private $defaultValue;
     /**
      * @var bool
      */
-    protected $required;
+    private $required;
 
     /**
      * Creates a new {@link \bitExpert\Disco\Annotations\Parameter}.

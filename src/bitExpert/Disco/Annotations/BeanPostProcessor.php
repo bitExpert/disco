@@ -25,7 +25,6 @@ use Doctrine\Common\Annotations\AnnotationException;
  */
 final class BeanPostProcessor extends ParameterAwareAnnotation
 {
-
     /**
      * Creates a new {@link \bitExpert\Disco\Annotations\BeanPostProcessor}.
      *
@@ -36,9 +35,7 @@ final class BeanPostProcessor extends ParameterAwareAnnotation
     {
         parent::__construct();
 
-        if (isset($attributes['value'], $attributes['value']['parameters']) and
-            is_array($attributes['value']['parameters'])
-        ) {
+        if (isset($attributes['value']['parameters']) && \is_array($attributes['value']['parameters'])) {
             $this->setParameters(...$attributes['value']['parameters']);
         }
     }
