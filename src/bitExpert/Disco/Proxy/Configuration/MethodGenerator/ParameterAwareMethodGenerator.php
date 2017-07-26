@@ -35,26 +35,26 @@ class ParameterAwareMethodGenerator extends MethodGenerator
         $parameters = [];
         foreach ($methodParameters as $methodParameter) {
             /** @var $methodParameter Parameter */
-            $name = $methodParameter->getName();
             $defaultValue = $methodParameter->getDefaultValue();
-            $required = $methodParameter->isRequired() ? 'true' : 'false';
-            if (is_string($defaultValue)) {
-                $defaultValue = '"' . $defaultValue . '"';
-            } elseif (is_null($defaultValue)) {
-                $defaultValue = 'null';
-            } elseif (is_bool($defaultValue)) {
-                $defaultValue = ($defaultValue) ? 'true' : 'false';
+            switch (\gettype($defaultValue)) {
+                case 'string':
+                    $defaultValue = '"' . $defaultValue . '"';
+                    break;
+                case 'boolean':
+                    $defaultValue = $defaultValue ? 'true' : 'false';
+                    break;
+                case 'NULL':
+                    $defaultValue = 'null';
+                default:
+                    break;
             }
 
-            if (!empty($defaultValue)) {
-                $parameters[] = '$this->' . $parameterValuesMethod->getName() . '("' . $name . '", ' . $required .
-                    ', ' . $defaultValue . ')';
-            } else {
-                $parameters[] = '$this->' . $parameterValuesMethod->getName() . '("' . $name . '", ' . $required .
-                    ')';
-            }
+            $template = empty($defaultValue) ? '$this->%s("%s", %s)' : '$this->%s("%s", %s, %s)';
+            $required = $methodParameter->isRequired() ? 'true' : 'false';
+            $methodName = $parameterValuesMethod->getName();
+            $parameters[] = \sprintf($template, $methodName, $methodParameter->getName(), $required, $defaultValue);
         }
 
-        return implode(', ', $parameters);
+        return \implode(', ', $parameters);
     }
 }
