@@ -45,6 +45,7 @@ class ParameterAwareMethodGenerator extends MethodGenerator
                     break;
                 case 'NULL':
                     $defaultValue = 'null';
+                    break;
                 default:
                     break;
             }
