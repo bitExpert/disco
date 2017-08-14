@@ -1,15 +1,10 @@
-# Bean configuration
+# Bean Configuration
 
-The `@Bean` annotation comes with a few attributes which influence how
-beans are created or how their internal state will be kept during
-different requests.
+The `@Bean` annotation comes with a few attributes which influence how beans are created or how their internal state will be kept during different requests.
 
 ## Singleton Beans
 
-By default a bean instance is configured to be returned as a singleton
-instance which means multiple calls to `\bitExpert\Disco\AnnotationBeanFactory::get()`
-will retrieve the very same instance. The explicit bean configuration
-to return singleton instances would read as follows:
+By default a bean instance is configured to be returned as a singleton instance which means multiple calls to `\bitExpert\Disco\AnnotationBeanFactory::get()` will retrieve the very same instance. The explicit bean configuration to return singleton instances would read as follows:
 
 ```php
 <?php
@@ -34,8 +29,7 @@ class MyConfiguration
 ```
 
 In case you explicitly want to return a new instance for every
-`\bitExpert\Disco\AnnotationBeanFactory::get()` call, set the singleton
-attribute to `false`.
+`\bitExpert\Disco\AnnotationBeanFactory::get()` call, set the singleton attribute to `false`.
 
 ```php
 <?php
@@ -61,10 +55,7 @@ class MyConfiguration
 
 ## Lazy Beans
 
-By default Disco will return non-lazy bean instances, which means you will
-get the exact same instance as you have defined in your configuration
-code. The explicit bean configuration to return non-lazy instances
-would read as follows:
+By default Disco will return non-lazy bean instances, which means you will get the exact same instance as you have defined in your configuration code. The explicit bean configuration to return non-lazy instances would read as follows:
 
 ```php
 <?php
@@ -88,11 +79,7 @@ class MyConfiguration
 }
 ```
 
-In case the construction of your bean is quite time consuming - e.g. a
-call to a remote service is made - you can instruct Disco to return a
-lazy instance of your bean, the concrete instance gets created upon the
-first method call. Simply set the lazy attribute to `true` to let Disco
-wrap your bean as a lazy instance:
+In case the construction of your bean is quite time consuming — e.g., a call to a remote service is made — you can instruct Disco to return a lazy instance of your bean, the concrete instance gets created upon the first method call. Simply set the lazy attribute to `true` to let Disco wrap your bean as a lazy instance:
 
 ```php
 <?php
@@ -116,24 +103,18 @@ class MyConfiguration
 }
 ```
 
-For the lazy bean management Disco uses [ocramius/proxy-manager](https://github.com/Ocramius/ProxyManager), so the
-same rules apply for Disco as for Proxy Manager when it comes to creating
-lazy instances. For examle you are not able to return a lazy instance of
-a final class as the class cannot be extended - which is the basic
-principle when it comes to creating lazy instances.
+For the lazy bean management Disco uses [ocramius/proxy-manager](https://github.com/Ocramius/ProxyManager), so the same rules apply for Disco as for Proxy Manager when it comes to creating
+lazy instances. 
 
-## Bean scopes
+For example you are not able to return a lazy instance of a final class as the class cannot be extended — which is the basic principle when it comes to creating lazy instances.
 
-Beans in Disco can either live in the request scope or the session scope.
-Request scoped beans are created newly for every new request, whilest session
-scoped beans persist beyond a page refresh.
+## Bean Scopes
 
-Disco itself is not responsible for managing session state in any way but
-will allow you to grab session instances from the container, persists them and
-retrieve them during the new request.
+Beans in Disco can either live in the request scope or the session scope. Request scoped beans are created newly for every new request, whilst session scoped beans persist beyond a page refresh.
 
-By default beans are request scoped which means a new instance gets created
-for every new request:
+Disco itself is not responsible for managing session state in any way but will allow you to grab session instances from the container, persists them and retrieve them during the new request.
+
+By default beans are request scoped which means a new instance gets created for every new request:
 
 ```php
 <?php
@@ -157,8 +138,7 @@ class MyConfiguration
 }
 ```
 
-To let Disco create a session scoped bean, simply set the `scope`
-attribute to `session`:
+To let Disco create a session scoped bean, simply set the `scope` attribute to `session`:
 
 ```php
 <?php
@@ -182,26 +162,19 @@ class MyConfiguration
 }
 ```
 
-Read in the advanced section of the documentation what else is needed
-to let session scoped beans persist beyond a page refresh.
+Read in the advanced section of the documentation what else is needed to let session scoped beans persist beyond a page refresh.
 
-## Bean aliases
+## Bean Aliases
 
-Using class method names as bean identifiers is a simple way to avoid
-naming collisions as your IDE will warn you in case you define multiple
-methods with the same name.
+Using class method names as bean identifiers is a simple way to avoid naming collisions as your IDE will warn you in case you define multiple methods with the same name.
 
-As a drawback you are quite limited when it comes to bean names. To quote
-the [PHP manual](http://php.net/manual/en/functions.user-defined.php): "A valid function name starts with a letter or underscore,
-followed by any number of letters, numbers, or underscores".
+As a drawback you are quite limited when it comes to bean names. To quote the [PHP manual](http://php.net/manual/en/functions.user-defined.php):
 
-This led to introducing aliases for beans. Each bean can have multiple
-aliases and two types of aliases are possible. In case of collisions
-(same alias is used for different beans) Disco will throw an exception.
-You're asked to avoid/resolve such conflicts.
+> A valid function name starts with a letter or underscore, followed by any number of letters, numbers, or underscores.
 
-Simply add the `aliases` attribute to the `@Bean` annotation to define a
-list of `@Alias`:
+This led to introducing aliases for beans. Each bean can have multiple aliases and two types of aliases are possible. In case of collisions (the same alias is used for different beans) Disco will throw an exception. You're asked to avoid/resolve such conflicts.
+
+Simply add the `aliases` attribute to the `@Bean` annotation to define a list of `@Alias`:
 
 ```php
 <?php
@@ -231,9 +204,7 @@ class MyConfiguration
 }
 ```
 
-Now you can either pass `mySampleService` or `\Identifier\With\Namespace`
-or `bitExpert\Disco\Helper\SampleService` to the `\bitExpert\Disco\AnnotationBeanFactory::get()`
-or `\bitExpert\Disco\AnnotationBeanFactory::has()` calls.
+Now you can either pass `mySampleService` or `\Identifier\With\Namespace` or `bitExpert\Disco\Helper\SampleService` to the `\bitExpert\Disco\AnnotationBeanFactory::get()` or `\bitExpert\Disco\AnnotationBeanFactory::has()` calls.
 
 The example uses both available alias types. Let's look at them one after the other.
 
@@ -241,26 +212,18 @@ The example uses both available alias types. Let's look at them one after the ot
 
 `@Alias({"name" = "\Identifier\With\Namespace"})`
 
-This alias type is pretty much self explaining. What you define as name
-can later be used to get the service from the bean factory.
+This alias type is pretty much self explaining. What you define as name can later be used to get the service from the bean factory.
 
 ### Return Type Alias
 
 `@Alias({"type" = true})`
 
-Setting the `type` attribute to `true` (name attribute must be omitted in this case) 
-tells Disco to use the return type of the method as an alias.
+Setting the `type` attribute to `true` (name attribute must be omitted in this case) tells Disco to use the return type of the method as an alias.
 
-This is very useful because you can work with PHP's `::class` language construct
-like in this example: `$annotationBeanFactory->get(SampleService::class)`.
-If you now refactor `SampleService` (rename or move to other namespace) a
-modern IDE will automatically change the alias and your code continues to
-work. Classes or interfaces can be used as an alias as well as PHP's
-native types like array, bool, int, float, string.
+This is very useful because you can work with PHP's `::class` language construct like in this example: `$annotationBeanFactory->get(SampleService::class)`.
+
+If you now refactor `SampleService` (rename or move to other namespace) a modern IDE will automatically change the alias and your code continues to work. Classes or interfaces can be used as an alias as well as PHP's native types like _array_, _bool_, _int_, _float_, _string_.
 
 ### Mix and Match
 
-You can use many named aliases and/or one type alias per bean.
-
-Aliases also work for protected beans, exposing the bean by the given alias
-but not by their method name!
+You can use many named aliases and/or one type alias per bean. Aliases also work for protected beans, exposing the bean by the given alias but not by their method name!

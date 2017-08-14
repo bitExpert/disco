@@ -1,9 +1,6 @@
-# Injecting dependencies
+# Injecting Dependencies
 
-To inject a bean as a dependency simply call the respective method of
-the configuration class. It is not possible to refer to a defined alias,
-you can only inject a dependency by its primary name which is the method
-name.
+To inject a bean as a dependency simply call the respective method of the configuration class. It is not possible to refer to a defined alias, you can only inject a dependency by its primary name which is the method name.
 
 ```php
 <?php
@@ -36,7 +33,4 @@ class MyConfiguration
 }
 ```
 
-Disco will respect the bean configuration of `mySampleService` when it
-gets injected as a dependency - e.g. when `mySampleService` is configured
-to return a non-singleton instance, Disco will provide a new instance
-for every call of `$this->mySampleService()`.
+Disco will respect the bean configuration of `mySampleService` when it gets injected as a dependency — e.g., when `mySampleService` is configured to return a non-singleton instance, Disco will provide a new instance for every call of `$this->mySampleService()`.
