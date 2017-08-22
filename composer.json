@@ -38,6 +38,10 @@
       "bitExpert\\Disco\\": ["tests/bitExpert/Disco", "benchmarks/bitExpert/Disco"]
     }
   },
+  "provide": {
+    "container-interop/container-interop-implementation": "^1.2",
+    "psr/container-implementation": "^1.0"
+  },
   "scripts": {
     "check": [
       "@cs-check",
