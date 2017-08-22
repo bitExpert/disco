@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e9e5c5bfc2c1d920e23f1bed720c7537",
+    "content-hash": "2ba493737278d31f7acdee1a46084688",
     "packages": [
         {
             "name": "bitexpert/slf4psrlog",
@@ -879,7 +879,7 @@
                 "markdown",
                 "static site"
             ],
-            "time": "2016-03-04 17:42:57"
+            "time": "2016-03-04T17:42:57+00:00"
         },
         {
             "name": "cilex/cilex",
