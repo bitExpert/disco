@@ -61,4 +61,27 @@ class AliasUnitTest extends TestCase
         self::expectExceptionMessage('Alias should either be a named alias or a type alias!');
         new Alias();
     }
+
+    /**
+     * @test
+     * @dataProvider invalidNameProvider
+     */
+    public function aliasNameCannotBeEmpty($name)
+    {
+        self::expectException(AnnotationException::class);
+        self::expectExceptionMessage('Alias should either be a named alias or a type alias!');
+        new Alias(['value' => ['name' => $name, 'type' => false]]);
+    }
+
+    public function invalidNameProvider()
+    {
+        return [
+            [''],
+            [0],
+            [0.0],
+            [false],
+            [null],
+            [[]],
+        ];
+    }
 }
