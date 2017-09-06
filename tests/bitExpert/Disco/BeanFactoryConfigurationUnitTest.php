@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace bitExpert\Disco;
 
 use bitExpert\Disco\Store\SerializableBeanStore;
+use InvalidArgumentException;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use ProxyManager\Autoloader\Autoloader;
@@ -28,10 +29,11 @@ class BeanFactoryConfigurationUnitTest extends TestCase
 {
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     public function invalidProxyTargetDirThrowsException()
     {
+        self::expectException(InvalidArgumentException::class);
+
         new BeanFactoryConfiguration('/abc');
     }
 
@@ -130,22 +132,24 @@ class BeanFactoryConfigurationUnitTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionCode 10
      */
     public function injectedInvalidProxyTargetDirThrowsException()
     {
+        self::expectException(InvalidArgumentException::class);
+        self::expectExceptionCode(10);
+
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
         $config->setProxyTargetDir('/abc');
     }
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionCode 20
      */
     public function injectedNotWritableProxyTargetDirThrowsException()
     {
+        self::expectException(InvalidArgumentException::class);
+        self::expectExceptionCode(20);
+
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
         $path = vfsStream::setup('root', 0x111);
         $config->setProxyTargetDir($path->url());

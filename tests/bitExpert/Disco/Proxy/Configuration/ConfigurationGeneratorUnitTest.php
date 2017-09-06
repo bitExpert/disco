@@ -22,6 +22,7 @@ use bitExpert\Disco\Config\MissingReturnTypeConfiguration;
 use bitExpert\Disco\Config\NonExistentReturnTypeConfiguration;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
+use ProxyManager\Exception\InvalidProxiedClassException;
 use Zend\Code\Generator\ClassGenerator;
 
 /**
@@ -52,71 +53,78 @@ class ConfigurationGeneratorUnitTest extends TestCase
 
     /**
      * @test
-     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
      */
     public function configClassWithoutAnAnnotationThrowsException()
     {
+        self::expectException(InvalidProxiedClassException::class);
+
         $reflClass = new \ReflectionClass(InvalidConfiguration::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
     }
 
     /**
      * @test
-     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
      */
     public function passingInterfaceAsConfigClassThrowsException()
     {
+        self::expectException(InvalidProxiedClassException::class);
+
         $reflClass = new \ReflectionClass(InterfaceConfiguration::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
     }
 
     /**
      * @test
-     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
      */
     public function missingBeanAnnotationThrowsException()
     {
+        self::expectException(InvalidProxiedClassException::class);
+
         $reflClass = new \ReflectionClass(MissingBeanAnnotationConfiguration::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
     }
 
     /**
      * @test
-     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
      */
     public function missingReturnTypeOfBeanDeclarationThrowsException()
     {
+        self::expectException(InvalidProxiedClassException::class);
+
         $reflClass = new \ReflectionClass(MissingReturnTypeConfiguration::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
     }
 
     /**
      * @test
-     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
      */
     public function nonExistentClassInReturnTypeThrowsException()
     {
+        self::expectException(InvalidProxiedClassException::class);
+
         $reflClass = new \ReflectionClass(NonExistentReturnTypeConfiguration::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
     }
 
     /**
      * @test
-     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
      */
     public function sameAliasUsedForMultipleBeansThrowsException()
     {
+        self::expectException(InvalidProxiedClassException::class);
+
         $reflClass = new \ReflectionClass(BeanConfigurationWithConflictingAliases::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
     }
 
     /**
      * @test
-     * @expectedException \ProxyManager\Exception\InvalidProxiedClassException
-     * @expectedExceptionMessageRegExp /^\[Semantical Error\] The annotation "@foo"/
      */
     public function unknownAnnotationThrowsException()
     {
+        self::expectException(InvalidProxiedClassException::class);
+        self::expectExceptionMessageRegExp('/^\[Semantical Error\] The annotation "@foo"/');
+
         /**
          * @foo
          */

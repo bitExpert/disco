@@ -48,10 +48,11 @@ class BeanPostProcessorUnitTest extends TestCase
 
     /**
      * @test
-     * @expectedException TypeError
      */
     public function throwsExceptionIfParameterTypeDoesNotMatch()
     {
+        self::expectException(TypeError::class);
+
         $bean = new Bean([
             'value' => [
                 'parameters' => [

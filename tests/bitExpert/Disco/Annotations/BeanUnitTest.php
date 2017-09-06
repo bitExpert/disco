@@ -205,10 +205,11 @@ class BeanUnitTest extends TestCase
 
     /**
      * @test
-     * @expectedException TypeError
      */
     public function throwsExceptionIfAliasTypeDoesNotMatch()
     {
+        self::expectException(TypeError::class);
+
         $bean = new Bean([
             'value' => [
                 'aliases' => [
@@ -245,10 +246,11 @@ class BeanUnitTest extends TestCase
 
     /**
      * @test
-     * @expectedException TypeError
      */
     public function throwsExceptionIfParameterTypeDoesNotMatch()
     {
+        self::expectException(TypeError::class);
+
         $bean = new Bean([
             'value' => [
                 'parameters' => [
