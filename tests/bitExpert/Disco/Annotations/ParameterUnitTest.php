@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
+use Doctrine\Common\Annotations\AnnotationException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,10 +22,11 @@ class ParameterUnitTest extends TestCase
 {
     /**
      * @test
-     * @expectedException \Doctrine\Common\Annotations\AnnotationException
      */
     public function missingNameWillThrowAnnotationException()
     {
+        self::expectException(AnnotationException::class);
+
         new Parameter();
     }
 

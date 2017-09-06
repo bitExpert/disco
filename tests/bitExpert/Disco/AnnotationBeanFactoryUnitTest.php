@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco;
 
+use bitExpert\Disco\BeanException;
+use bitExpert\Disco\BeanNotFoundException;
 use bitExpert\Disco\Config\BeanConfiguration;
 use bitExpert\Disco\Config\BeanConfigurationSubclass;
 use bitExpert\Disco\Config\BeanConfigurationTrait;
@@ -54,28 +56,31 @@ class AnnotationBeanFactoryUnitTest extends TestCase
 
     /**
      * @test
-     * @expectedException \bitExpert\Disco\BeanNotFoundException
      */
     public function retrievingNonExistentBeanThrowsException()
     {
+        self::expectException(BeanNotFoundException::class);
+
         $this->beanFactory->get('serviceWhichDoesNotExist');
     }
 
     /**
      * @test
-     * @expectedException \bitExpert\Disco\BeanException
      */
     public function retrievingBeanWithEmptyStringThrowsException()
     {
+        self::expectException(BeanException::class);
+
         $this->beanFactory->get('');
     }
 
     /**
      * @test
-     * @expectedException \bitExpert\Disco\BeanException
      */
     public function retrievingBeanWithNonStringThrowsException()
     {
+        self::expectException(BeanException::class);
+
         $this->beanFactory->get(3);
     }
 
@@ -322,10 +327,11 @@ class AnnotationBeanFactoryUnitTest extends TestCase
 
     /**
      * @test
-     * @expectedException \bitExpert\Disco\BeanException
      */
     public function missingRequiredParameterWillThrowException()
     {
+        self::expectException(BeanException::class);
+
         $this->beanFactory = new AnnotationBeanFactory(BeanConfigurationWithParameters::class);
         BeanFactoryRegistry::register($this->beanFactory);
 
@@ -421,10 +427,11 @@ class AnnotationBeanFactoryUnitTest extends TestCase
 
     /**
      * @test
-     * @expectedException \bitExpert\Disco\BeanException
      */
     public function throwsExceptionIfTypeOfReturnedObjectIsNotExpectedOfNonLazyBean()
     {
+        self::expectException(BeanException::class);
+
         $this->beanFactory = new AnnotationBeanFactory(WrongReturnTypeConfiguration::class);
         BeanFactoryRegistry::register($this->beanFactory);
 
@@ -433,10 +440,11 @@ class AnnotationBeanFactoryUnitTest extends TestCase
 
     /**
      * @test
-     * @expectedException \bitExpert\Disco\BeanException
      */
     public function throwsExceptionIfNonLazyBeanMethodDoesNotReturnAnything()
     {
+        self::expectException(BeanException::class);
+
         $this->beanFactory = new AnnotationBeanFactory(WrongReturnTypeConfiguration::class);
         BeanFactoryRegistry::register($this->beanFactory);
 
@@ -445,10 +453,11 @@ class AnnotationBeanFactoryUnitTest extends TestCase
 
     /**
      * @test
-     * @expectedException \bitExpert\Disco\BeanException
      */
     public function throwsExceptionIfTypeOfReturnedObjectIsNotExpectedOfLazyBean()
     {
+        self::expectException(BeanException::class);
+
         $this->beanFactory = new AnnotationBeanFactory(WrongReturnTypeConfiguration::class);
         BeanFactoryRegistry::register($this->beanFactory);
 
@@ -458,10 +467,11 @@ class AnnotationBeanFactoryUnitTest extends TestCase
 
     /**
      * @test
-     * @expectedException \bitExpert\Disco\BeanException
      */
     public function throwsExceptionIfLazyBeanMethodDoesNotReturnAnything()
     {
+        self::expectException(BeanException::class);
+
         $this->beanFactory = new AnnotationBeanFactory(WrongReturnTypeConfiguration::class);
         BeanFactoryRegistry::register($this->beanFactory);
 

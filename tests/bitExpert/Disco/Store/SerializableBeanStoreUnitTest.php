@@ -14,7 +14,7 @@ namespace bitExpert\Disco\Store;
 
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
-use Doctrine\Instantiator\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -66,10 +66,11 @@ class SerializableBeanStoreUnitTest extends TestCase
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
      */
     public function gettingNonExistentBeanWillThrowException()
     {
+        self::expectException(InvalidArgumentException::class);
+
         $this->beanStore->get('some-random-bean-instance');
     }
 

@@ -38,6 +38,7 @@ class AliasUnitTest extends TestCase
     {
         self::expectException(AnnotationException::class);
         self::expectExceptionMessage('Type alias should not have a name!');
+
         new Alias(['value' => ['name' => 'someAliasName', 'type' => true]]);
     }
 
@@ -59,6 +60,7 @@ class AliasUnitTest extends TestCase
     {
         self::expectException(AnnotationException::class);
         self::expectExceptionMessage('Alias should either be a named alias or a type alias!');
+
         new Alias();
     }
 
@@ -70,6 +72,7 @@ class AliasUnitTest extends TestCase
     {
         self::expectException(AnnotationException::class);
         self::expectExceptionMessage('Alias should either be a named alias or a type alias!');
+
         new Alias(['value' => ['name' => $name, 'type' => false]]);
     }
 
