@@ -1,3 +1,10 @@
+# Upgrade to Disco 0.10.0
+
+## BC BREAK: Rasing minimum PHP version to 7.2
+
+With the 0.10.0 release of Disco support for PHP 7.1 is dropped. Disco
+will only work in PHP 7.2 environments.
+
 # Upgrade to Disco 0.9.0
 
 ## BC BREAK: Rasing minimum PHP version to 7.1
