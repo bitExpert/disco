@@ -26,5 +26,5 @@ interface BeanPostProcessor
      * @param object $bean
      * @param string $beanName
      */
-    public function postProcess($bean, $beanName);
+    public function postProcess(object $bean, string $beanName): void;
 }

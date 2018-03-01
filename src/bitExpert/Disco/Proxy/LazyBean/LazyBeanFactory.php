@@ -45,9 +45,12 @@ class LazyBeanFactory extends AbstractBaseFactory
     }
 
     /**
-     * {@inheritDoc}
+     * @param string  $className
+     * @param Closure $initializer
+     *
+     * @return object
      */
-    public function createProxy($className, Closure $initializer)
+    public function createProxy(string $className, Closure $initializer): object
     {
         $proxyClassName = $this->generateProxy($className);
 

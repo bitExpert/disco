@@ -31,7 +31,7 @@ class ParameterizedSampleServiceBeanPostProcessor implements BeanPostProcessor
     /**
      * {@inheritDoc}
      */
-    public function postProcess($bean, $beanName)
+    public function postProcess(object $bean, string $beanName): void
     {
         if ($bean instanceof SampleService) {
             $bean->setTest($this->dependency);

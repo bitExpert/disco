@@ -34,7 +34,7 @@ class SerializableBeanStore implements BeanStore
     /**
      * {@inheritdoc}
      */
-    public function add(string $beanId, $bean)
+    public function add(string $beanId, $bean): void
     {
         $this->beans[$beanId] = $bean;
     }

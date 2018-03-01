@@ -61,7 +61,7 @@ class BeanMethod extends ParameterAwareMethodGenerator
         BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty,
         GetParameter $parameterValuesMethod,
         WrapBeanAsLazy $wrapBeanAsLazy
-    ) {
+    ): MethodGenerator {
         if (null === $beanType) {
             throw new InvalidProxiedClassException(
                 sprintf(

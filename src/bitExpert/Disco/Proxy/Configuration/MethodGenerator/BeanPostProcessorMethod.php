@@ -31,7 +31,7 @@ class BeanPostProcessorMethod extends ParameterAwareMethodGenerator
         MethodReflection $originalMethod,
         BeanPostProcessor $beanPostProcessorMetadata,
         GetParameter $parameterValuesMethod
-    ) {
+    ): MethodGenerator {
         $method = static::fromReflection($originalMethod);
 
         $methodParams = static::convertMethodParamsToString(

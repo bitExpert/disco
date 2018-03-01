@@ -26,7 +26,7 @@ class InitializedService implements InitializedBean
     /**
      * {@inheritDoc}
      */
-    public function postInitialization()
+    public function postInitialization(): void
     {
         $this->postInitCnt++;
     }

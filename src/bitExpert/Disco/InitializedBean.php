@@ -26,5 +26,5 @@ interface InitializedBean
      *
      * @throws \bitExpert\Disco\BeanException
      */
-    public function postInitialization();
+    public function postInitialization(): void;
 }
