@@ -22,7 +22,7 @@ interface BeanStore
      * @param string $beanId
      * @param mixed $bean
      */
-    public function add(string $beanId, $bean);
+    public function add(string $beanId, $bean): void;
 
     /**
      * Retrieves bean instance for $beanId.

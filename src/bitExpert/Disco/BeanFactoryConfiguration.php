@@ -77,7 +77,7 @@ class BeanFactoryConfiguration
      * @param string $proxyTargetDir
      * @throws InvalidArgumentException
      */
-    public function setProxyTargetDir(string $proxyTargetDir)
+    public function setProxyTargetDir(string $proxyTargetDir): void
     {
         if (!is_dir($proxyTargetDir)) {
             throw new InvalidArgumentException(
@@ -108,7 +108,7 @@ class BeanFactoryConfiguration
      *
      * @param GeneratorStrategyInterface $writergenerator
      */
-    public function setProxyWriterGenerator(GeneratorStrategyInterface $writergenerator)
+    public function setProxyWriterGenerator(GeneratorStrategyInterface $writergenerator): void
     {
         $this->proxyWriterGenerator = $writergenerator;
     }
@@ -120,7 +120,7 @@ class BeanFactoryConfiguration
      * @param AutoloaderInterface $autoloader
      * @throws \RuntimeException
      */
-    public function setProxyAutoloader(AutoloaderInterface $autoloader)
+    public function setProxyAutoloader(AutoloaderInterface $autoloader): void
     {
         if ($this->proxyAutoloader instanceof AutoloaderInterface) {
             spl_autoload_unregister($this->proxyAutoloader);
@@ -170,7 +170,7 @@ class BeanFactoryConfiguration
      *
      * @param BeanStore $sessionBeanStore
      */
-    public function setSessionBeanStore(BeanStore $sessionBeanStore)
+    public function setSessionBeanStore(BeanStore $sessionBeanStore): void
     {
         $this->sessionBeanStore = $sessionBeanStore;
     }
