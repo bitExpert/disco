@@ -15,6 +15,7 @@ namespace bitExpert\Disco\Proxy\Configuration;
 use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\BeanPostProcessor;
 use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Annotations\Ignore;
 use bitExpert\Disco\Annotations\Parameters;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanMethod;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanPostProcessorMethod;
@@ -128,6 +129,11 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                         $getParameterMethod
                     );
                     $classGenerator->addMethodFromGenerator($proxyMethod);
+                    continue;
+                }
+
+                $beanAnnotation = $reader->getMethodAnnotation($method, Ignore::class);
+                if ($beanAnnotation instanceof Ignore) {
                     continue;
                 }
 
