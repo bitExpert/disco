@@ -49,7 +49,7 @@ class MyConfiguration
 
 Beans with a `public` visibility can be retrieved via the `\bitExpert\Disco\AnnotationBeanFactory`. Beans with a `protected` visibility are so-called internal dependencies and thus cannot be retrieved via the `\bitExpert\Disco\AnnotationBeanFactory`.
 
-Both the public and protected methods of the configuration class have to be marked with the `@Bean` annotation. The `\bitExpert\Disco\AnnotationBeanFactory` will throw an exception when public or protected methods without a `@Bean` annotation are found.
+Public methods of the configuration class have to while protected classes may be marked with the `@Bean` annotation. The `\bitExpert\Disco\AnnotationBeanFactory` will throw an exception when public methods without a `@Bean` annotation are found.
 
 ## PSR-11
 

@@ -131,6 +131,10 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                     continue;
                 }
 
+                if ($method->isProtected()) {
+                    continue;
+                }
+
                 // every method needs either @Bean or @PostPostprocessor annotation
                 throw new InvalidProxiedClassException(
                     sprintf(
