@@ -148,7 +148,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                     continue;
                 }
 
-                if (isset($aliases[$alias]) && $declaringClass[$alias] == $method->getDeclaringClass() ) {
+                if (isset($aliases[$alias]) && $declaringClass[$alias] == $method->getDeclaringClass()) {
                     throw new InvalidProxiedClassException(
                         sprintf(
                             'Alias "%s" of method "%s" on "%s" is already used by method "%s" of another Bean!'
@@ -162,7 +162,10 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 }
 
                 $extendedClass = $method->getDeclaringClass()->getExtension();
-                if (isset($declaringClass[$alias]) && $extendedClass && ! in_array($declaringClass[$alias], $extendedClass->getClasses())) {
+                if (isset($declaringClass[$alias]) &&
+                    $extendedClass &&
+                    ! in_array($declaringClass[$alias], $extendedClass->getClasses())
+                ) {
                     // The alias is not overwriting the alias-definition of an extended class, so it is silently ignored
                     continue;
                 }
