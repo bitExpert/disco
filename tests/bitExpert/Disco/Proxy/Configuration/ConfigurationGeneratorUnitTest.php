@@ -14,6 +14,7 @@ namespace bitExpert\Disco\Proxy\Configuration;
 
 use bitExpert\Disco\Config\BeanConfiguration;
 use bitExpert\Disco\Config\BeanConfigurationWithConflictingAliases;
+use bitExpert\Disco\Config\BeanConfigurationWithExtendedAliases;
 use bitExpert\Disco\Config\BeanConfigurationWithNativeTypeAlias;
 use bitExpert\Disco\Config\InterfaceConfiguration;
 use bitExpert\Disco\Config\InvalidConfiguration;
@@ -148,6 +149,18 @@ class ConfigurationGeneratorUnitTest extends TestCase
             ->method('addMethodFromGenerator');
 
         $reflClass = new \ReflectionClass(BeanConfiguration::class);
+        $this->configGenerator->generate($reflClass, $this->classGenerator);
+    }
+
+    /**
+     * @test
+     */
+    public function parsingExtendingFileWithSameAliasSucceeds()
+    {
+        $this->classGenerator->expects(self::atLeastOnce())
+                             ->method('addMethodFromGenerator');
+
+        $reflClass = new \ReflectionClass(BeanConfigurationWithExtendedAliases::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
     }
 }
