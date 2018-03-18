@@ -172,7 +172,8 @@ As a drawback you are quite limited when it comes to bean names. To quote the [P
 
 > A valid function name starts with a letter or underscore, followed by any number of letters, numbers, or underscores.
 
-This led to introducing aliases for beans. Each bean can have multiple aliases and two types of aliases are possible. In case of collisions (the same alias is used for different beans) Disco will throw an exception. You're asked to avoid/resolve such conflicts.
+This led to introducing aliases for beans. Each bean can have multiple aliases and two types of aliases are possible. In case of collisions (the same alias is used for different beans) Disco will throw an exception.
+You're asked to avoid/resolve such conflicts. Since version 0.10.0 of Disco collision detection will only take the configuration class into account the alias is defined in, this allows you to overwrite aliases in child configuration.
 
 Simply add the `aliases` attribute to the `@Bean` annotation to define a list of `@Alias`:
 
