@@ -3,7 +3,9 @@
 ## BC BREAK: Rasing minimum PHP version to 7.2
 
 With the 0.10.0 release of Disco support for PHP 7.1 is dropped. Disco
-will only work in PHP 7.2 environments.
+will only work in PHP 7.2 environments. In addition to that, return type
+hints were added, thus if you are extending Disco or implementing provided
+interfaces, you need to adapt those changes.
 
 # Upgrade to Disco 0.9.0
 

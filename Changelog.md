@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.10.0
+
+### Added
+
+- [#117](https://github.com/bitExpert/disco/pull/117) Allow overwriting an Alias in an extending class
+- [#115](https://github.com/bitExpert/disco/pull/115) Missing types for Disco methods
+- [#106](https://github.com/bitExpert/disco/pull/106) Add "provide" section to composer.json
+- [#92](https://github.com/bitExpert/disco/pull/92) Revise the documentation
+
+### Deprecated
+
+- [#114](https://github.com/bitExpert/disco/pull/114) Bump php version to 7.2
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#113](https://github.com/bitExpert/disco/pull/113) Move vfsstream dependency to require-dev section
+- [#109](https://github.com/bitExpert/disco/pull/109) Replace annotations with methods for exception tests
+- [#107](https://github.com/bitExpert/disco/pull/107) Add test for invalid service alias names
+- [#104](https://github.com/bitExpert/disco/pull/104) Php Inspections (EA Extended): nit-picks
+
 ## 0.9.0
 
 ### Added
