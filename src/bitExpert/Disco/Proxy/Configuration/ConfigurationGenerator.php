@@ -106,8 +106,8 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $classGenerator->addPropertyFromGenerator($aliasesProperty);
 
         $postProcessorMethods = [];
-        $aliases = [];
-        $declaringClass = [];
+        $parentAliases = [];
+        $localAliases = [];
         $methods = $originalClass->getMethods(ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED);
         foreach ($methods as $method) {
             $methodReflection = new MethodReflection(
@@ -152,7 +152,14 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                     continue;
                 }
 
-                if (isset($aliases[$alias]) && $declaringClass[$alias] == $method->getDeclaringClass()) {
+                $hasAlias = '';
+                if ($method->getDeclaringClass()->name === $originalClass->name) {
+                    $hasAlias = $localAliases[$alias] ?? '';
+                } else {
+                    $hasAlias= $parentAliases[$alias] ?? '';
+                }
+
+                if ($hasAlias !== '') {
                     throw new InvalidProxiedClassException(
                         sprintf(
                             'Alias "%s" of method "%s" on "%s" is already used by method "%s" of another Bean!'
@@ -160,22 +167,16 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                             $alias,
                             $method->name,
                             $originalClass->name,
-                            $aliases[$alias]
+                            $hasAlias
                         )
                     );
                 }
 
-                $extendedClass = $method->getDeclaringClass()->getExtension();
-                if (isset($declaringClass[$alias]) &&
-                    $extendedClass &&
-                    ! in_array($declaringClass[$alias], $extendedClass->getClasses())
-                ) {
-                    // The alias is not overwriting the alias-definition of an extended class, so it is silently ignored
-                    continue;
+                if ($method->getDeclaringClass()->name === $originalClass->name) {
+                    $localAliases[$alias] = $method->name;
+                } else {
+                    $parentAliases[$alias] = $method->name;
                 }
-
-                $declaringClass[$alias] = $method->getDeclaringClass();
-                $aliases[$alias] = $method->name;
             }
 
             $proxyMethod = BeanMethod::generateMethod(
@@ -193,7 +194,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             $classGenerator->addMethodFromGenerator($proxyMethod);
         }
 
-        $aliasesProperty->setDefaultValue($aliases);
+        $aliasesProperty->setDefaultValue($parentAliases + $localAliases);
 
         $classGenerator->addMethodFromGenerator(
             new Constructor(

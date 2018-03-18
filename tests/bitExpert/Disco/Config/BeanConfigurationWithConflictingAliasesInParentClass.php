@@ -21,19 +21,17 @@ use bitExpert\Disco\Helper\SampleServiceInterface;
 /**
  * @Configuration
  */
-class BeanConfigurationWithExtendedAliases extends BeanConfigurationWithAliases
+class BeanConfigurationWithConflictingAliasesInParentClass extends BeanConfigurationWithConflictingAliases
 {
-
-
     /**
      * @Bean({
      *   "aliases"={
-     *     @Alias({"type"=true})
+     *     @Alias({"name"="SampleService3Alias"})
      *   }
      * })
      * @return SampleServiceInterface
      */
-    public function extendedSampleServiceWithInterfaceReturnTypeAlias(): SampleServiceInterface
+    public function sampleService3(): SampleServiceInterface
     {
         return new SampleService();
     }
