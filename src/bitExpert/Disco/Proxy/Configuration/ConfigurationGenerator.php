@@ -106,7 +106,8 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $classGenerator->addPropertyFromGenerator($aliasesProperty);
 
         $postProcessorMethods = [];
-        $aliases = [];
+        $parentAliases = [];
+        $localAliases = [];
         $methods = $originalClass->getMethods(ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED);
         foreach ($methods as $method) {
             $methodReflection = new MethodReflection(
@@ -151,7 +152,14 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                     continue;
                 }
 
-                if (isset($aliases[$alias])) {
+                $hasAlias = '';
+                if ($method->getDeclaringClass()->name === $originalClass->name) {
+                    $hasAlias = $localAliases[$alias] ?? '';
+                } else {
+                    $hasAlias= $parentAliases[$alias] ?? '';
+                }
+
+                if ($hasAlias !== '') {
                     throw new InvalidProxiedClassException(
                         sprintf(
                             'Alias "%s" of method "%s" on "%s" is already used by method "%s" of another Bean!'
@@ -159,12 +167,16 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                             $alias,
                             $method->name,
                             $originalClass->name,
-                            $aliases[$alias]
+                            $hasAlias
                         )
                     );
                 }
 
-                $aliases[$alias] = $method->name;
+                if ($method->getDeclaringClass()->name === $originalClass->name) {
+                    $localAliases[$alias] = $method->name;
+                } else {
+                    $parentAliases[$alias] = $method->name;
+                }
             }
 
             $proxyMethod = BeanMethod::generateMethod(
@@ -182,7 +194,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             $classGenerator->addMethodFromGenerator($proxyMethod);
         }
 
-        $aliasesProperty->setDefaultValue($aliases);
+        $aliasesProperty->setDefaultValue($parentAliases + $localAliases);
 
         $classGenerator->addMethodFromGenerator(
             new Constructor(
