@@ -51,7 +51,7 @@
     "cs-check": "vendor/bin/phing sniff",
     "cs-fix": "vendor/bin/phpcbf",
     "test": "vendor/bin/phing unit",
-    "analyze": "vendor/bin/phpstan.phar analyze -l 0  ./src .tests",
+    "analyze": "vendor/bin/phpstan.phar analyze -l 0  ./src ./tests",
     "post-install-cmd": "Tooly\\ScriptHandler::installPharTools",
     "post-update-cmd": "Tooly\\ScriptHandler::installPharTools"
   },
