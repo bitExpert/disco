@@ -27,11 +27,10 @@ class GetAlias extends MethodGenerator
     /**
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\GetAlias}.
      *
-     * @param ReflectionClass $originalClass
      * @param AliasesProperty $aliasesProperty
      * @throws InvalidArgumentException
      */
-    public function __construct(ReflectionClass $originalClass, AliasesProperty $aliasesProperty)
+    public function __construct(AliasesProperty $aliasesProperty)
     {
         parent::__construct('getAlias');
 

@@ -27,11 +27,10 @@ class GetParameter extends MethodGenerator
     /**
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\GetParameter}.
      *
-     * @param ReflectionClass $originalClass
      * @param ParameterValuesProperty $parameterValueProperty
      * @throws InvalidArgumentException
      */
-    public function __construct(ReflectionClass $originalClass, ParameterValuesProperty $parameterValueProperty)
+    public function __construct(ParameterValuesProperty $parameterValueProperty)
     {
         parent::__construct(UniqueIdentifierGenerator::getIdentifier('getParameter'));
 

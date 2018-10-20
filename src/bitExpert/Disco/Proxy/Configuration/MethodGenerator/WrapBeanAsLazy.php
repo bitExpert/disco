@@ -26,11 +26,9 @@ class WrapBeanAsLazy extends MethodGenerator
     /**
      * Creates a new {@link \bitExpert\Disco\Proxy\LazyBean\MethodGenerator\Constructor}.
      *
-     * @param ReflectionClass $originalClass
      * @param BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty
      */
     public function __construct(
-        ReflectionClass $originalClass,
         BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty
     ) {
         parent::__construct(UniqueIdentifierGenerator::getIdentifier('wrapBeanAsLazy'));
