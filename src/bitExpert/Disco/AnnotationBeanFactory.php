@@ -30,8 +30,8 @@ class AnnotationBeanFactory implements BeanFactory
     /**
      * Creates a new {@link \bitExpert\Disco\BeanFactory}.
      *
-     * @param $configClassName string
-     * @param array $parameters
+     * @param string                   $configClassName
+     * @param array                    $parameters
      * @param BeanFactoryConfiguration $config
      */
     public function __construct($configClassName, array $parameters = [], BeanFactoryConfiguration $config = null)

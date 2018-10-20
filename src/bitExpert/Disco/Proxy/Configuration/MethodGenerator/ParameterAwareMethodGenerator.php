@@ -34,7 +34,7 @@ class ParameterAwareMethodGenerator extends MethodGenerator
     ): string {
         $parameters = [];
         foreach ($methodParameters as $methodParameter) {
-            /** @var $methodParameter Parameter */
+            /** @var Parameter $methodParameter */
             $defaultValue = $methodParameter->getDefaultValue();
             switch (\gettype($defaultValue)) {
                 case 'string':
