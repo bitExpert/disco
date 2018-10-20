@@ -82,8 +82,8 @@ class SerializableBeanStoreUnitTest extends TestCase
     {
         $this->beanStore->add('bean', $bean);
 
-        $this->beanStore = serialize($this->beanStore);
-        $this->beanStore = unserialize($this->beanStore);
+        $beanStore       = serialize($this->beanStore);
+        $this->beanStore = unserialize($beanStore);
 
         $beanFromStore = $this->beanStore->get('bean');
         self::assertEquals($bean, $beanFromStore);

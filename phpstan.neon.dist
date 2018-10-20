@@ -5,3 +5,4 @@ parameters:
     - ./tests
   excludes_analyse:
     - %currentWorkingDirectory%/tests/bitExpert/Disco/Config/NonExistentReturnTypeConfiguration.php
+    - %currentWorkingDirectory%/tests/bitExpert/Disco/Config/WrongReturnTypeConfiguration.php

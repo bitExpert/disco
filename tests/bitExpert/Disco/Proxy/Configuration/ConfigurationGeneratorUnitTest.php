@@ -38,7 +38,7 @@ class ConfigurationGeneratorUnitTest extends TestCase
     private $configGenerator;
 
     /**
-     * @var ClassGenerator|PHPUnit_Framework_MockObject_MockObject
+     * @var ClassGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $classGenerator;
 
