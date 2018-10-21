@@ -44,13 +44,13 @@ class ConfigurationFactory extends AbstractBaseFactory
      * @param BeanFactoryConfiguration $config
      * @param string $configClassName name of the configuration class
      * @param array $parameters
-     * @return object
+     * @return AliasContainerInterface
      */
     public function createInstance(
         BeanFactoryConfiguration $config,
         string $configClassName,
         array $parameters = []
-    ): object {
+    ): AliasContainerInterface {
         $proxyClassName = $this->generateProxy($configClassName);
         return new $proxyClassName($config, $parameters);
     }
