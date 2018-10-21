@@ -77,8 +77,8 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $parameterValuesProperty = new ParameterValuesProperty();
         $beanFactoryConfigurationProperty = new BeanFactoryConfigurationProperty();
         $aliasesProperty = new AliasesProperty();
-        $getParameterMethod = new GetParameter($originalClass, $parameterValuesProperty);
-        $wrapBeanAsLazyMethod = new WrapBeanAsLazy($originalClass, $beanFactoryConfigurationProperty);
+        $getParameterMethod = new GetParameter($parameterValuesProperty);
+        $wrapBeanAsLazyMethod = new WrapBeanAsLazy($beanFactoryConfigurationProperty);
 
         try {
             $reader = new AnnotationReader();
@@ -198,7 +198,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
 
         $classGenerator->addMethodFromGenerator(
             new Constructor(
-                $originalClass,
                 $parameterValuesProperty,
                 $sessionBeansProperty,
                 $beanFactoryConfigurationProperty,
@@ -215,16 +214,10 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             )
         );
         $classGenerator->addMethodFromGenerator(
-            new GetAlias(
-                $originalClass,
-                $aliasesProperty
-            )
+            new GetAlias($aliasesProperty)
         );
         $classGenerator->addMethodFromGenerator(
-            new HasAlias(
-                $originalClass,
-                $aliasesProperty
-            )
+            new HasAlias($aliasesProperty)
         );
     }
 }

@@ -29,7 +29,6 @@ class Constructor extends MethodGenerator
     /**
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\Constructor}.
      *
-     * @param ReflectionClass $originalClass
      * @param ParameterValuesProperty $parameterValuesProperty
      * @param SessionBeansProperty $sessionBeansProperty
      * @param BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty
@@ -37,7 +36,6 @@ class Constructor extends MethodGenerator
      * @param string[] $beanPostProcessorMethodNames
      */
     public function __construct(
-        ReflectionClass $originalClass,
         ParameterValuesProperty $parameterValuesProperty,
         SessionBeansProperty $sessionBeansProperty,
         BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty,
