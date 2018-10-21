@@ -23,7 +23,7 @@ use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 class LazyBeanFactory extends AbstractBaseFactory
 {
     /**
-     * @var LazyBeanGenerator
+     * @var LazyBeanGenerator|null
      */
     private $generator;
     /**

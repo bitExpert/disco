@@ -15,9 +15,9 @@ namespace bitExpert\Disco\Annotations;
 final class AnnotationAttributeParser
 {
     /**
-     * Helper function to cast a string value to a boolean representation.
+     * Helper function to cast any value to a boolean representation.
      *
-     * @param string|bool $value
+     * @param mixed $value
      * @return bool
      */
     public static function parseBooleanValue($value): bool
