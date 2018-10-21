@@ -1,0 +1,7 @@
+parameters:
+  level: 0
+  paths:
+    - ./src
+    - ./tests
+  excludes_analyse:
+    - %currentWorkingDirectory%/tests/bitExpert/Disco/Config/NonExistentReturnTypeConfiguration.php
