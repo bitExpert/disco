@@ -38,7 +38,7 @@ class ConfigurationGeneratorUnitTest extends TestCase
     private $configGenerator;
 
     /**
-     * @var ClassGenerator|\PHPUnit\Framework\MockObject\MockObject
+     * @var ClassGenerator&\PHPUnit\Framework\MockObject\MockObject
      */
     private $classGenerator;
 
@@ -50,7 +50,9 @@ class ConfigurationGeneratorUnitTest extends TestCase
         parent::setUp();
 
         $this->configGenerator = new ConfigurationGenerator();
-        $this->classGenerator = $this->createMock(ClassGenerator::class);
+        /** @var ClassGenerator&\PHPUnit\Framework\MockObject\MockObject $mock */
+        $mock = $this->createMock(ClassGenerator::class);
+        $this->classGenerator = $mock;
     }
 
     /**

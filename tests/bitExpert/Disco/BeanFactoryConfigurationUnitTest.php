@@ -66,6 +66,7 @@ class BeanFactoryConfigurationUnitTest extends TestCase
      */
     public function configuredProxyAutoloaderInstanceCanBeRetrieved()
     {
+        /** @var AutoloaderInterface $autoloader */
         $autoloader = $this->createMock(AutoloaderInterface::class);
 
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
@@ -82,9 +83,11 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     {
         $autoloader = new Autoloader(new FileLocator(sys_get_temp_dir()), new ClassNameInflector('AUTOLOADER'));
 
+        /** @var array $autoloaderFunctionsBeforeBeanFactoryInit */
         $autoloaderFunctionsBeforeBeanFactoryInit = spl_autoload_functions();
         $beanFactoryConfig = new BeanFactoryConfiguration(sys_get_temp_dir());
         $beanFactoryConfig->setProxyAutoloader($autoloader);
+        /** @var array $autoloaderFunctionsAfterBeanFactoryInit */
         $autoloaderFunctionsAfterBeanFactoryInit = spl_autoload_functions();
 
         self::assertCount(
@@ -100,7 +103,9 @@ class BeanFactoryConfigurationUnitTest extends TestCase
      */
     public function existingProxyAutoloaderCanBeUnregistered()
     {
+        /** @var AutoloaderInterface $autoloader1 */
         $autoloader1 = $this->createMock(AutoloaderInterface::class);
+        /** @var AutoloaderInterface $autoloader2 */
         $autoloader2 = $this->createMock(AutoloaderInterface::class);
 
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
