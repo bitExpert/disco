@@ -90,7 +90,7 @@ final class Bean extends ParameterAwareAnnotation
     /**
      * Helper methd to ensure that the passed aliases are of {@link \bitExpert\Disco\Annotations\Alias} type.
      *
-     * @param Alias[] $aliases
+     * @param Alias ...$aliases
      */
     private function setAliases(Alias ...$aliases): void
     {

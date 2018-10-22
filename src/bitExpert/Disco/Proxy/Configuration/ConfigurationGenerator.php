@@ -115,10 +115,10 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 $method->name
             );
 
-            /* @var \bitExpert\Disco\Annotations\Bean $beanAnnotation */
+            /** @var \bitExpert\Disco\Annotations\Bean|null $beanAnnotation */
             $beanAnnotation = $reader->getMethodAnnotation($method, Bean::class);
             if (null === $beanAnnotation) {
-                /* @var \bitExpert\Disco\Annotations\Bean $beanAnnotation */
+                /** @var \bitExpert\Disco\Annotations\BeanPostProcessor $beanAnnotation */
                 $beanAnnotation = $reader->getMethodAnnotation($method, BeanPostProcessor::class);
                 if ($beanAnnotation instanceof BeanPostProcessor) {
                     $postProcessorMethods[] = $method->name;
