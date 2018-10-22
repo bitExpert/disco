@@ -26,8 +26,7 @@
     "mikey179/vfsStream": "^1.6",
     "phpbench/phpbench": "^0.13.0",
     "bookdown/bookdown": "@dev",
-    "tm/tooly-composer-script": "^1.2",
-    "phpstan/phpstan-phpunit": "^0.10.0"
+    "tm/tooly-composer-script": "^1.2"
   },
   "autoload": {
     "psr-4": {
