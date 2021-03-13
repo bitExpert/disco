@@ -14,8 +14,8 @@ namespace bitExpert\Disco\Proxy\Configuration\PropertyGenerator;
 
 use bitExpert\Disco\BeanFactoryConfiguration;
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
-use Zend\Code\Generator\Exception\InvalidArgumentException;
-use Zend\Code\Generator\PropertyGenerator;
+use Laminas\Code\Generator\Exception\InvalidArgumentException;
+use Laminas\Code\Generator\PropertyGenerator;
 
 /**
  * Private property to store the {@link \bitExpert\Disco\BeanFactoryConfiguration}.

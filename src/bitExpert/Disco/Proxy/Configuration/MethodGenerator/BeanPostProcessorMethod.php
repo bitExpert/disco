@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
 use bitExpert\Disco\Annotations\BeanPostProcessor;
-use Zend\Code\Generator\MethodGenerator;
-use Zend\Code\Reflection\MethodReflection;
+use Laminas\Code\Generator\MethodGenerator;
+use Laminas\Code\Reflection\MethodReflection;
 
 class BeanPostProcessorMethod extends ParameterAwareMethodGenerator
 {
@@ -25,7 +25,7 @@ class BeanPostProcessorMethod extends ParameterAwareMethodGenerator
      * @param BeanPostProcessor $beanPostProcessorMetadata
      * @param GetParameter $parameterValuesMethod
      * @return MethodGenerator
-     * @throws \Zend\Code\Generator\Exception\InvalidArgumentException
+     * @throws \Laminas\Code\Generator\Exception\InvalidArgumentException
      */
     public static function generateMethod(
         MethodReflection $originalMethod,
