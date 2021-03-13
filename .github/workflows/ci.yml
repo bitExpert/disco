@@ -31,6 +31,9 @@ jobs:
       - name: Codesniffer
         run: composer cs-check
 
+      - name: Static code analysis
+        run: composer analyze
+
       - name: Unittests
         if: matrix.coveralls == false
         run: composer test
