@@ -32,7 +32,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "bitExpert\\Disco\\": ["tests/bitExpert/Disco", "benchmarks/bitExpert/Disco"]
+      "bitExpert\\Disco\\": ["tests/bitExpert/Disco"]
     }
   },
   "provide": {
