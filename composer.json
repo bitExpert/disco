@@ -21,7 +21,6 @@
     "phpunit/phpunit": "^9.5.2",
     "squizlabs/php_codesniffer": "^3.5.8",
     "monolog/monolog": "^2.2.0",
-    "phing/phing": "^2.16.0",
     "mikey179/vfsstream": "^1.6",
     "bookdown/bookdown": "@dev"
   },
@@ -44,9 +43,10 @@
       "@cs-check",
       "@test"
     ],
-    "cs-check": "vendor/bin/phing sniff",
+    "cs-check": "vendor/bin/phpcs --standard=PSR2 ./src ./tests",
     "cs-fix": "vendor/bin/phpcbf",
-    "test": "vendor/bin/phing unit",
-    "coverage": "vendor/bin/phing unit-with-coverage"
+    "analyze": "vendor/bin/phpstan analyze",
+    "test": "vendor/bin/phpunit",
+    "coverage": "vendor/bin/phpunit --coverage-clover clover.xml"
   }
 }
