@@ -15,9 +15,9 @@ namespace bitExpert\Disco\Proxy\LazyBean\MethodGenerator;
 use ProxyManager\Generator\MethodGenerator;
 use ReflectionClass;
 use ReflectionProperty;
-use Zend\Code\Generator\Exception\InvalidArgumentException;
-use Zend\Code\Generator\ParameterGenerator;
-use Zend\Code\Generator\PropertyGenerator;
+use Laminas\Code\Generator\Exception\InvalidArgumentException;
+use Laminas\Code\Generator\ParameterGenerator;
+use Laminas\Code\Generator\PropertyGenerator;
 
 /**
  * `__construct` method for lazy loading value holder objects.

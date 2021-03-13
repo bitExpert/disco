@@ -25,7 +25,7 @@ use bitExpert\Disco\Config\NonExistentReturnTypeConfiguration;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use ProxyManager\Exception\InvalidProxiedClassException;
-use Zend\Code\Generator\ClassGenerator;
+use Laminas\Code\Generator\ClassGenerator;
 
 /**
  * Unit tests for {@link \bitExpert\Disco\Proxy\Configuration\ConfigurationGenerator}.
@@ -127,7 +127,7 @@ class ConfigurationGeneratorUnitTest extends TestCase
     public function unknownAnnotationThrowsException()
     {
         self::expectException(InvalidProxiedClassException::class);
-        self::expectExceptionMessageRegExp('/^\[Semantical Error\] The annotation "@foo"/');
+        self::expectExceptionMessageMatches('/^\[Semantical Error\] The annotation "@foo"/');
 
         /**
          * @foo

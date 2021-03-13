@@ -16,7 +16,7 @@ use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanFactoryConfigurati
 use ProxyManager\Generator\MethodGenerator;
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
 use ReflectionClass;
-use Zend\Code\Generator\ParameterGenerator;
+use Laminas\Code\Generator\ParameterGenerator;
 
 /**
  * `wrapBeanAsLazy` method for lazy loading value holder objects.

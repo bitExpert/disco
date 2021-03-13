@@ -23,9 +23,9 @@ use bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory;
 use ProxyManager\Exception\InvalidProxiedClassException;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use ReflectionType;
-use Zend\Code\Generator\MethodGenerator;
-use Zend\Code\Generator\ParameterGenerator;
-use Zend\Code\Reflection\MethodReflection;
+use Laminas\Code\Generator\MethodGenerator;
+use Laminas\Code\Generator\ParameterGenerator;
+use Laminas\Code\Reflection\MethodReflection;
 
 /**
  * The bean method generator will generate a method for each bean definition in the generated
@@ -48,7 +48,7 @@ class BeanMethod extends ParameterAwareMethodGenerator
      * @param GetParameter $parameterValuesMethod
      * @param WrapBeanAsLazy $wrapBeanAsLazy
      * @return MethodGenerator
-     * @throws \Zend\Code\Generator\Exception\InvalidArgumentException
+     * @throws \Laminas\Code\Generator\Exception\InvalidArgumentException
      * @throws \ProxyManager\Exception\InvalidProxiedClassException
      */
     public static function generateMethod(
@@ -127,7 +127,7 @@ class BeanMethod extends ParameterAwareMethodGenerator
      * @override Enforces generation of \ProxyManager\Generator\MethodGenerator.
      *
      * {@inheritDoc}
-     * @throws \Zend\Code\Generator\Exception\InvalidArgumentException
+     * @throws \Laminas\Code\Generator\Exception\InvalidArgumentException
      */
     public static function fromReflection(MethodReflection $reflectionMethod): MethodGenerator
     {

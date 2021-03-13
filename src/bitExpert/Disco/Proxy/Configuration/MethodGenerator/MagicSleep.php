@@ -15,7 +15,7 @@ namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
 use ProxyManager\Generator\MagicMethodGenerator;
 use ReflectionClass;
-use Zend\Code\Generator\Exception\InvalidArgumentException;
+use Laminas\Code\Generator\Exception\InvalidArgumentException;
 
 /**
  * `__sleep` method for the generated config proxy class.

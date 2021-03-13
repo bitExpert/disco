@@ -15,8 +15,8 @@ namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\AliasesProperty;
 use ProxyManager\Generator\MethodGenerator;
 use ReflectionClass;
-use Zend\Code\Generator\Exception\InvalidArgumentException;
-use Zend\Code\Generator\ParameterGenerator;
+use Laminas\Code\Generator\Exception\InvalidArgumentException;
+use Laminas\Code\Generator\ParameterGenerator;
 
 /**
  * `hasAlias` method for the generated config proxy class.

@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Proxy\Configuration\PropertyGenerator;
 
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
-use Zend\Code\Generator\Exception\InvalidArgumentException;
-use Zend\Code\Generator\PropertyGenerator;
+use Laminas\Code\Generator\Exception\InvalidArgumentException;
+use Laminas\Code\Generator\PropertyGenerator;
 
 /**
  * The property will store the parameters which can be injected into the bean creation methods.

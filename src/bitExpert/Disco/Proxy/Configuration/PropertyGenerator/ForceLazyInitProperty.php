@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Proxy\Configuration\PropertyGenerator;
 
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
-use Zend\Code\Generator\Exception\InvalidArgumentException;
-use Zend\Code\Generator\PropertyGenerator;
+use Laminas\Code\Generator\Exception\InvalidArgumentException;
+use Laminas\Code\Generator\PropertyGenerator;
 
 /**
  * The forceLazyInit property is used as a marker to make sure that lazy dependencies are created

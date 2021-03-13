@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Proxy\LazyBean\PropertyGenerator;
 
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
-use Zend\Code\Generator\Exception\InvalidArgumentException;
-use Zend\Code\Generator\PropertyGenerator;
+use Laminas\Code\Generator\Exception\InvalidArgumentException;
+use Laminas\Code\Generator\PropertyGenerator;
 
 /**
  * Property that contains the beanId of the wrapped value object.
