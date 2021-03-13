@@ -30,8 +30,8 @@ class AnnotationBeanFactory implements BeanFactory
     /**
      * Creates a new {@link \bitExpert\Disco\BeanFactory}.
      *
-     * @param string                   $configClassName
-     * @param array                    $parameters
+     * @param class-string<Object> $configClassName
+     * @param array<string, mixed> $parameters
      * @param BeanFactoryConfiguration $config
      */
     public function __construct($configClassName, array $parameters = [], BeanFactoryConfiguration $config = null)
@@ -49,12 +49,8 @@ class AnnotationBeanFactory implements BeanFactory
      * @throws BeanException
      * @throws BeanNotFoundException
      */
-    public function get($id)
+    public function get(string $id)
     {
-        if (!is_string($id) || empty($id)) {
-            throw new BeanException('Id must be a non-empty string.');
-        }
-
         $instance = null;
 
         try {
@@ -83,12 +79,8 @@ class AnnotationBeanFactory implements BeanFactory
     /**
      * {@inheritDoc}
      */
-    public function has($id)
+    public function has(string $id)
     {
-        if (!is_string($id) || empty($id)) {
-            return false;
-        }
-
         return is_callable([$this->beanConfig, $id]) || $this->beanConfig->hasAlias($id);
     }
 }

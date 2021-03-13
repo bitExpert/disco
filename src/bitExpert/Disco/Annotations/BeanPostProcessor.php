@@ -28,8 +28,7 @@ final class BeanPostProcessor extends ParameterAwareAnnotation
     /**
      * Creates a new {@link \bitExpert\Disco\Annotations\BeanPostProcessor}.
      *
-     * @param array $attributes
-     * @throws AnnotationException
+     * @param array<string, array<string, mixed>> $attributes
      */
     public function __construct(array $attributes = [])
     {

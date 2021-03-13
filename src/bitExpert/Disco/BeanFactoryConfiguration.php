@@ -37,11 +37,11 @@ class BeanFactoryConfiguration
      */
     protected $proxyTargetDir;
     /**
-     * @var GeneratorStrategyInterface
+     * @var ?GeneratorStrategyInterface
      */
     protected $proxyWriterGenerator;
     /**
-     * @var AutoloaderInterface
+     * @var ?AutoloaderInterface
      */
     protected $proxyAutoloader;
 

@@ -30,9 +30,9 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     /**
      * @test
      */
-    public function invalidProxyTargetDirThrowsException()
+    public function invalidProxyTargetDirThrowsException(): void
     {
-        self::expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new BeanFactoryConfiguration('/abc');
     }
@@ -40,7 +40,7 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     /**
      * @test
      */
-    public function configuredProxyTargetDirCanBeRetrieved()
+    public function configuredProxyTargetDirCanBeRetrieved(): void
     {
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
         $proxyManagerConfig = $config->getProxyManagerConfiguration();
@@ -51,7 +51,7 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     /**
      * @test
      */
-    public function configuredGeneratorStrategyInstanceCanBeRetrieved()
+    public function configuredGeneratorStrategyInstanceCanBeRetrieved(): void
     {
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
         $config->setProxyWriterGenerator(new EvaluatingGeneratorStrategy());
@@ -64,7 +64,7 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     /**
      * @test
      */
-    public function configuredProxyAutoloaderInstanceCanBeRetrieved()
+    public function configuredProxyAutoloaderInstanceCanBeRetrieved(): void
     {
         /** @var AutoloaderInterface $autoloader */
         $autoloader = $this->createMock(AutoloaderInterface::class);
@@ -79,15 +79,15 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     /**
      * @test
      */
-    public function enablingProxyAutoloaderRegistersAdditionalAutoloader()
+    public function enablingProxyAutoloaderRegistersAdditionalAutoloader(): void
     {
         $autoloader = new Autoloader(new FileLocator(sys_get_temp_dir()), new ClassNameInflector('AUTOLOADER'));
 
-        /** @var array $autoloaderFunctionsBeforeBeanFactoryInit */
+        /** @var array<callable> $autoloaderFunctionsBeforeBeanFactoryInit */
         $autoloaderFunctionsBeforeBeanFactoryInit = spl_autoload_functions();
         $beanFactoryConfig = new BeanFactoryConfiguration(sys_get_temp_dir());
         $beanFactoryConfig->setProxyAutoloader($autoloader);
-        /** @var array $autoloaderFunctionsAfterBeanFactoryInit */
+        /** @var array<callable> $autoloaderFunctionsAfterBeanFactoryInit */
         $autoloaderFunctionsAfterBeanFactoryInit = spl_autoload_functions();
 
         self::assertCount(
@@ -101,7 +101,7 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     /**
      * @test
      */
-    public function existingProxyAutoloaderCanBeUnregistered()
+    public function existingProxyAutoloaderCanBeUnregistered(): void
     {
         /** @var AutoloaderInterface $autoloader1 */
         $autoloader1 = $this->createMock(AutoloaderInterface::class);
@@ -125,7 +125,7 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     /**
      * @test
      */
-    public function configuredBeanStoreInstanceCanBererieved()
+    public function configuredBeanStoreInstanceCanBererieved(): void
     {
         $beanStore = new SerializableBeanStore();
 
@@ -138,10 +138,10 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     /**
      * @test
      */
-    public function injectedInvalidProxyTargetDirThrowsException()
+    public function injectedInvalidProxyTargetDirThrowsException(): void
     {
-        self::expectException(InvalidArgumentException::class);
-        self::expectExceptionCode(10);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(10);
 
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
         $config->setProxyTargetDir('/abc');
@@ -150,10 +150,10 @@ class BeanFactoryConfigurationUnitTest extends TestCase
     /**
      * @test
      */
-    public function injectedNotWritableProxyTargetDirThrowsException()
+    public function injectedNotWritableProxyTargetDirThrowsException(): void
     {
-        self::expectException(InvalidArgumentException::class);
-        self::expectExceptionCode(20);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(20);
 
         $config = new BeanFactoryConfiguration(sys_get_temp_dir());
         $path = vfsStream::setup('root', 0x111);

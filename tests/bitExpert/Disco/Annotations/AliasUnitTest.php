@@ -23,7 +23,7 @@ class AliasUnitTest extends TestCase
     /**
      * @test
      */
-    public function aliasCanBeNamedAlias()
+    public function aliasCanBeNamedAlias(): void
     {
         $namedAlias = new Alias(['value' => ['name' => 'someAliasName']]);
 
@@ -34,10 +34,10 @@ class AliasUnitTest extends TestCase
     /**
      * @test
      */
-    public function aliasCannotBeNamedAliasAndTypeAlias()
+    public function aliasCannotBeNamedAliasAndTypeAlias(): void
     {
-        self::expectException(AnnotationException::class);
-        self::expectExceptionMessage('Type alias should not have a name!');
+        $this->expectException(AnnotationException::class);
+        $this->expectExceptionMessage('Type alias should not have a name!');
 
         new Alias(['value' => ['name' => 'someAliasName', 'type' => true]]);
     }
@@ -45,7 +45,7 @@ class AliasUnitTest extends TestCase
     /**
      * @test
      */
-    public function aliasCanBeTypeAlias()
+    public function aliasCanBeTypeAlias(): void
     {
         $typeAlias = new Alias(['value' => ['type' => true]]);
 
@@ -56,10 +56,10 @@ class AliasUnitTest extends TestCase
     /**
      * @test
      */
-    public function aliasShouldBeNamedOrTypeAlias()
+    public function aliasShouldBeNamedOrTypeAlias(): void
     {
-        self::expectException(AnnotationException::class);
-        self::expectExceptionMessage('Alias should either be a named alias or a type alias!');
+        $this->expectException(AnnotationException::class);
+        $this->expectExceptionMessage('Alias should either be a named alias or a type alias!');
 
         new Alias();
     }
@@ -67,16 +67,20 @@ class AliasUnitTest extends TestCase
     /**
      * @test
      * @dataProvider invalidNameProvider
+     * @param mixed $name
      */
-    public function aliasNameCannotBeEmpty($name)
+    public function aliasNameCannotBeEmpty(mixed $name): void
     {
-        self::expectException(AnnotationException::class);
-        self::expectExceptionMessage('Alias should either be a named alias or a type alias!');
+        $this->expectException(AnnotationException::class);
+        $this->expectExceptionMessage('Alias should either be a named alias or a type alias!');
 
         new Alias(['value' => ['name' => $name, 'type' => false]]);
     }
 
-    public function invalidNameProvider()
+    /**
+     * @return array<mixed>
+     */
+    public function invalidNameProvider(): array
     {
         return [
             [''],

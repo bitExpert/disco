@@ -1,5 +1,6 @@
 parameters:
   level: max
+  checkGenericClassInNonGenericObjectType: false
   fileExtensions:
     - php
   paths:
@@ -8,3 +9,10 @@ parameters:
   excludes_analyse:
     - %currentWorkingDirectory%/tests/bitExpert/Disco/Config/*.php
     - %currentWorkingDirectory%/tests/bitExpert/Disco/Helper/*.php
+  ignoreErrors:
+    -
+      message: '~Variable method call on bitExpert\\Disco\\Proxy\\Configuration\\AliasContainerInterface~'
+      path: src/bitExpert/Disco/AnnotationBeanFactory.php
+    -
+      message: '~Parameter #1 \$callback of function spl_autoload_register expects~'
+      path: src/bitExpert/Disco/BeanFactoryConfiguration.php

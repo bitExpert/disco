@@ -27,7 +27,7 @@ use Doctrine\Common\Annotations\AnnotationException;
 final class Alias
 {
     /**
-     * @var string
+     * @var ?string
      */
     private $name;
 
@@ -39,7 +39,7 @@ final class Alias
     /**
      * Creates a new {@link \bitExpert\Disco\Annotations\Bean\Alias}.
      *
-     * @param array $attributes
+     * @param array<string, array<string, mixed>> $attributes
      * @throws AnnotationException
      */
     public function __construct(array $attributes = [])
@@ -58,7 +58,7 @@ final class Alias
             $this->name = $attributes['value']['name'];
         }
 
-        if (!$this->type && !$this->name) {
+        if (!$this->type && (!is_string($this->name) || $this->name === '')) {
             throw new AnnotationException('Alias should either be a named alias or a type alias!');
         }
     }

@@ -27,9 +27,9 @@ use Laminas\Code\Generator\PropertyGenerator;
 class MagicWakeup extends MagicMethodGenerator
 {
     /**
-     * Creates a new {@link \bitExpert\Disco\Proxy\MethodGenerator\MagicWakeup}.
+     * Creates a new {@link \bitExpert\Disco\Proxy\LazyBean\MethodGenerator\MagicWakeup}.
      *
-     * @param ReflectionClass $originalClass
+     * @param ReflectionClass<Object> $originalClass
      * @param PropertyGenerator $valueHolderProperty
      * @param PropertyGenerator $valueHolderBeanIdProperty
      * @throws InvalidArgumentException

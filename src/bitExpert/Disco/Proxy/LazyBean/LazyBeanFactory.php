@@ -52,6 +52,7 @@ class LazyBeanFactory extends AbstractBaseFactory
      */
     public function createProxy(string $className, Closure $initializer): object
     {
+        /** @var class-string<Object> $className */
         $proxyClassName = $this->generateProxy($className);
 
         return new $proxyClassName($this->beanId, $initializer);
@@ -62,6 +63,6 @@ class LazyBeanFactory extends AbstractBaseFactory
      */
     protected function getGenerator(): ProxyGeneratorInterface
     {
-        return $this->generator ?: $this->generator = new LazyBeanGenerator();
+        return $this->generator = $this->generator ?? new LazyBeanGenerator();
     }
 }

@@ -27,9 +27,9 @@ use Laminas\Code\Generator\PropertyGenerator;
 class MagicSleep extends MagicMethodGenerator
 {
     /**
-     * Creates a new {@link \bitExpert\Disco\Proxy\MethodGenerator\MagicSleep}.
+     * Creates a new {@link \bitExpert\Disco\Proxy\LazyBean\MethodGenerator\MagicSleep}.
      *
-     * @param ReflectionClass $originalClass
+     * @param ReflectionClass<Object> $originalClass
      * @param PropertyGenerator $initializerProperty
      * @param PropertyGenerator $valueHolderProperty
      * @param PropertyGenerator $valueHolderBeanIdProperty

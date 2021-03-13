@@ -19,7 +19,7 @@ namespace bitExpert\Disco\Store;
 class SerializableBeanStore implements BeanStore
 {
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected $beans;
 
@@ -42,7 +42,7 @@ class SerializableBeanStore implements BeanStore
     /**
      * {@inheritdoc}
      */
-    public function get(string $beanId)
+    public function get(string $beanId): mixed
     {
         if (!isset($this->beans[$beanId])) {
             throw new \InvalidArgumentException(

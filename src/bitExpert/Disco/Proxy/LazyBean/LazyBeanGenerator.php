@@ -38,6 +38,7 @@ use ProxyManager\ProxyGenerator\Util\Properties;
 use ProxyManager\ProxyGenerator\Util\ProxiedMethodsFilter;
 use ProxyManager\ProxyGenerator\ValueHolder\MethodGenerator\GetWrappedValueHolderValue;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionMethod;
 use Laminas\Code\Generator\ClassGenerator;
 use Laminas\Code\Generator\Exception\InvalidArgumentException;
@@ -51,9 +52,11 @@ class LazyBeanGenerator implements ProxyGeneratorInterface
 {
     /**
      * {@inheritDoc}
-     *
+     * @param ReflectionClass $originalClass
+     * @param ClassGenerator $classGenerator
      * @throws InvalidProxiedClassException
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function generate(ReflectionClass $originalClass, ClassGenerator $classGenerator)
     {
@@ -75,12 +78,12 @@ class LazyBeanGenerator implements ProxyGeneratorInterface
         $classGenerator->addPropertyFromGenerator($publicProperties);
 
         array_map(
-            function (MethodGenerator $generatedMethod) use ($originalClass, $classGenerator) {
+            function (MethodGenerator $generatedMethod) use ($originalClass, $classGenerator): void {
                 ClassGeneratorUtils::addMethodIfNotFinal($originalClass, $classGenerator, $generatedMethod);
             },
             array_merge(
                 array_map(
-                    function (ReflectionMethod $method) use ($initializer, $valueHolder) {
+                    function (ReflectionMethod $method) use ($initializer, $valueHolder): LazyLoadingMethodInterceptor {
                         return LazyLoadingMethodInterceptor::generateMethod(
                             new MethodReflection($method->class, $method->getName()),
                             $initializer,

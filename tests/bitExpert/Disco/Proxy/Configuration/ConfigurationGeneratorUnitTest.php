@@ -58,9 +58,9 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      */
-    public function configClassWithoutAnAnnotationThrowsException()
+    public function configClassWithoutAnAnnotationThrowsException(): void
     {
-        self::expectException(InvalidProxiedClassException::class);
+        $this->expectException(InvalidProxiedClassException::class);
 
         $reflClass = new \ReflectionClass(InvalidConfiguration::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
@@ -69,9 +69,9 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      */
-    public function passingInterfaceAsConfigClassThrowsException()
+    public function passingInterfaceAsConfigClassThrowsException(): void
     {
-        self::expectException(InvalidProxiedClassException::class);
+        $this->expectException(InvalidProxiedClassException::class);
 
         $reflClass = new \ReflectionClass(InterfaceConfiguration::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
@@ -80,9 +80,9 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      */
-    public function missingBeanAnnotationThrowsException()
+    public function missingBeanAnnotationThrowsException(): void
     {
-        self::expectException(InvalidProxiedClassException::class);
+        $this->expectException(InvalidProxiedClassException::class);
 
         $reflClass = new \ReflectionClass(MissingBeanAnnotationConfiguration::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
@@ -91,9 +91,9 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      */
-    public function missingReturnTypeOfBeanDeclarationThrowsException()
+    public function missingReturnTypeOfBeanDeclarationThrowsException(): void
     {
-        self::expectException(InvalidProxiedClassException::class);
+        $this->expectException(InvalidProxiedClassException::class);
 
         $reflClass = new \ReflectionClass(MissingReturnTypeConfiguration::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
@@ -102,9 +102,9 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      */
-    public function nonExistentClassInReturnTypeThrowsException()
+    public function nonExistentClassInReturnTypeThrowsException(): void
     {
-        self::expectException(InvalidProxiedClassException::class);
+        $this->expectException(InvalidProxiedClassException::class);
 
         $reflClass = new \ReflectionClass(NonExistentReturnTypeConfiguration::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
@@ -113,9 +113,9 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      */
-    public function sameAliasUsedForMultipleBeansThrowsException()
+    public function sameAliasUsedForMultipleBeansThrowsException(): void
     {
-        self::expectException(InvalidProxiedClassException::class);
+        $this->expectException(InvalidProxiedClassException::class);
 
         $reflClass = new \ReflectionClass(BeanConfigurationWithConflictingAliases::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);
@@ -124,10 +124,10 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      */
-    public function unknownAnnotationThrowsException()
+    public function unknownAnnotationThrowsException(): void
     {
-        self::expectException(InvalidProxiedClassException::class);
-        self::expectExceptionMessageMatches('/^\[Semantical Error\] The annotation "@foo"/');
+        $this->expectException(InvalidProxiedClassException::class);
+        $this->expectExceptionMessageMatches('/^\[Semantical Error\] The annotation "@foo"/');
 
         /**
          * @foo
@@ -146,7 +146,7 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      */
-    public function parsingConfigurationWithoutAnyErrorsSucceeds()
+    public function parsingConfigurationWithoutAnyErrorsSucceeds(): void
     {
         $this->classGenerator->expects(self::atLeastOnce())
             ->method('addMethodFromGenerator');
@@ -158,7 +158,7 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      */
-    public function subclassedConfigurationIsAllowedToOverrwriteParentAlias()
+    public function subclassedConfigurationIsAllowedToOverrwriteParentAlias(): void
     {
         $this->classGenerator->expects(self::atLeastOnce())
             ->method('addMethodFromGenerator');
@@ -170,9 +170,9 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      */
-    public function parsingConfigurationWithConflictingAliasesInParentConfigurationFails()
+    public function parsingConfigurationWithConflictingAliasesInParentConfigurationFails(): void
     {
-        self::expectException(InvalidProxiedClassException::class);
+        $this->expectException(InvalidProxiedClassException::class);
 
         $reflClass = new \ReflectionClass(BeanConfigurationWithConflictingAliasesInParentClass::class);
         $this->configGenerator->generate($reflClass, $this->classGenerator);

@@ -24,7 +24,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function emptyAttributesArraySetsDefaultValues()
+    public function emptyAttributesArraySetsDefaultValues(): void
     {
         $bean = new Bean();
 
@@ -39,7 +39,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanWithSessionScope()
+    public function markingBeanWithSessionScope(): void
     {
         $bean = new Bean(['value' => ['scope' => 'session']]);
 
@@ -50,7 +50,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanWithRequestScope()
+    public function markingBeanWithRequestScope(): void
     {
         $bean = new Bean(['value' => ['scope' => 'request']]);
 
@@ -61,7 +61,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanAsSingleton()
+    public function markingBeanAsSingleton(): void
     {
         $bean = new Bean(['value' => ['singleton' => true]]);
 
@@ -71,7 +71,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanAsSingletonWithString()
+    public function markingBeanAsSingletonWithString(): void
     {
         $bean = new Bean(['value' => ['singleton' => 'true']]);
 
@@ -81,7 +81,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanAsSingletonWithInt()
+    public function markingBeanAsSingletonWithInt(): void
     {
         $bean = new Bean(['value' => ['singleton' => 1]]);
 
@@ -91,7 +91,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanAsNonSingleton()
+    public function markingBeanAsNonSingleton(): void
     {
         $bean = new Bean(['value' => ['singleton' => false]]);
 
@@ -101,7 +101,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanAsNonSingletonWithString()
+    public function markingBeanAsNonSingletonWithString(): void
     {
         $bean = new Bean(['value' => ['singleton' => 'false']]);
 
@@ -111,7 +111,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanAsNonSingletonWithInt()
+    public function markingBeanAsNonSingletonWithInt(): void
     {
         $bean = new Bean(['value' => ['singleton' => 0]]);
 
@@ -121,7 +121,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanAsLazy()
+    public function markingBeanAsLazy(): void
     {
         $bean = new Bean(['value' => ['lazy' => true]]);
 
@@ -131,7 +131,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanAsLazyWithString()
+    public function markingBeanAsLazyWithString(): void
     {
         $bean = new Bean(['value' => ['lazy' => 'true']]);
 
@@ -141,7 +141,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanAsLazyWithInt()
+    public function markingBeanAsLazyWithInt(): void
     {
         $bean = new Bean(['value' => ['lazy' => 1]]);
 
@@ -151,7 +151,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanAsNonLazy()
+    public function markingBeanAsNonLazy(): void
     {
         $bean = new Bean(['value' => ['lazy' => false]]);
 
@@ -161,7 +161,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanAsNonLazyWithString()
+    public function markingBeanAsNonLazyWithString(): void
     {
         $bean = new Bean(['value' => ['lazy' => 'false']]);
 
@@ -171,7 +171,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanAsNonLazyWithInt()
+    public function markingBeanAsNonLazyWithInt(): void
     {
         $bean = new Bean(['value' => ['lazy' => 0]]);
 
@@ -181,7 +181,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function configuredAliasesGetReturned()
+    public function configuredAliasesGetReturned(): void
     {
         $bean = new Bean([
             'value' => [
@@ -194,7 +194,7 @@ class BeanUnitTest extends TestCase
 
         self::assertEquals(
             array_map(
-                function (Alias $alias) {
+                function (Alias $alias): ?string {
                     return $alias->getName();
                 },
                 $bean->getAliases()
@@ -206,9 +206,9 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function throwsExceptionIfAliasTypeDoesNotMatch()
+    public function throwsExceptionIfAliasTypeDoesNotMatch(): void
     {
-        self::expectException(TypeError::class);
+        $this->expectException(TypeError::class);
 
         $bean = new Bean([
             'value' => [
@@ -222,7 +222,7 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function configuredParametersGetReturned()
+    public function configuredParametersGetReturned(): void
     {
         $bean = new Bean([
             'value' => [
@@ -235,7 +235,7 @@ class BeanUnitTest extends TestCase
 
         self::assertEquals(
             array_map(
-                function (Parameter $parameter) {
+                function (Parameter $parameter): string {
                     return $parameter->getName();
                 },
                 $bean->getParameters()
@@ -247,9 +247,9 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function throwsExceptionIfParameterTypeDoesNotMatch()
+    public function throwsExceptionIfParameterTypeDoesNotMatch(): void
     {
-        self::expectException(TypeError::class);
+        $this->expectException(TypeError::class);
 
         $bean = new Bean([
             'value' => [
