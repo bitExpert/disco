@@ -47,8 +47,6 @@
     "cs-check": "vendor/bin/phing sniff",
     "cs-fix": "vendor/bin/phpcbf",
     "test": "vendor/bin/phing unit",
-    "analyze": "vendor/bin/phpstan.phar analyze || true" ,
-    "post-install-cmd": "Tooly\\ScriptHandler::installPharTools",
-    "post-update-cmd": "Tooly\\ScriptHandler::installPharTools"
+    "coverage": "vendor/bin/phing unit-with-coverage"
   }
 }
