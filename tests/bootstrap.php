@@ -14,7 +14,7 @@ declare(strict_types=1);
 include __DIR__ . '/../vendor/autoload.php';
 
 // configure the Simple Logging Facade for PSR-3 loggers with a Monolog backend
-\bitExpert\Slf4PsrLog\LoggerFactory::registerFactoryCallback(function ($channel) {
+\bitExpert\Slf4PsrLog\LoggerFactory::registerFactoryCallback(function ($channel): \Monolog\Logger {
     if (!\Monolog\Registry::hasLogger($channel)) {
         \Monolog\Registry::addLogger(new \Monolog\Logger($channel));
     }

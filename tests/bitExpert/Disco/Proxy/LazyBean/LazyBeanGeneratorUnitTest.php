@@ -26,7 +26,7 @@ class LazyBeanGeneratorUnitTest extends TestCase
     /**
      * @test
      */
-    public function generateWithInterfaceAsOriginalObject()
+    public function generateWithInterfaceAsOriginalObject(): void
     {
         /** @var ClassGenerator&\PHPUnit\Framework\MockObject\MockObject $classGenerator */
         $classGenerator = $this->createMock(ClassGenerator::class);

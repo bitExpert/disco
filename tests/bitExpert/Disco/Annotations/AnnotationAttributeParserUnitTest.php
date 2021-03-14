@@ -22,15 +22,20 @@ class AnnotationAttributeParserUnitTest extends TestCase
     /**
      * @test
      * @dataProvider requireDataProvider
+     * @param mixed $parameterValue
+     * @param mixed $expectedValue
      */
-    public function requireGetsRecognizedCorrectly($parameterValue, $expectedValue)
+    public function requireGetsRecognizedCorrectly(mixed $parameterValue, mixed $expectedValue): void
     {
         self::assertSame($expectedValue, AnnotationAttributeParser::parseBooleanValue($parameterValue));
     }
 
-    public function requireDataProvider()
+    /**
+     * @return array<mixed, mixed>
+     */
+    public function requireDataProvider(): array
     {
-        $callable = function () {
+        $callable = function (): void {
         };
 
         return [

@@ -43,12 +43,13 @@ final class Parameter
     /**
      * Creates a new {@link \bitExpert\Disco\Annotations\Parameter}.
      *
-     * @param array $attributes
+     * @param array<string, array<string, mixed>> $attributes
      * @throws AnnotationException
      */
     public function __construct(array $attributes = [])
     {
         $this->required = true;
+        $this->name = '';
 
         if (isset($attributes['value'])) {
             if (isset($attributes['value']['name'])) {
@@ -64,7 +65,7 @@ final class Parameter
             }
         }
 
-        if (!$this->name) {
+        if ($this->name === '') {
             throw new AnnotationException('name attribute missing!');
         }
     }
@@ -84,7 +85,7 @@ final class Parameter
      *
      * @return mixed
      */
-    public function getDefaultValue()
+    public function getDefaultValue(): mixed
     {
         return $this->defaultValue;
     }

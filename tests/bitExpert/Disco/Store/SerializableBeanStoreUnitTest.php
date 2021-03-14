@@ -40,8 +40,9 @@ class SerializableBeanStoreUnitTest extends TestCase
     /**
      * @test
      * @dataProvider beanProvider
+     * @param mixed $bean
      */
-    public function addingAndRetrievingBeansSucceeds($bean)
+    public function addingAndRetrievingBeansSucceeds(mixed $bean): void
     {
         $this->beanStore->add('bean', $bean);
         $beanFromStore = $this->beanStore->get('bean');
@@ -52,7 +53,7 @@ class SerializableBeanStoreUnitTest extends TestCase
     /**
      * @test
      */
-    public function addingBeanWithSameBeanIdMultipleTimeWillNotTriggerError()
+    public function addingBeanWithSameBeanIdMultipleTimeWillNotTriggerError(): void
     {
         $service = new SampleService();
         $bean = new MasterService($service);
@@ -67,9 +68,9 @@ class SerializableBeanStoreUnitTest extends TestCase
     /**
      * @test
      */
-    public function gettingNonExistentBeanWillThrowException()
+    public function gettingNonExistentBeanWillThrowException(): void
     {
-        self::expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->beanStore->get('some-random-bean-instance');
     }
@@ -77,8 +78,9 @@ class SerializableBeanStoreUnitTest extends TestCase
     /**
      * @test
      * @dataProvider beanProvider
+     * @param mixed $bean
      */
-    public function beanStoreCanBeSerialized($bean)
+    public function beanStoreCanBeSerialized(mixed $bean): void
     {
         $this->beanStore->add('bean', $bean);
 
@@ -89,7 +91,10 @@ class SerializableBeanStoreUnitTest extends TestCase
         self::assertEquals($bean, $beanFromStore);
     }
 
-    public function beanProvider()
+    /**
+     * @return array<mixed>
+     */
+    public function beanProvider(): array
     {
         return [
             [new SampleService()],

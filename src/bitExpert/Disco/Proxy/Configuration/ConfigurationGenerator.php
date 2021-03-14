@@ -62,6 +62,8 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
 
     /**
      * {@inheritDoc}
+     * @param ReflectionClass $originalClass
+     * @param ClassGenerator $classGenerator
      * @throws InvalidProxiedClassException
      * @throws InvalidArgumentException
      * @throws \ReflectionException
@@ -118,7 +120,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             /** @var \bitExpert\Disco\Annotations\Bean|null $beanAnnotation */
             $beanAnnotation = $reader->getMethodAnnotation($method, Bean::class);
             if (null === $beanAnnotation) {
-                /** @var \bitExpert\Disco\Annotations\BeanPostProcessor $beanAnnotation */
+                /** @var \bitExpert\Disco\Annotations\BeanPostProcessor|null $beanAnnotation */
                 $beanAnnotation = $reader->getMethodAnnotation($method, BeanPostProcessor::class);
                 if ($beanAnnotation instanceof BeanPostProcessor) {
                     $postProcessorMethods[] = $method->name;
@@ -148,9 +150,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
 
             foreach ($beanAnnotation->getAliases() as $beanAlias) {
                 $alias = $beanAlias->isTypeAlias() ? (string) $method->getReturnType() : $beanAlias->getName();
-                if (empty($alias)) {
-                    continue;
-                }
 
                 $hasAlias = '';
                 if ($method->getDeclaringClass()->name === $originalClass->name) {

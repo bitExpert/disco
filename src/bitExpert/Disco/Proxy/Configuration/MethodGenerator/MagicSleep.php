@@ -25,7 +25,7 @@ class MagicSleep extends MagicMethodGenerator
     /**
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\MagicSleep}.
      *
-     * @param ReflectionClass $originalClass
+     * @param ReflectionClass<Object> $originalClass
      * @param SessionBeansProperty $aliasesProperty
      * @throws InvalidArgumentException
      */

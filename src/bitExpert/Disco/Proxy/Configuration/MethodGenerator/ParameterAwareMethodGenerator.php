@@ -41,7 +41,7 @@ class ParameterAwareMethodGenerator extends MethodGenerator
                     $defaultValue = '"' . $defaultValue . '"';
                     break;
                 case 'boolean':
-                    $defaultValue = $defaultValue ? 'true' : 'false';
+                    $defaultValue = ($defaultValue === true) ? 'true' : 'false';
                     break;
                 case 'NULL':
                     $defaultValue = 'null';
@@ -50,7 +50,7 @@ class ParameterAwareMethodGenerator extends MethodGenerator
                     break;
             }
 
-            $template = empty($defaultValue) ? '$this->%s("%s", %s)' : '$this->%s("%s", %s, %s)';
+            $template = ($defaultValue === '') ? '$this->%s("%s", %s)' : '$this->%s("%s", %s, %s)';
             $required = $methodParameter->isRequired() ? 'true' : 'false';
             $methodName = $parameterValuesMethod->getName();
             $parameters[] = \sprintf($template, $methodName, $methodParameter->getName(), $required, $defaultValue);

@@ -27,7 +27,7 @@ class Constructor extends MethodGenerator
     /**
      * Creates a new {@link \bitExpert\Disco\Proxy\LazyBean\MethodGenerator\Constructor}.
      *
-     * @param ReflectionClass $originalClass
+     * @param ReflectionClass<Object> $originalClass
      * @param PropertyGenerator $initializerProperty
      * @param PropertyGenerator $valueHolderBeanIdProperty
      * @throws InvalidArgumentException
@@ -56,7 +56,7 @@ class Constructor extends MethodGenerator
             . '@param \Closure|null \$initializer'
         );
         $this->setBody(
-            ($unsetProperties ? 'unset(' . implode(', ', $unsetProperties) . ');' . PHP_EOL . PHP_EOL : '')
+            (count($unsetProperties) > 0 ? 'unset(' . implode(', ', $unsetProperties) . ');' . PHP_EOL . PHP_EOL : '')
             . '$this->' . $initializerProperty->getName() . ' = $initializer;' . PHP_EOL
             . '$this->' . $valueHolderBeanIdProperty->getName() . ' = $beanId;'
         );
