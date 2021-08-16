@@ -12,7 +12,8 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
-use bitExpert\Disco\Annotations\BeanPostProcessor;
+use bitExpert\Disco\Attributes\BeanPostProcessor;
+use bitExpert\Disco\Attributes\Parameter;
 use Laminas\Code\Generator\MethodGenerator;
 use Laminas\Code\Reflection\MethodReflection;
 
@@ -22,20 +23,20 @@ class BeanPostProcessorMethod extends ParameterAwareMethodGenerator
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanPostProcessorMethod}.
      *
      * @param MethodReflection $originalMethod
-     * @param BeanPostProcessor $beanPostProcessorMetadata
+     * @param \bitExpert\Disco\Attributes\Parameter[] $beanPostProcessorParameters
      * @param GetParameter $parameterValuesMethod
      * @return MethodGenerator
      * @throws \Laminas\Code\Generator\Exception\InvalidArgumentException
      */
     public static function generateMethod(
         MethodReflection $originalMethod,
-        BeanPostProcessor $beanPostProcessorMetadata,
+        array $beanPostProcessorParameters,
         GetParameter $parameterValuesMethod
     ): MethodGenerator {
         $method = static::fromReflection($originalMethod);
 
         $methodParams = static::convertMethodParamsToString(
-            $beanPostProcessorMetadata->getParameters(),
+            $beanPostProcessorParameters,
             $parameterValuesMethod
         );
         $beanId = $originalMethod->name;

@@ -72,11 +72,12 @@ Disco 0.5.0 dropped support for the @return annotations and strictly
 relies on the return type definitions now. 
 
 While this was valid configuration code before the 0.5.0 release:
+
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
 /**
@@ -96,11 +97,12 @@ class MyConfiguration
 ```
 
 This is how you have to define bean instances for the 0.5.0 release:
+
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
 /**

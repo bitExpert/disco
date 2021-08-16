@@ -10,12 +10,14 @@
  */
 declare(strict_types=1);
 
-namespace bitExpert\Disco\Annotations;
+namespace bitExpert\Disco\Attributes;
+
+use Attribute;
 
 /**
- * @Annotation
- * @Target({"CLASS"})
+ * Non-repeatable Attribute to declare a method as a BeanPostProcessor factory.
  */
-final class Configuration
+#[Attribute(Attribute::TARGET_METHOD)]
+final class BeanPostProcessor
 {
 }

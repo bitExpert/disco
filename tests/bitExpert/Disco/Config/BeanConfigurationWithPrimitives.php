@@ -12,60 +12,45 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Annotations\Parameters;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class BeanConfigurationWithPrimitives
 {
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function arrayPrimitive(): array
     {
         return [];
     }
 
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function callablePrimitive(): callable
     {
         return function () {
         };
     }
 
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function boolPrimitive(): bool
     {
         return true;
     }
 
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function floatPrimitive(): float
     {
         return 1.23;
     }
 
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function intPrimitive(): int
     {
         return 5;
     }
 
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function serviceWithStringInjected(): SampleService
     {
         $service = new SampleService();
@@ -73,9 +58,7 @@ class BeanConfigurationWithPrimitives
         return $service;
     }
 
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function stringPrimitive(): string
     {
         return 'Disco';

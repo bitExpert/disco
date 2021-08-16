@@ -9,8 +9,8 @@ By default a bean instance is configured to be returned as a singleton instance 
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
 /**
@@ -34,8 +34,8 @@ In case you explicitly want to return a new instance for every
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
 /**
@@ -60,8 +60,8 @@ By default Disco will return non-lazy bean instances, which means you will get t
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
 /**
@@ -84,8 +84,8 @@ In case the construction of your bean is quite time consuming — e.g., a call t
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
 /**
@@ -119,8 +119,8 @@ By default beans are request scoped which means a new instance gets created for 
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
 /**
@@ -143,8 +143,8 @@ To let Disco create a session scoped bean, simply set the `scope` attribute to `
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
 /**
@@ -180,9 +180,9 @@ Simply add the `aliases` attribute to the `@Bean` annotation to define a list of
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Attributes\Bean;
 use bitExpert\Disco\Annotations\Àlias;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
 /**

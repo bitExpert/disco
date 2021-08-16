@@ -15,7 +15,6 @@ namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 use bitExpert\Disco\BeanNotFoundException;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\AliasesProperty;
 use ProxyManager\Generator\MethodGenerator;
-use ReflectionClass;
 use Laminas\Code\Generator\Exception\InvalidArgumentException;
 use Laminas\Code\Generator\ParameterGenerator;
 

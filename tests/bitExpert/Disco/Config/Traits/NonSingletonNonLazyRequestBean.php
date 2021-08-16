@@ -12,14 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config\Traits;
 
-use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Attributes\Bean;
 use bitExpert\Disco\Helper\SampleService;
 
 trait NonSingletonNonLazyRequestBean
 {
-    /**
-     * @Bean({"singleton"=false, "lazy"=false, "scope"="request"})
-     */
+    #[Bean(singleton: false, lazy: false, scope: Bean::SCOPE_REQUEST)]
     public function nonSingletonNonLazyRequestBeanInTrait(): SampleService
     {
         return new SampleService();

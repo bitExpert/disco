@@ -5,8 +5,8 @@ To inject a bean as a dependency simply call the respective method of the config
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 use bitExpert\Disco\Helper\MasterService;
 

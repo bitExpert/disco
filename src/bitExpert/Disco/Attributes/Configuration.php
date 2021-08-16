@@ -10,11 +10,14 @@
  */
 declare(strict_types=1);
 
-namespace bitExpert\Disco\Config;
+namespace bitExpert\Disco\Attributes;
 
-use bitExpert\Disco\Attributes\Configuration;
+use Attribute;
 
-#[Configuration]
-interface InterfaceConfiguration
+/**
+ * Non-repeatable Attribute to mark a class a Beans or BeanPostProcessors provider.
+ */
+#[Attribute(Attribute::TARGET_CLASS)]
+final class Configuration
 {
 }

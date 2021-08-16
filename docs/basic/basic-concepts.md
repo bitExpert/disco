@@ -11,7 +11,7 @@ Annotating a class with `@Configuration` indicates that its primary purpose is a
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Configuration;
 
 /**
  * @Configuration
@@ -28,8 +28,8 @@ To declare a bean, simply annotate a method with the `@Bean` annotation. You use
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
 /**

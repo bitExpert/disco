@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
-use bitExpert\Disco\Helper\SampleService;
+use bitExpert\Disco\Attributes\Bean;
 use PHPUnit\Framework\TestCase;
-use TypeError;
+use Webmozart\Assert\InvalidArgumentException;
 
 /**
- * Unit tests for {@link \bitExpert\Disco\Annotations\Bean}.
+ * Unit tests for {@link \bitExpert\Disco\Attributes\Bean}.
  */
 class BeanUnitTest extends TestCase
 {
@@ -32,8 +32,6 @@ class BeanUnitTest extends TestCase
         self::assertFalse($bean->isSession());
         self::assertTrue($bean->isSingleton());
         self::assertFalse($bean->isLazy());
-        self::assertEmpty($bean->getAliases());
-        self::assertEmpty($bean->getParameters());
     }
 
     /**
@@ -41,7 +39,7 @@ class BeanUnitTest extends TestCase
      */
     public function markingBeanWithSessionScope(): void
     {
-        $bean = new Bean(['value' => ['scope' => 'session']]);
+        $bean = new Bean(scope: Bean::SCOPE_SESSION);
 
         self::assertTrue($bean->isSession());
         self::assertFalse($bean->isRequest());
@@ -52,7 +50,7 @@ class BeanUnitTest extends TestCase
      */
     public function markingBeanWithRequestScope(): void
     {
-        $bean = new Bean(['value' => ['scope' => 'request']]);
+        $bean = new Bean(scope: Bean::SCOPE_REQUEST);
 
         self::assertTrue($bean->isRequest());
         self::assertFalse($bean->isSession());
@@ -63,7 +61,7 @@ class BeanUnitTest extends TestCase
      */
     public function markingBeanAsSingleton(): void
     {
-        $bean = new Bean(['value' => ['singleton' => true]]);
+        $bean = new Bean(singleton: true);
 
         self::assertTrue($bean->isSingleton());
     }
@@ -73,17 +71,7 @@ class BeanUnitTest extends TestCase
      */
     public function markingBeanAsSingletonWithString(): void
     {
-        $bean = new Bean(['value' => ['singleton' => 'true']]);
-
-        self::assertTrue($bean->isSingleton());
-    }
-
-    /**
-     * @test
-     */
-    public function markingBeanAsSingletonWithInt(): void
-    {
-        $bean = new Bean(['value' => ['singleton' => 1]]);
+        $bean = new Bean(singleton: true);
 
         self::assertTrue($bean->isSingleton());
     }
@@ -93,27 +81,7 @@ class BeanUnitTest extends TestCase
      */
     public function markingBeanAsNonSingleton(): void
     {
-        $bean = new Bean(['value' => ['singleton' => false]]);
-
-        self::assertFalse($bean->isSingleton());
-    }
-
-    /**
-     * @test
-     */
-    public function markingBeanAsNonSingletonWithString(): void
-    {
-        $bean = new Bean(['value' => ['singleton' => 'false']]);
-
-        self::assertFalse($bean->isSingleton());
-    }
-
-    /**
-     * @test
-     */
-    public function markingBeanAsNonSingletonWithInt(): void
-    {
-        $bean = new Bean(['value' => ['singleton' => 0]]);
+        $bean = new Bean(singleton: false);
 
         self::assertFalse($bean->isSingleton());
     }
@@ -123,27 +91,7 @@ class BeanUnitTest extends TestCase
      */
     public function markingBeanAsLazy(): void
     {
-        $bean = new Bean(['value' => ['lazy' => true]]);
-
-        self::assertTrue($bean->isLazy());
-    }
-
-    /**
-     * @test
-     */
-    public function markingBeanAsLazyWithString(): void
-    {
-        $bean = new Bean(['value' => ['lazy' => 'true']]);
-
-        self::assertTrue($bean->isLazy());
-    }
-
-    /**
-     * @test
-     */
-    public function markingBeanAsLazyWithInt(): void
-    {
-        $bean = new Bean(['value' => ['lazy' => 1]]);
+        $bean = new Bean(lazy: true);
 
         self::assertTrue($bean->isLazy());
     }
@@ -153,7 +101,7 @@ class BeanUnitTest extends TestCase
      */
     public function markingBeanAsNonLazy(): void
     {
-        $bean = new Bean(['value' => ['lazy' => false]]);
+        $bean = new Bean(lazy: false);
 
         self::assertFalse($bean->isLazy());
     }
@@ -161,102 +109,10 @@ class BeanUnitTest extends TestCase
     /**
      * @test
      */
-    public function markingBeanAsNonLazyWithString(): void
+    public function throwsExceptionIfScopeIsInvalid(): void
     {
-        $bean = new Bean(['value' => ['lazy' => 'false']]);
+        $this->expectException(InvalidArgumentException::class);
 
-        self::assertFalse($bean->isLazy());
-    }
-
-    /**
-     * @test
-     */
-    public function markingBeanAsNonLazyWithInt(): void
-    {
-        $bean = new Bean(['value' => ['lazy' => 0]]);
-
-        self::assertFalse($bean->isLazy());
-    }
-
-    /**
-     * @test
-     */
-    public function configuredAliasesGetReturned(): void
-    {
-        $bean = new Bean([
-            'value' => [
-                'aliases' => [
-                    new Alias(['value' => ['name' => 'someAlias']]),
-                    new Alias(['value' => ['name' => 'yetAnotherAlias']])
-                ]
-            ]
-        ]);
-
-        self::assertEquals(
-            array_map(
-                function (Alias $alias): ?string {
-                    return $alias->getName();
-                },
-                $bean->getAliases()
-            ),
-            ['someAlias', 'yetAnotherAlias']
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function throwsExceptionIfAliasTypeDoesNotMatch(): void
-    {
-        $this->expectException(TypeError::class);
-
-        $bean = new Bean([
-            'value' => [
-                'aliases' => [
-                    new SampleService()
-                ]
-            ]
-        ]);
-    }
-
-    /**
-     * @test
-     */
-    public function configuredParametersGetReturned(): void
-    {
-        $bean = new Bean([
-            'value' => [
-                'parameters' => [
-                    new Parameter(['value' => ['name' => 'parameterName']]),
-                    new Parameter(['value' => ['name' => 'yetAnotherParameter']])
-                ]
-            ]
-        ]);
-
-        self::assertEquals(
-            array_map(
-                function (Parameter $parameter): string {
-                    return $parameter->getName();
-                },
-                $bean->getParameters()
-            ),
-            ['parameterName', 'yetAnotherParameter']
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function throwsExceptionIfParameterTypeDoesNotMatch(): void
-    {
-        $this->expectException(TypeError::class);
-
-        $bean = new Bean([
-            'value' => [
-                'parameters' => [
-                    new SampleService()
-                ]
-            ]
-        ]);
+        new Bean(scope: 3);
     }
 }

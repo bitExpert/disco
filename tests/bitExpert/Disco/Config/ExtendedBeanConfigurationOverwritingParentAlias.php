@@ -12,25 +12,17 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Annotations\Alias;
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
+use bitExpert\Disco\Attributes\ReturnTypeAlias;
 use bitExpert\Disco\Helper\SampleService;
 use bitExpert\Disco\Helper\SampleServiceInterface;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class ExtendedBeanConfigurationOverwritingParentAlias extends BeanConfigurationWithAliases
 {
-    /**
-     * @Bean({
-     *   "aliases"={
-     *     @Alias({"type"=true})
-     *   }
-     * })
-     * @return SampleServiceInterface
-     */
+    #[Bean]
+    #[ReturnTypeAlias]
     public function extendedSampleServiceWithInterfaceReturnTypeAlias(): SampleServiceInterface
     {
         return new SampleService();

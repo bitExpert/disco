@@ -16,14 +16,12 @@ use bitExpert\Disco\Config\BeanConfiguration;
 use bitExpert\Disco\Config\BeanConfigurationWithConflictingAliases;
 use bitExpert\Disco\Config\BeanConfigurationWithConflictingAliasesInParentClass;
 use bitExpert\Disco\Config\ExtendedBeanConfigurationOverwritingParentAlias;
-use bitExpert\Disco\Config\BeanConfigurationWithNativeTypeAlias;
 use bitExpert\Disco\Config\InterfaceConfiguration;
 use bitExpert\Disco\Config\InvalidConfiguration;
 use bitExpert\Disco\Config\MissingBeanAnnotationConfiguration;
 use bitExpert\Disco\Config\MissingReturnTypeConfiguration;
 use bitExpert\Disco\Config\NonExistentReturnTypeConfiguration;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use ProxyManager\Exception\InvalidProxiedClassException;
 use Laminas\Code\Generator\ClassGenerator;
 
@@ -124,10 +122,10 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      */
-    public function unknownAnnotationThrowsException(): void
+    public function missingConfigurationAttributeThrowsException(): void
     {
         $this->expectException(InvalidProxiedClassException::class);
-        $this->expectExceptionMessageMatches('/^\[Semantical Error\] The annotation "@foo"/');
+        $this->expectExceptionMessageMatches('/#\[Configuration\] attribute missing!/');
 
         /**
          * @foo
@@ -158,7 +156,7 @@ class ConfigurationGeneratorUnitTest extends TestCase
     /**
      * @test
      */
-    public function subclassedConfigurationIsAllowedToOverrwriteParentAlias(): void
+    public function subclassedConfigurationIsAllowedToOverwriteParentAlias(): void
     {
         $this->classGenerator->expects(self::atLeastOnce())
             ->method('addMethodFromGenerator');

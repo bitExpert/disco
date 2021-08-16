@@ -15,10 +15,10 @@
   ],
   "require": {
     "php": "^8.0.0",
-    "psr/container": "^1.1.1",
-    "doctrine/annotations": "^1.12.1",
+    "bitexpert/slf4psrlog": "^0.1.3",
     "ocramius/proxy-manager": "^2.11.1",
-    "bitexpert/slf4psrlog": "^0.1.3"
+    "psr/container": "^1.1.1",
+    "webmozart/assert": "^1.10"
   },
   "require-dev": {
     "bookdown/bookdown": "@dev",

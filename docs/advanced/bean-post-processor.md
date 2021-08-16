@@ -30,8 +30,8 @@ To register the `SampleServiceBeanPostProcessor` with Disco create a method in y
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\BeanPostProcessor;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\BeanPostProcessor;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleServiceBeanPostProcessor;
 
 /**

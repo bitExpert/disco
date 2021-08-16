@@ -12,24 +12,16 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Annotations\Parameter;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
+use bitExpert\Disco\Attributes\Parameter;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class BeanConfigurationWithParameters
 {
-    /**
-     * @Bean({
-     *   "singleton"=false,
-     *   "parameters"={
-     *     @Parameter({"name" = "test"})
-     *   }
-     * })
-     */
+    #[Bean(singleton: false)]
+    #[Parameter(name: 'test', key: 'test')]
     public function sampleServiceWithParam($test = ''): SampleService
     {
         $service = new SampleService();
@@ -37,14 +29,8 @@ class BeanConfigurationWithParameters
         return $service;
     }
 
-    /**
-     * @Bean({
-     *   "singleton"=false,
-     *   "parameters"={
-     *     @Parameter({"name" = "test", "default" = null})
-     *   }
-     * })
-     */
+    #[Bean(singleton: false)]
+    #[Parameter(name: 'test', key: 'test', default: null)]
     public function sampleServiceWithParamNull($test = ''): SampleService
     {
         $service = new SampleService();
@@ -52,14 +38,8 @@ class BeanConfigurationWithParameters
         return $service;
     }
 
-    /**
-     * @Bean({
-     *   "singleton"=false,
-     *   "parameters"={
-     *     @Parameter({"name" = "test", "default" = true})
-     *   }
-     * })
-     */
+    #[Bean(singleton: false)]
+    #[Parameter(name: 'test', key: 'test', default: true)]
     public function sampleServiceWithParamBool($test = ''): SampleService
     {
         $service = new SampleService();
@@ -67,14 +47,8 @@ class BeanConfigurationWithParameters
         return $service;
     }
 
-    /**
-     * @Bean({
-     *   "singleton"=false,
-     *   "parameters"={
-     *     @Parameter({"name" = "test", "default" = 0})
-     *   }
-     * })
-     */
+    #[Bean(singleton: false)]
+    #[Parameter(name: 'test', key: 'test', default: 0)]
     public function sampleServiceWithParamEmpty($test = ''): SampleService
     {
         $service = new SampleService();
@@ -82,14 +56,8 @@ class BeanConfigurationWithParameters
         return $service;
     }
 
-    /**
-     * @Bean({
-     *   "singleton"=false,
-     *   "parameters"={
-     *     @Parameter({"name" = "test.nested.key"})
-     *   }
-     * })
-     */
+    #[Bean(singleton: false)]
+    #[Parameter(name: 'test', key: 'test.nested.key')]
     public function sampleServiceWithNestedParamKey($test = ''): SampleService
     {
         $service = new SampleService();
@@ -97,14 +65,8 @@ class BeanConfigurationWithParameters
         return $service;
     }
 
-    /**
-     * @Bean({
-     *   "singleton"=false,
-     *   "parameters"={
-     *     @Parameter({"name" = "test", "default" = "myDefaultValue"})
-     *   }
-     * })
-     */
+    #[Bean(singleton: false)]
+    #[Parameter(name: 'test', key: 'test', default: 'myDefaultValue')]
     public function sampleServiceWithParamDefaultValue($test = ''): SampleService
     {
         $service = new SampleService();
@@ -112,14 +74,8 @@ class BeanConfigurationWithParameters
         return $service;
     }
 
-    /**
-     * @Bean({
-     *   "singleton"=false,
-     *   "parameters"={
-     *     @Parameter({"name" = "test", "required" = false})
-     *   }
-     * })
-     */
+    #[Bean(singleton: false)]
+    #[Parameter(name: 'test', key: 'test', required: false)]
     public function sampleServiceWithoutRequiredParam($test = ''): SampleService
     {
         $service = new SampleService();

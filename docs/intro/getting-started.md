@@ -31,7 +31,7 @@ Next up you need to create a configuration class ```MyConfiguration```. The clas
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Configuration;
 
 /**
  * @Configuration

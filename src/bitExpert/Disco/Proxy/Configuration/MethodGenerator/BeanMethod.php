@@ -12,7 +12,8 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
-use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Parameter;
 use bitExpert\Disco\BeanException;
 use bitExpert\Disco\InitializedBean;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanFactoryConfigurationProperty;
@@ -22,7 +23,7 @@ use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
 use bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory;
 use ProxyManager\Exception\InvalidProxiedClassException;
 use ProxyManager\Proxy\LazyLoadingInterface;
-use ReflectionType;
+use ReflectionNamedType;
 use Laminas\Code\Generator\MethodGenerator;
 use Laminas\Code\Generator\ParameterGenerator;
 use Laminas\Code\Reflection\MethodReflection;
@@ -39,8 +40,9 @@ class BeanMethod extends ParameterAwareMethodGenerator
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanMethod}.
      *
      * @param MethodReflection $originalMethod
-     * @param Bean $beanMetadata
-     * @param ReflectionType|null $beanType
+     * @param \bitExpert\Disco\Attributes\Bean $beanMetadata
+     * @param \bitExpert\Disco\Attributes\Parameter[] $parameters
+     * @param ReflectionNamedType|null $beanTypeName
      * @param ForceLazyInitProperty $forceLazyInitProperty
      * @param SessionBeansProperty $sessionBeansProperty
      * @param BeanPostProcessorsProperty $postProcessorsProperty
@@ -52,15 +54,16 @@ class BeanMethod extends ParameterAwareMethodGenerator
      * @throws \ProxyManager\Exception\InvalidProxiedClassException
      */
     public static function generateMethod(
-        MethodReflection $originalMethod,
-        Bean $beanMetadata,
-        ?ReflectionType $beanType,
-        ForceLazyInitProperty $forceLazyInitProperty,
-        SessionBeansProperty $sessionBeansProperty,
-        BeanPostProcessorsProperty $postProcessorsProperty,
+        MethodReflection                 $originalMethod,
+        Bean                             $beanMetadata,
+        array                            $parameters,
+        ?ReflectionNamedType             $beanType,
+        ForceLazyInitProperty            $forceLazyInitProperty,
+        SessionBeansProperty             $sessionBeansProperty,
+        BeanPostProcessorsProperty       $postProcessorsProperty,
         BeanFactoryConfigurationProperty $beanFactoryConfigurationProperty,
-        GetParameter $parameterValuesMethod,
-        WrapBeanAsLazy $wrapBeanAsLazy
+        GetParameter                     $parameterValuesMethod,
+        WrapBeanAsLazy                   $wrapBeanAsLazy
     ): MethodGenerator {
         if (null === $beanType) {
             throw new InvalidProxiedClassException(
@@ -71,22 +74,22 @@ class BeanMethod extends ParameterAwareMethodGenerator
                 )
             );
         }
-        $beanType = (string) $beanType;
+        $beanTypeName = $beanType->getName();
 
         $method = static::fromReflection($originalMethod);
-        $methodParams = static::convertMethodParamsToString($beanMetadata->getParameters(), $parameterValuesMethod);
+        $methodParams = static::convertMethodParamsToString($parameters, $parameterValuesMethod);
         $beanId = $originalMethod->name;
         $body = '';
 
-        if (in_array($beanType, ['array', 'callable', 'bool', 'float', 'int', 'string'], true)) {
+        if ($beanType->isBuiltin()) {
             // return type is a primitive, simply call parent method and return immediately
             $body .= 'return parent::' . $beanId . '(' . $methodParams . ');' . PHP_EOL;
-        } elseif (class_exists($beanType) || interface_exists($beanType)) {
+        } elseif (class_exists($beanTypeName) || interface_exists($beanTypeName)) {
             if ($beanMetadata->isLazy()) {
                 $body = static::generateLazyBeanCode(
                     '',
                     $beanId,
-                    $beanType,
+                    $beanTypeName,
                     $beanMetadata,
                     $methodParams,
                     $forceLazyInitProperty,
@@ -98,7 +101,7 @@ class BeanMethod extends ParameterAwareMethodGenerator
                 $body = static::generateNonLazyBeanCode(
                     '',
                     $beanId,
-                    $beanType,
+                    $beanTypeName,
                     $beanMetadata,
                     $methodParams,
                     $forceLazyInitProperty,
@@ -154,7 +157,7 @@ class BeanMethod extends ParameterAwareMethodGenerator
      * @param string $padding
      * @param string $beanId
      * @param string $beanType
-     * @param Bean $beanMetadata
+     * @param \bitExpert\Disco\Attributes\Bean $beanMetadata
      * @param string $methodParams
      * @param ForceLazyInitProperty $forceLazyInitProperty
      * @param SessionBeansProperty $sessionBeansProperty
@@ -279,7 +282,7 @@ class BeanMethod extends ParameterAwareMethodGenerator
      * @param string $padding
      * @param string $beanId
      * @param string $beanType
-     * @param Bean $beanMetadata
+     * @param \bitExpert\Disco\Attributes\Bean $beanMetadata
      * @param string $methodParams
      * @param ForceLazyInitProperty $forceLazyInitProperty
      * @param SessionBeansProperty $sessionBeansProperty

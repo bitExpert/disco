@@ -12,54 +12,36 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Annotations\Alias;
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Alias;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
+use bitExpert\Disco\Attributes\ReturnTypeAlias;
 use bitExpert\Disco\Helper\SampleService;
 use bitExpert\Disco\Helper\SampleServiceInterface;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class BeanConfigurationWithAliases
 {
-    /**
-     * @Bean({
-     *   "singelton"=true,
-     *   "aliases"={
-     *      @Alias({"name" = "\my\Custom\Namespace"}),
-     *      @Alias({"name" = "my::Custom::Namespace"}),
-     *      @Alias({"name" = "Alias_With_Underscore"}),
-     *      @Alias({"name" = "123456"}),
-     *      @Alias({"type" = true})
-     *   }
-     * })
-     */
+    #[Bean(singleton: true)]
+    #[Alias(name: '\my\Custom\Namespace')]
+    #[Alias(name: 'my::Custom::Namespace')]
+    #[Alias(name: 'Alias_With_Underscore')]
+    #[Alias(name: '123456')]
+    #[ReturnTypeAlias]
     public function sampleServiceWithAliases(): SampleService
     {
         return new SampleService();
     }
 
-    /**
-     * @Bean({
-     *   "aliases"={
-     *     @Alias({"type"=true})
-     *   }
-     * })
-     * @return SampleServiceInterface
-     */
+    #[Bean]
+    #[ReturnTypeAlias]
     public function sampleServiceWithInterfaceReturnTypeAlias(): SampleServiceInterface
     {
         return new SampleService();
     }
 
-    /**
-     * @Bean({
-     *   "aliases"={
-     *      @Alias({"name"="aliasIsPublicForInternalService"})
-     *   }
-     * })
-     */
+    #[Bean]
+    #[Alias(name: 'aliasIsPublicForInternalService')]
     protected function internalServiceWithAlias(): SampleService
     {
         return new SampleService();

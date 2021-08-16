@@ -12,32 +12,53 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
-use Doctrine\Common\Annotations\AnnotationException;
+use bitExpert\Disco\Attributes\Parameter;
 use PHPUnit\Framework\TestCase;
+use Webmozart\Assert\InvalidArgumentException;
 
 /**
- * Unit tests for {@link \bitExpert\Disco\Annotations\Parameter}.
+ * Unit tests for {@link \bitExpert\Disco\Attributes\Parameter}.
  */
 class ParameterUnitTest extends TestCase
 {
     /**
      * @test
      */
-    public function missingNameWillThrowAnnotationException(): void
+    public function emptyNameWillThrowAnnotationException(): void
     {
-        $this->expectException(AnnotationException::class);
+        $this->expectException(InvalidArgumentException::class);
 
-        new Parameter();
+        new Parameter('', 'myParam');
     }
 
     /**
      * @test
      */
-    public function parameterNameIsParsed(): void
+    public function emptyKeyWillThrowAnnotationException(): void
     {
-        $parameter = new Parameter(['value' => ['name' => 'myParam']]);
+        $this->expectException(InvalidArgumentException::class);
 
-        self::assertSame('myParam', $parameter->getName());
+        new Parameter('name', '');
+    }
+
+    /**
+     * @test
+     */
+    public function nameIsSet(): void
+    {
+        $parameter = new Parameter(name: 'paramName', key: 'key');
+
+        self::assertSame('paramName', $parameter->getName());
+    }
+
+    /**
+     * @test
+     */
+    public function keyIsSet(): void
+    {
+        $parameter = new Parameter(name: 'paramName', key: 'key');
+
+        self::assertSame('key', $parameter->getKey());
     }
 
     /**
@@ -45,7 +66,7 @@ class ParameterUnitTest extends TestCase
      */
     public function defaultValueDefaultsToNull(): void
     {
-        $parameter = new Parameter(['value' => ['name' => 'myParam']]);
+        $parameter = new Parameter(name: 'paramName', key: 'myParam');
 
         self::assertNull($parameter->getDefaultValue());
     }
@@ -57,7 +78,7 @@ class ParameterUnitTest extends TestCase
      */
     public function defaultValueIsParsed(mixed $defaultValue): void
     {
-        $parameter = new Parameter(['value' => ['name' => 'myParam', 'default' => $defaultValue]]);
+        $parameter = new Parameter(name: 'paramName', key: 'myParam', default: $defaultValue);
 
         self::assertSame($defaultValue, $parameter->getDefaultValue());
     }
@@ -67,7 +88,7 @@ class ParameterUnitTest extends TestCase
      */
     public function requireDefaultsToTrue(): void
     {
-        $parameter = new Parameter(['value' => ['name' => 'myParam']]);
+        $parameter = new Parameter(name: 'paramName', key: 'myParam');
 
         self::assertTrue($parameter->isRequired());
     }
@@ -79,7 +100,7 @@ class ParameterUnitTest extends TestCase
      */
     public function requireIsParsed(bool $requireValue): void
     {
-        $parameter = new Parameter(['value' => ['name' => 'myParam', 'required' => $requireValue]]);
+        $parameter = new Parameter(name: 'paramName', key: 'myParam', required: $requireValue);
 
         self::assertSame($requireValue, $parameter->isRequired());
     }

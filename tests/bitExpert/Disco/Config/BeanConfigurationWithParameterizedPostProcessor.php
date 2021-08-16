@@ -12,33 +12,24 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\BeanPostProcessor;
-use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Annotations\Parameter;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\BeanPostProcessor;
+use bitExpert\Disco\Attributes\Configuration;
+use bitExpert\Disco\Attributes\Parameter;
 use bitExpert\Disco\Helper\ParameterizedSampleServiceBeanPostProcessor;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class BeanConfigurationWithParameterizedPostProcessor
 {
-    /**
-     * @BeanPostProcessor({
-     *   "parameters"={
-     *      @Parameter({"name" = "test"})
-     *   }
-     * })
-     */
+    #[BeanPostProcessor]
+    #[Parameter(name: 'test', key: 'test')]
     public function sampleServiceBeanPostProcessor($test = ''): ParameterizedSampleServiceBeanPostProcessor
     {
         return new ParameterizedSampleServiceBeanPostProcessor($test);
     }
 
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function nonSingletonNonLazyRequestBean(): SampleService
     {
         return new SampleService();

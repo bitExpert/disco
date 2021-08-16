@@ -12,18 +12,14 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class BeanConfigurationPersistence
 {
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function sampleService(): SampleService
     {
         return new SampleService();

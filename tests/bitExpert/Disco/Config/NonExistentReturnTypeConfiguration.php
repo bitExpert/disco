@@ -12,18 +12,14 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class NonExistentReturnTypeConfiguration
 {
-    /**
-     * @Bean({"singleton"=false, "lazy"=false, "scope"="request"})
-     */
+    #[Bean(singleton: false, lazy: false, scope: Bean::SCOPE_REQUEST)]
     public function nonSingletonNonLazyRequestBean(): \MyOtherClass
     {
         return new SampleService();

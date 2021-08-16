@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
-use bitExpert\Disco\Annotations\Parameter;
+use bitExpert\Disco\Attributes\Parameter;
 use Laminas\Code\Generator\MethodGenerator;
 
 /**
@@ -53,7 +53,7 @@ class ParameterAwareMethodGenerator extends MethodGenerator
             $template = ($defaultValue === '') ? '$this->%s("%s", %s)' : '$this->%s("%s", %s, %s)';
             $required = $methodParameter->isRequired() ? 'true' : 'false';
             $methodName = $parameterValuesMethod->getName();
-            $parameters[] = \sprintf($template, $methodName, $methodParameter->getName(), $required, $defaultValue);
+            $parameters[] = \sprintf($template, $methodName, $methodParameter->getKey(), $required, $defaultValue);
         }
 
         return \implode(', ', $parameters);

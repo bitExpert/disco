@@ -32,7 +32,7 @@ Next up you need to create a configuration class `MyConfiguration` and document 
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Configuration;
 
 /**
  * @Configuration
@@ -48,8 +48,8 @@ Doing this registers the instance with Disco and uses the type specified by the 
 ```php
 <?php
 
-use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Attributes\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
 /**
