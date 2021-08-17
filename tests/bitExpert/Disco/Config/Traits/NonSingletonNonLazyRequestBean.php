@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config\Traits;
 
-use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Helper\SampleService;
 
 trait NonSingletonNonLazyRequestBean

@@ -2,7 +2,10 @@
 
 ## Prerequisites
 
-Disco needs at least [PHP](http://php.net) 7.1 to run. Disco relies on the [return type declarations](http://php.net/manual/en/functions.returning-values.php#functions.returning-values.type-declaration) feature introduced with PHP 7.0 as well as the `ocramius/proxy-manager` package which in the latest version is only compatible with PHP 7.1.
+Version 1 of Disco needs at least [PHP](http://php.net) 8.0 to run. Disco relies on the [return type declarations](http://php.net/manual/en/functions.returning-values.php#functions.returning-values.type-declaration) 
+and [attributes](https://www.php.net/manual/en/language.attributes.overview.php) feature introduced with PHP 8.0 as well as the `ocramius/proxy-manager` package.
+
+:warning: Look at version 0.x if you are still on [PHP](http://php.net) 7.4.
 
 ## Installation
 
@@ -26,16 +29,14 @@ $beanFactory = new \bitExpert\Disco\AnnotationBeanFactory(MyConfiguration::class
 \bitExpert\Disco\BeanFactoryRegistry::register($beanFactory);
 ```
 
-Next up you need to create a configuration class ```MyConfiguration```. The class needs to be marked with a `@Configuration` annotation.
+Next up you need to create a configuration class ```MyConfiguration```. The class needs to be attributed with `#[Configuration]`.
 
 ```php
 <?php
 
-use bitExpert\Disco\Attributes\Configuration;
+use bitExpert\Disco\Annotations\Configuration;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
 }

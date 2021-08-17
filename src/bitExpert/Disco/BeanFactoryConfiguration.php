@@ -31,19 +31,22 @@ class BeanFactoryConfiguration
     /**
      * @var BeanStore
      */
-    protected $sessionBeanStore;
+    protected BeanStore $sessionBeanStore;
+
     /**
      * @var string
      */
-    protected $proxyTargetDir;
+    protected string $proxyTargetDir;
+
     /**
-     * @var ?GeneratorStrategyInterface
+     * @var GeneratorStrategyInterface
      */
-    protected $proxyWriterGenerator;
+    protected GeneratorStrategyInterface $proxyWriterGenerator;
+
     /**
-     * @var ?AutoloaderInterface
+     * @var AutoloaderInterface|null
      */
-    protected $proxyAutoloader;
+    protected ?AutoloaderInterface $proxyAutoloader = null;
 
     /**
      * Creates a new {@link \bitExpert\Disco\BeanFactoryConfiguration}.
@@ -51,7 +54,7 @@ class BeanFactoryConfiguration
      * @param string $proxyTargetDir
      * @throws InvalidArgumentException
      */
-    public function __construct($proxyTargetDir)
+    public function __construct(string $proxyTargetDir)
     {
         try {
             $proxyFileLocator = new FileLocator($proxyTargetDir);

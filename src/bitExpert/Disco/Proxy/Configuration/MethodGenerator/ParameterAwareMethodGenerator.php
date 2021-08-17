@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
-use bitExpert\Disco\Attributes\Parameter;
+use bitExpert\Disco\Annotations\Parameter;
 use Laminas\Code\Generator\MethodGenerator;
 
 /**

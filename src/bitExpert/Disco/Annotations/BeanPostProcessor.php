@@ -10,14 +10,14 @@
  */
 declare(strict_types=1);
 
-namespace bitExpert\Disco\Attributes;
+namespace bitExpert\Disco\Annotations;
 
 use Attribute;
 
 /**
- * Non-repeatable Attribute to mark a class a Beans or BeanPostProcessors provider.
+ * Non-repeatable Attribute to declare a method as a BeanPostProcessor factory.
  */
-#[Attribute(Attribute::TARGET_CLASS)]
-final class Configuration
+#[Attribute(Attribute::TARGET_METHOD)]
+final class BeanPostProcessor
 {
 }

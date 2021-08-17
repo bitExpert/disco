@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Attributes\Configuration;
+use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Config\Traits\NonSingletonNonLazyRequestBean;
 
 #[Configuration]

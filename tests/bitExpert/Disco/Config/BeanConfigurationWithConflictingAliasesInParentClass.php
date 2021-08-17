@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Attributes\Alias;
-use bitExpert\Disco\Attributes\Bean;
-use bitExpert\Disco\Attributes\Configuration;
+use bitExpert\Disco\Annotations\Alias;
+use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 use bitExpert\Disco\Helper\SampleServiceInterface;
 
@@ -22,7 +22,7 @@ use bitExpert\Disco\Helper\SampleServiceInterface;
 class BeanConfigurationWithConflictingAliasesInParentClass extends BeanConfigurationWithConflictingAliases
 {
     #[Bean]
-    #[Alias(name: 'SampleService3Alias')]
+    #[NameAlias(name: 'SampleService3Alias')]
     public function sampleService3(): SampleServiceInterface
     {
         return new SampleService();

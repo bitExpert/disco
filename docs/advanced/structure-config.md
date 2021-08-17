@@ -16,27 +16,21 @@ type thus you are bound to return the same instance.
 ```php
 <?php
 
-use bitExpert\Disco\Attributes\Bean;
-use bitExpert\Disco\Attributes\Configuration;
+use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class ParentConfig
 {
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function mySampleService() : SampleService
     {
         return new SampleService();
     }
 }
 
-/**
- * @Configuration
- */
+#[Configuration]
 class ChildConfig extends ParentConfig
 {
 }
@@ -57,27 +51,21 @@ statement in your config class.
 ```php
 <?php
 
-use bitExpert\Disco\Attributes\Bean;
-use bitExpert\Disco\Attributes\Configuration;
+use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 trait SampleServiceConfig
 {
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function mySampleService() : SampleService
     {
         return new SampleService();
     }
 }
 
-/**
- * @Configuration
- */
+#[Configuration]
 class Config
 {
     use SampleServiceConfig;

@@ -10,7 +10,9 @@ First of all you need to create a class that implements the
 ```php
 <?php
 
-class SampleServiceBeanPostProcessor implements \bitExpert\Disco\BeanPostProcessor
+use bitExpert\Disco\BeanPostProcessor;
+
+class SampleServiceBeanPostProcessor implements BeanPostProcessor
 {
     /**
      * {@inheritdoc}
@@ -25,23 +27,19 @@ class SampleServiceBeanPostProcessor implements \bitExpert\Disco\BeanPostProcess
 
 ```
 
-To register the `SampleServiceBeanPostProcessor` with Disco create a method in your configuration class and annotate it with the `@BeanPostProcessor` annotation.
+To register the `SampleServiceBeanPostProcessor` with Disco create a method in your configuration class and attribute it with `#[BeanPostProcessor]`.
 
 ```php
 <?php
 
-use bitExpert\Disco\Attributes\BeanPostProcessor;
-use bitExpert\Disco\Attributes\Configuration;
+use bitExpert\Disco\Annotations\BeanPostProcessor;
+use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleServiceBeanPostProcessor;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
-    /**
-     * @BeanPostProcessor
-     */
+    #[BeanPostProcessor]
     public function sampleServiceBeanPostProcessor() : SampleServiceBeanPostProcessor
     {
         return new SampleServiceBeanPostProcessor();

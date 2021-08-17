@@ -10,7 +10,7 @@
  */
 declare(strict_types=1);
 
-namespace bitExpert\Disco\Attributes;
+namespace bitExpert\Disco\Annotations;
 
 use Attribute;
 use Webmozart\Assert\Assert;
@@ -29,7 +29,6 @@ final class Alias
     private string $name;
 
     /**
-     * Creates a new {@link \bitExpert\Disco\Annotations\Alias}.
      *
      * @param string $name
      */

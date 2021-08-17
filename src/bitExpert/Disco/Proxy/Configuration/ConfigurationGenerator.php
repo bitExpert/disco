@@ -12,12 +12,13 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration;
 
-use bitExpert\Disco\Attributes\Alias;
-use bitExpert\Disco\Attributes\Bean;
-use bitExpert\Disco\Attributes\BeanPostProcessor;
-use bitExpert\Disco\Attributes\Configuration;
-use bitExpert\Disco\Attributes\Parameter;
-use bitExpert\Disco\Attributes\ReturnTypeAlias;
+use Attribute;
+use bitExpert\Disco\Annotations\Alias;
+use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\BeanPostProcessor;
+use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Annotations\Parameter;
+use bitExpert\Disco\Annotations\TypeAlias;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanMethod;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanPostProcessorMethod;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\Constructor;
@@ -42,6 +43,7 @@ use ReflectionMethod;
 use Laminas\Code\Generator\ClassGenerator;
 use Laminas\Code\Generator\Exception\InvalidArgumentException;
 use Laminas\Code\Reflection\MethodReflection;
+use ReflectionNamedType;
 use ReflectionUnionType;
 
 /**
@@ -95,6 +97,18 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $localAliases = [];
         $methods = $originalClass->getMethods(ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED);
         foreach ($methods as $method) {
+            /** @var null|ReflectionUnionType|ReflectionNamedType $returnTypeRefl */
+            $returnTypeRefl = $method->getReturnType();
+            if ($returnTypeRefl instanceof ReflectionUnionType) {
+                throw new InvalidProxiedClassException(
+                    sprintf(
+                        'Method "%s" on "%s" uses the unsupported union type.',
+                        $method->name,
+                        $originalClass->name
+                    )
+                );
+            }
+
             $reflectionMethod = new MethodReflection(
                 $method->class,
                 $method->name
@@ -138,22 +152,10 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
 
             $beanAliases = [];
 
-            /** @var \bitExpert\Disco\Attributes\ReturnTypeAlias $returnTypeAlias */
-            $returnTypeAlias = ($reflectionMethod->getAttributes(ReturnTypeAlias::class)[0] ?? null)
+            /** @var TypeAlias|null $returnTypeAlias */
+            $returnTypeAlias = ($reflectionMethod->getAttributes(TypeAlias::class)[0] ?? null)
                 ?->newInstance();
             if (null !== $returnTypeAlias) {
-                $returnTypeRefl = $method->getReturnType();
-
-                if ($returnTypeRefl instanceof ReflectionUnionType) {
-                    throw new InvalidProxiedClassException(
-                        sprintf(
-                            'Method "%s" on "%s" uses the unsupported union type.',
-                            $method->name,
-                            $originalClass->name
-                        )
-                    );
-                }
-
                 if (null === $returnTypeRefl || $returnTypeRefl->allowsNull() || $returnTypeRefl->isBuiltin()) {
                     throw new InvalidProxiedClassException(
                         sprintf(
@@ -172,6 +174,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
             }
 
             $beanAliases = [...$beanAliases, ...\array_map(
+                /** @phpstan-ignore-next-line */
                 fn($attr) => $attr->newInstance()->getName(),
                 $reflectionMethod->getAttributes(Alias::class)
             )];
@@ -206,7 +209,7 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 $reflectionMethod,
                 $beanAttribute,
                 $parameterAttributes,
-                $method->getReturnType(),
+                $returnTypeRefl,
                 $forceLazyInitProperty,
                 $sessionBeansProperty,
                 $postProcessorsProperty,

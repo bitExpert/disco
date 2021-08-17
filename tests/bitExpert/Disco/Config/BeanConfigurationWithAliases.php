@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Attributes\Alias;
-use bitExpert\Disco\Attributes\Bean;
-use bitExpert\Disco\Attributes\Configuration;
-use bitExpert\Disco\Attributes\ReturnTypeAlias;
+use bitExpert\Disco\Annotations\Alias;
+use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Annotations\TypeAlias;
 use bitExpert\Disco\Helper\SampleService;
 use bitExpert\Disco\Helper\SampleServiceInterface;
 
@@ -27,14 +27,14 @@ class BeanConfigurationWithAliases
     #[Alias(name: 'my::Custom::Namespace')]
     #[Alias(name: 'Alias_With_Underscore')]
     #[Alias(name: '123456')]
-    #[ReturnTypeAlias]
+    #[TypeAlias]
     public function sampleServiceWithAliases(): SampleService
     {
         return new SampleService();
     }
 
     #[Bean]
-    #[ReturnTypeAlias]
+    #[TypeAlias]
     public function sampleServiceWithInterfaceReturnTypeAlias(): SampleServiceInterface
     {
         return new SampleService();

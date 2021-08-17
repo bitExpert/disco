@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
-use bitExpert\Disco\Attributes\Alias;
+use bitExpert\Disco\Annotations\Alias;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
 /**
- * Unit tests for {@link \bitExpert\Disco\Attributes\Alias}.
+ * Unit tests for {@link \bitExpert\Disco\Annotations\NameAlias}.
  */
 class AliasUnitTest extends TestCase
 {

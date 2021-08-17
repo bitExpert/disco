@@ -10,16 +10,14 @@
  */
 declare(strict_types=1);
 
-namespace bitExpert\Disco\Attributes;
+namespace bitExpert\Disco\Annotations;
 
 use Attribute;
 
 /**
- * Non-repeatable Attribute class to configure the return type as an alias for a Bean.
- *
- * Used in conjunction with the #[Bean] attribute.
+ * Non-repeatable Attribute to mark a class a Beans or BeanPostProcessors provider.
  */
-#[Attribute(Attribute::TARGET_METHOD)]
-final class ReturnTypeAlias
+#[Attribute(Attribute::TARGET_CLASS)]
+final class Configuration
 {
 }

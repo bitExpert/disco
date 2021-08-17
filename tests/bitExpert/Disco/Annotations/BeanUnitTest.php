@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
-use bitExpert\Disco\Attributes\Bean;
+use bitExpert\Disco\Annotations\Bean;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
 /**
- * Unit tests for {@link \bitExpert\Disco\Attributes\Bean}.
+ * Unit tests for {@link \bitExpert\Disco\Annotations\Bean}.
  */
 class BeanUnitTest extends TestCase
 {

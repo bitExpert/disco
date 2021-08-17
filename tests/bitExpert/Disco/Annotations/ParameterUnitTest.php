@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
-use bitExpert\Disco\Attributes\Parameter;
+use bitExpert\Disco\Annotations\Parameter;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
 /**
- * Unit tests for {@link \bitExpert\Disco\Attributes\Parameter}.
+ * Unit tests for {@link \bitExpert\Disco\Annotations\Parameter}.
  */
 class ParameterUnitTest extends TestCase
 {

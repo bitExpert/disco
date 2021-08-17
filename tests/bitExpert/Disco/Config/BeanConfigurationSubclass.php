@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Attributes\Bean;
-use bitExpert\Disco\Attributes\Configuration;
+use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\MasterService;
 
 #[Configuration]

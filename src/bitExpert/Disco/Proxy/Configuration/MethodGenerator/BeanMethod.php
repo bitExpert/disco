@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 
-use bitExpert\Disco\Attributes\Bean;
-use bitExpert\Disco\Attributes\Parameter;
+use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Parameter;
 use bitExpert\Disco\BeanException;
 use bitExpert\Disco\InitializedBean;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanFactoryConfigurationProperty;
@@ -21,6 +21,7 @@ use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProp
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ForceLazyInitProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
 use bitExpert\Disco\Proxy\LazyBean\LazyBeanFactory;
+use Laminas\Code\Generator\Exception\InvalidArgumentException;
 use ProxyManager\Exception\InvalidProxiedClassException;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use ReflectionNamedType;
@@ -40,9 +41,9 @@ class BeanMethod extends ParameterAwareMethodGenerator
      * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanMethod}.
      *
      * @param MethodReflection $originalMethod
-     * @param \bitExpert\Disco\Attributes\Bean $beanMetadata
-     * @param \bitExpert\Disco\Attributes\Parameter[] $parameters
-     * @param ReflectionNamedType|null $beanTypeName
+     * @param Bean $beanMetadata
+     * @param Parameter[] $parameters
+     * @param ReflectionNamedType|null $beanType
      * @param ForceLazyInitProperty $forceLazyInitProperty
      * @param SessionBeansProperty $sessionBeansProperty
      * @param BeanPostProcessorsProperty $postProcessorsProperty
@@ -50,8 +51,8 @@ class BeanMethod extends ParameterAwareMethodGenerator
      * @param GetParameter $parameterValuesMethod
      * @param WrapBeanAsLazy $wrapBeanAsLazy
      * @return MethodGenerator
-     * @throws \Laminas\Code\Generator\Exception\InvalidArgumentException
-     * @throws \ProxyManager\Exception\InvalidProxiedClassException
+     * @throws InvalidArgumentException
+     * @throws InvalidProxiedClassException
      */
     public static function generateMethod(
         MethodReflection                 $originalMethod,
@@ -130,7 +131,7 @@ class BeanMethod extends ParameterAwareMethodGenerator
      * @override Enforces generation of \ProxyManager\Generator\MethodGenerator.
      *
      * {@inheritDoc}
-     * @throws \Laminas\Code\Generator\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function fromReflection(MethodReflection $reflectionMethod): MethodGenerator
     {
@@ -157,7 +158,7 @@ class BeanMethod extends ParameterAwareMethodGenerator
      * @param string $padding
      * @param string $beanId
      * @param string $beanType
-     * @param \bitExpert\Disco\Attributes\Bean $beanMetadata
+     * @param Bean $beanMetadata
      * @param string $methodParams
      * @param ForceLazyInitProperty $forceLazyInitProperty
      * @param SessionBeansProperty $sessionBeansProperty
@@ -282,7 +283,7 @@ class BeanMethod extends ParameterAwareMethodGenerator
      * @param string $padding
      * @param string $beanId
      * @param string $beanType
-     * @param \bitExpert\Disco\Attributes\Bean $beanMetadata
+     * @param Bean $beanMetadata
      * @param string $methodParams
      * @param ForceLazyInitProperty $forceLazyInitProperty
      * @param SessionBeansProperty $sessionBeansProperty

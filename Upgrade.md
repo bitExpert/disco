@@ -76,8 +76,8 @@ While this was valid configuration code before the 0.5.0 release:
 ```php
 <?php
 
-use bitExpert\Disco\Attributes\Bean;
-use bitExpert\Disco\Attributes\Configuration;
+use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
 /**
@@ -101,8 +101,8 @@ This is how you have to define bean instances for the 0.5.0 release:
 ```php
 <?php
 
-use bitExpert\Disco\Attributes\Bean;
-use bitExpert\Disco\Attributes\Configuration;
+use bitExpert\Disco\Annotations\Bean;
+use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
 /**
