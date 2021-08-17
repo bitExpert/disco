@@ -12,88 +12,36 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
-use Doctrine\Common\Annotations\Annotation\Attribute;
-use Doctrine\Common\Annotations\Annotation\Attributes;
-use Doctrine\Common\Annotations\AnnotationException;
+use Attribute;
+use Webmozart\Assert\Assert;
 
 /**
- * @Annotation
- * @Target({"METHOD"})
- * @Attributes({
- *   @Attribute("scope", type = "string"),
- *   @Attribute("singleton", type = "bool"),
- *   @Attribute("lazy", type = "bool"),
- *   @Attribute("aliases", type = "array<\bitExpert\Disco\Annotations\Alias>"),
- *   @Attribute("parameters", type = "array<\bitExpert\Disco\Annotations\Parameter>")
- * })
+ * Non-repeatable Attribute to declare a method as a Bean factory.
  */
-final class Bean extends ParameterAwareAnnotation
+#[Attribute(Attribute::TARGET_METHOD)]
+final class Bean
 {
-    const SCOPE_REQUEST = 1;
-    const SCOPE_SESSION = 2;
-    /**
-     * @var int
-     */
-    protected $scope;
-    /**
-     * @var bool
-     */
-    protected $singleton;
-    /**
-     * @var bool
-     */
-    protected $lazy;
-    /**
-     * @var Alias[]
-     */
-    protected $aliases;
+    public const SCOPE_REQUEST = 1;
+    public const SCOPE_SESSION = 2;
+
+    private int $scope;
+
+    private bool $singleton;
+
+    private bool $lazy;
 
     /**
-     * Creates a new {@link \bitExpert\Disco\Annotations\Bean}.
-     *
-     * @param array<string, array<string, mixed>> $attributes
+     * @param bool $singleton
+     * @param bool $lazy
+     * @param int $scope
      */
-    public function __construct(array $attributes = [])
+    public function __construct(bool $singleton = true, bool $lazy = false, int $scope = self::SCOPE_REQUEST)
     {
-        parent::__construct();
+        Assert::inArray($scope, [self::SCOPE_REQUEST, self::SCOPE_SESSION]);
 
-        // initialize default values
-        $this->scope = self::SCOPE_REQUEST;
-        $this->singleton = true;
-        $this->lazy = false;
-        $this->aliases = [];
-
-        if (isset($attributes['value'])) {
-            if (isset($attributes['value']['scope']) && \strtolower($attributes['value']['scope']) === 'session') {
-                $this->scope = self::SCOPE_SESSION;
-            }
-
-            if (isset($attributes['value']['singleton'])) {
-                $this->singleton = AnnotationAttributeParser::parseBooleanValue($attributes['value']['singleton']);
-            }
-
-            if (isset($attributes['value']['lazy'])) {
-                $this->lazy = AnnotationAttributeParser::parseBooleanValue($attributes['value']['lazy']);
-            }
-
-            if (isset($attributes['value']['aliases']) && \is_array($attributes['value']['aliases'])) {
-                $this->setAliases(...$attributes['value']['aliases']);
-            }
-
-            if (isset($attributes['value']['parameters']) && \is_array($attributes['value']['parameters'])) {
-                $this->setParameters(...$attributes['value']['parameters']);
-            }
-        }
-    }
-
-    /**
-     * Helper methd to ensure that the passed aliases are of {@link \bitExpert\Disco\Annotations\Alias} type.
-     *
-     * @param Alias ...$aliases
-     */
-    private function setAliases(Alias ...$aliases): void
-    {
-        $this->aliases = $aliases;
+        $this->singleton = $singleton;
+        $this->lazy = $lazy;
+        $this->scope = $scope;
     }
 
     /**
@@ -134,15 +82,5 @@ final class Bean extends ParameterAwareAnnotation
     public function isLazy(): bool
     {
         return $this->lazy;
-    }
-
-    /**
-     * Returns the list of aliases for the bean instance. Returns an empty array when no alias was set.
-     *
-     * @return Alias[]
-     */
-    public function getAliases(): array
-    {
-        return $this->aliases;
     }
 }

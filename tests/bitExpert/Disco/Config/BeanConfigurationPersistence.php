@@ -16,14 +16,10 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class BeanConfigurationPersistence
 {
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function sampleService(): SampleService
     {
         return new SampleService();

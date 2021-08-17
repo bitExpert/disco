@@ -15,9 +15,7 @@ namespace bitExpert\Disco\Config;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MissingBeanAnnotationConfiguration
 {
     public function nonSingletonNonLazyRequestBean()

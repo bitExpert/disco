@@ -14,9 +14,7 @@ namespace bitExpert\Disco\Config;
 
 use bitExpert\Disco\Annotations\Configuration;
 
-/**
- * @Configuration
- */
+#[Configuration]
 interface InterfaceConfiguration
 {
 }

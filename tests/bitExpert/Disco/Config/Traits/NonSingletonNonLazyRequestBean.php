@@ -17,9 +17,7 @@ use bitExpert\Disco\Helper\SampleService;
 
 trait NonSingletonNonLazyRequestBean
 {
-    /**
-     * @Bean({"singleton"=false, "lazy"=false, "scope"="request"})
-     */
+    #[Bean(singleton: false, lazy: false, scope: Bean::SCOPE_REQUEST)]
     public function nonSingletonNonLazyRequestBeanInTrait(): SampleService
     {
         return new SampleService();

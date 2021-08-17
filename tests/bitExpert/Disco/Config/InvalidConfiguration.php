@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace bitExpert\Disco\Config;
 
 /**
- * Configuration class missing the needed annotation.
+ * Configuration class missing the needed attribute.
  */
 class InvalidConfiguration
 {

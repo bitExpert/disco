@@ -260,14 +260,15 @@ class AnnotationBeanFactoryUnitTest extends TestCase
     {
         $this->beanFactory = new AnnotationBeanFactory(
             BeanConfigurationWithPostProcessorAndParameterizedDependency::class,
-            ['test' => 'injectedValue']
+            ['configKey1' => 'injectedValue1', 'configKey2' => 'injectedValue2']
         );
         BeanFactoryRegistry::register($this->beanFactory);
 
         /** @var SampleService $bean */
         $bean = $this->beanFactory->get('nonSingletonNonLazyRequestBean');
         self::assertInstanceOf(stdClass::class, $bean->test);
-        self::assertEquals('injectedValue', $bean->test->property);
+        self::assertEquals('injectedValue1', $bean->test->property1);
+        self::assertEquals('injectedValue2', $bean->test->property2);
     }
 
     /**
@@ -277,7 +278,7 @@ class AnnotationBeanFactoryUnitTest extends TestCase
     {
         $this->beanFactory = new AnnotationBeanFactory(
             BeanConfigurationWithParameters::class,
-            ['test' => 'injectedValue']
+            ['configKey' => 'injectedValue']
         );
         BeanFactoryRegistry::register($this->beanFactory);
 
@@ -288,12 +289,60 @@ class AnnotationBeanFactoryUnitTest extends TestCase
     /**
      * @test
      */
+    public function parametersPassedToBeanFactoryGetsInjectedInBeanWithPositionalParams(): void
+    {
+        $this->beanFactory = new AnnotationBeanFactory(
+            BeanConfigurationWithParameters::class,
+            ['configKey1' => 'injectedValue1', 'configKey2' => 'injectedValue2']
+        );
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean = $this->beanFactory->get('sampleServiceWithPositionalParams');
+        self::assertEquals('injectedValue1', $bean->test);
+        self::assertEquals('injectedValue2', $bean->anotherTest);
+    }
+
+    /**
+     * @test
+     */
+    public function parametersPassedToBeanFactoryGetsInjectedInBeanWithNamedParams(): void
+    {
+        $this->beanFactory = new AnnotationBeanFactory(
+            BeanConfigurationWithParameters::class,
+            ['configKey1' => 'injectedValue1', 'configKey2' => 'injectedValue2']
+        );
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean = $this->beanFactory->get('sampleServiceWithNamedParams');
+        self::assertEquals('injectedValue1', $bean->test);
+        self::assertEquals('injectedValue2', $bean->anotherTest);
+    }
+
+    /**
+     * @test
+     */
+    public function parametersPassedToBeanFactoryGetsInjectedInBeanWithMixedPositionalAndNamedParams(): void
+    {
+        $this->beanFactory = new AnnotationBeanFactory(
+            BeanConfigurationWithParameters::class,
+            ['configKey1' => 'injectedValue1', 'configKey2' => 'injectedValue2']
+        );
+        BeanFactoryRegistry::register($this->beanFactory);
+
+        $bean = $this->beanFactory->get('sampleServiceWithMixedPositionalAndNamedParams');
+        self::assertEquals('injectedValue1', $bean->test);
+        self::assertEquals('injectedValue2', $bean->anotherTest);
+    }
+
+    /**
+     * @test
+     */
     public function nestedParameterKeyPassedToBeanFactoryGetsInjectedInBean(): void
     {
         $this->beanFactory = new AnnotationBeanFactory(
             BeanConfigurationWithParameters::class,
             [
-                'test' => [
+                'config' => [
                     'nested' => [
                         'key' => 'injectedValue'
                     ]

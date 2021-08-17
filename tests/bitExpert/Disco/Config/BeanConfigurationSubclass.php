@@ -16,14 +16,10 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\MasterService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class BeanConfigurationSubclass extends BeanConfiguration
 {
-    /**
-     * @Bean({"singleton"=true, "lazy"=false, "scope"="session"})
-     */
+    #[Bean(singleton: true, lazy: false, scope: Bean::SCOPE_SESSION)]
     public function singletonNonLazySessionBeanInSubclass(): MasterService
     {
         return new MasterService($this->singletonNonLazyRequestBean());

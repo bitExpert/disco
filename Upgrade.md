@@ -72,6 +72,7 @@ Disco 0.5.0 dropped support for the @return annotations and strictly
 relies on the return type definitions now. 
 
 While this was valid configuration code before the 0.5.0 release:
+
 ```php
 <?php
 
@@ -96,6 +97,7 @@ class MyConfiguration
 ```
 
 This is how you have to define bean instances for the 0.5.0 release:
+
 ```php
 <?php
 

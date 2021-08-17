@@ -15,9 +15,11 @@ namespace bitExpert\Disco\Annotations;
 use Attribute;
 
 /**
- * Non-repeatable Attribute to declare a method as a BeanPostProcessor factory.
+ * Non-repeatable Attribute class to configure the return type as an alias for a Bean.
+ *
+ * Used in conjunction with the #[Bean] attribute.
  */
 #[Attribute(Attribute::TARGET_METHOD)]
-final class BeanPostProcessor
+final class TypeAlias
 {
 }

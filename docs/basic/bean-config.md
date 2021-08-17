@@ -1,6 +1,6 @@
 # Bean Configuration
 
-The `@Bean` annotation comes with a few attributes which influence how beans are created or how their internal state will be kept during different requests.
+The `#[Bean]` attribute comes with a few options which influence how beans are created or how their internal state will be kept during different requests.
 
 ## Singleton Beans
 
@@ -13,14 +13,10 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
-    /**
-     * @Bean({"singleton" = true})
-     */
+    #[Bean(singleton: true)]
     public function mySampleService() : SampleService
     {
         return new SampleService();
@@ -29,7 +25,7 @@ class MyConfiguration
 ```
 
 In case you explicitly want to return a new instance for every
-`\bitExpert\Disco\AnnotationBeanFactory::get()` call, set the singleton attribute to `false`.
+`\bitExpert\Disco\AnnotationBeanFactory::get()` call, set the singleton option to `false`.
 
 ```php
 <?php
@@ -38,14 +34,10 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
-    /**
-     * @Bean({"singleton" = false})
-     */
+    #[Bean(singleton: false)]
     public function mySampleService() : SampleService
     {
         return new SampleService();
@@ -55,7 +47,7 @@ class MyConfiguration
 
 ## Lazy Beans
 
-By default Disco will return non-lazy bean instances, which means you will get the exact same instance as you have defined in your configuration code. The explicit bean configuration to return non-lazy instances would read as follows:
+By default, Disco will return non-lazy bean instances, which means you will get the exact same instance as you have defined in your configuration code. The explicit bean configuration to return non-lazy instances would read as follows:
 
 ```php
 <?php
@@ -64,14 +56,10 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
-    /**
-     * @Bean({"lazy" = false})
-     */
+    #[Bean(lazy: false)]
     public function mySampleService() : SampleService
     {
         return new SampleService();
@@ -79,7 +67,7 @@ class MyConfiguration
 }
 ```
 
-In case the construction of your bean is quite time consuming — e.g., a call to a remote service is made — you can instruct Disco to return a lazy instance of your bean, the concrete instance gets created upon the first method call. Simply set the lazy attribute to `true` to let Disco wrap your bean as a lazy instance:
+In case the construction of your bean is quite time-consuming — e.g., a call to a remote service is made — you can instruct Disco to return a lazy instance of your bean, the concrete instance gets created upon the first method call. Simply set the lazy option to `true` to let Disco wrap your bean as a lazy instance:
 
 ```php
 <?php
@@ -88,14 +76,10 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
-    /**
-     * @Bean({"lazy" = true})
-     */
+    #[Bean(lazy: true)]
     public function mySampleService() : SampleService
     {
         return new SampleService();
@@ -123,14 +107,10 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
-    /**
-     * @Bean({"scope" = request})
-     */
+    #[Bean(scope: Bean::SCOPE_REQUEST)]
     public function mySampleService() : SampleService
     {
         return new SampleService();
@@ -147,14 +127,10 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
-    /**
-     * @Bean({"scope" = session})
-     */
+    #[Bean(scope: Bean::SCOPE_SESSION)]
     public function mySampleService() : SampleService
     {
         return new SampleService();
@@ -172,32 +148,30 @@ As a drawback you are quite limited when it comes to bean names. To quote the [P
 
 > A valid function name starts with a letter or underscore, followed by any number of letters, numbers, or underscores.
 
-This led to introducing aliases for beans. Each bean can have multiple aliases and two types of aliases are possible. In case of collisions (the same alias is used for different beans) Disco will throw an exception.
+This led to introducing aliases for beans. Each bean can have multiple aliases and two types of aliases are possible: 
+a name alias `#[Alias]` or a type alias `#[TypeAlias]`.
+
+In case of collisions (the same alias is used for different beans) Disco will throw an exception.
 You're asked to avoid/resolve such conflicts. Since version 0.10.0 of Disco collision detection will only take the configuration class into account the alias is defined in, this allows you to overwrite aliases in child configuration.
 
-Simply add the `aliases` attribute to the `@Bean` annotation to define a list of `@Alias`:
+Simply attribute the Bean with `#[Alias(name: 'some_alias')]` to define a named alias or `#[TypeAlias]` to define the return type as an aliases.
+Multiple name aliases are allowed. 
 
 ```php
 <?php
 
+use bitExpert\Disco\Annotations\Alias;
 use bitExpert\Disco\Annotations\Bean;
-use bitExpert\Disco\Annotations\Àlias;
 use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Annotations\TypeAlias;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
-    /**
-      * @Bean({
-      *   "aliases"={
-      *      @Alias({"name" = "\Identifier\With\Namespace"}),
-      *      @Alias({"type" = true})
-      *   }
-      * })
-      */
+    #[Bean]
+    #[Alias(name: '\Identifier\With\Namespace')]
+    #[TypeAlias]
     public function mySampleService() : SampleService
     {
         return new SampleService();
@@ -211,15 +185,15 @@ The example uses both available alias types. Let's look at them one after the ot
 
 ### Named Alias
 
-`@Alias({"name" = "\Identifier\With\Namespace"})`
+`#[Alias(name: '\Identifier\With\Namespace')]`
 
 This alias type is pretty much self explaining. What you define as name can later be used to get the service from the bean factory.
 
 ### Return Type Alias
 
-`@Alias({"type" = true})`
+`#[TypeAlias]`
 
-Setting the `type` attribute to `true` (name attribute must be omitted in this case) tells Disco to use the return type of the method as an alias.
+Using thy `#[TypeAlias]` attribute tells Disco to use the return type of the method as an alias.
 
 This is very useful because you can work with PHP's `::class` language construct like in this example: `$annotationBeanFactory->get(SampleService::class)`.
 

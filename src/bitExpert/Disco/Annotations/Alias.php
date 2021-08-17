@@ -12,64 +12,35 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
-use Doctrine\Common\Annotations\Annotation\Attribute;
-use Doctrine\Common\Annotations\Annotation\Attributes;
-use Doctrine\Common\Annotations\AnnotationException;
+use Attribute;
+use Webmozart\Assert\Assert;
 
 /**
- * @Annotation
- * @Target({"ANNOTATION"})
- * @Attributes({
- *   @Attribute("name", type = "string"),
- *   @Attribute("type", type = "bool"),
- * })
+ * Repeatable Attribute class to configure named aliases for a Bean.
+ *
+ * Used in conjunction with the #[Bean] attribute.
  */
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Alias
 {
     /**
-     * @var ?string
+     * @var string
      */
-    private $name;
+    private string $name;
 
     /**
-     * @var bool
-     */
-    private $type;
-
-    /**
-     * Creates a new {@link \bitExpert\Disco\Annotations\Bean\Alias}.
      *
-     * @param array<string, array<string, mixed>> $attributes
-     * @throws AnnotationException
+     * @param string $name
      */
-    public function __construct(array $attributes = [])
+    public function __construct(string $name)
     {
-        $this->type = false;
+        Assert::minLength($name, 1);
 
-        if (isset($attributes['value']['type'])) {
-            $this->type = AnnotationAttributeParser::parseBooleanValue($attributes['value']['type']);
-        }
-
-        if (isset($attributes['value']['name'])) {
-            if ($this->type) {
-                throw new AnnotationException('Type alias should not have a name!');
-            }
-
-            $this->name = $attributes['value']['name'];
-        }
-
-        if (!$this->type && (!is_string($this->name) || $this->name === '')) {
-            throw new AnnotationException('Alias should either be a named alias or a type alias!');
-        }
+        $this->name = $name;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
-    }
-
-    public function isTypeAlias(): bool
-    {
-        return $this->type;
     }
 }

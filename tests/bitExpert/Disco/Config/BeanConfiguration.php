@@ -18,86 +18,64 @@ use bitExpert\Disco\Helper\InitializedService;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class BeanConfiguration
 {
-    /**
-     * @Bean({"singleton"=false, "lazy"=false, "scope"="session"})
-     */
+    #[Bean(singleton: false, lazy: false, scope: Bean::SCOPE_SESSION)]
     public function nonSingletonNonLazySessionBean(): MasterService
     {
         return new MasterService($this->nonSingletonNonLazyRequestBean());
     }
 
-    /**
-     * @Bean({"singleton"=false, "lazy"=false, "scope"="request"})
-     */
+    #[Bean(singleton: false, lazy: false, scope: Bean::SCOPE_REQUEST)]
     public function nonSingletonNonLazyRequestBean(): SampleService
     {
         return new SampleService();
     }
 
-    /**
-     * @Bean({"singleton"=false, "lazy"=true, "scope"="session"})
-     */
+    #[Bean(singleton: false, lazy: true, scope: Bean::SCOPE_SESSION)]
     public function nonSingletonLazySessionBean(): MasterService
     {
         return new MasterService($this->nonSingletonLazyRequestBean());
     }
 
-    /**
-     * @Bean({"singleton"=false, "lazy"=true, "scope"="request"})
-     */
+    #[Bean(singleton: false, lazy: true, scope: Bean::SCOPE_REQUEST)]
     public function nonSingletonLazyRequestBean(): SampleService
     {
         return new SampleService();
     }
 
-    /**
-     * @Bean({"singleton"=true, "lazy"=false, "scope"="session"})
-     */
+    #[Bean(singleton: true, lazy: false, scope: Bean::SCOPE_SESSION)]
     public function singletonNonLazySessionBean(): MasterService
     {
         return new MasterService($this->singletonNonLazyRequestBean());
     }
 
-    /**
-     * @Bean({"singleton"=true, "lazy"=false, "scope"="request"})
-     */
+    #[Bean(singleton: true, lazy: false, scope: Bean::SCOPE_REQUEST)]
     public function singletonNonLazyRequestBean(): SampleService
     {
         return new SampleService();
     }
 
-    /**
-     * @Bean({"singleton"=true, "lazy"=true, "scope"="session"})
-     */
+    #[Bean(singleton: true, lazy: true, scope: Bean::SCOPE_SESSION)]
     public function singletonLazySessionBean(): MasterService
     {
         return new MasterService($this->singletonLazyRequestBean());
     }
 
-    /**
-     * @Bean({"singleton"=true, "lazy"=true, "scope"="request"})
-     */
+    #[Bean(singleton: true, lazy: true, scope: Bean::SCOPE_REQUEST)]
     public function singletonLazyRequestBean(): SampleService
     {
         return new SampleService();
     }
 
-    /**
-     * @Bean({"singleton"=true, "lazy"=false, "scope"="request"})
-     */
+    #[Bean(singleton: true, lazy: false, scope: Bean::SCOPE_REQUEST)]
     public function singletonInitializedService(): InitializedService
     {
         return new InitializedService();
     }
 
-    /**
-     * @Bean({"singleton"=true, "lazy"=true, "scope"="request"})
-     */
+    #[Bean(singleton: true, lazy: true, scope: Bean::SCOPE_REQUEST)]
     public function singletonLazyInitializedService(): InitializedService
     {
         return new InitializedService();

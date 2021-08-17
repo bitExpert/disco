@@ -32,10 +32,13 @@ class AnnotationBeanFactory implements BeanFactory
      *
      * @param class-string<Object> $configClassName
      * @param array<string, mixed> $parameters
-     * @param BeanFactoryConfiguration $config
+     * @param BeanFactoryConfiguration|null $config
      */
-    public function __construct($configClassName, array $parameters = [], BeanFactoryConfiguration $config = null)
-    {
+    public function __construct(
+        string                   $configClassName,
+        array                    $parameters = [],
+        BeanFactoryConfiguration $config = null
+    ) {
         if ($config === null) {
             $config = new BeanFactoryConfiguration(sys_get_temp_dir());
         }
@@ -79,7 +82,7 @@ class AnnotationBeanFactory implements BeanFactory
     /**
      * {@inheritDoc}
      */
-    public function has(string $id)
+    public function has(string $id): bool
     {
         return is_callable([$this->beanConfig, $id]) || $this->beanConfig->hasAlias($id);
     }
