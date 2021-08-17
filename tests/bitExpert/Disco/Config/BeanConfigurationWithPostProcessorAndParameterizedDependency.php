@@ -29,11 +29,13 @@ class BeanConfigurationWithPostProcessorAndParameterizedDependency
     }
 
     #[Bean]
-    #[Parameter(name: 'test', key: 'test')]
-    public function dependency($test = ''): \stdClass
+    #[Parameter(name: 'property1', key: 'configKey1')]
+    #[Parameter(name: 'property2', key: 'configKey2')]
+    public function dependency(string $property1 = '', string $property2 = ''): \stdClass
     {
         $object = new \stdClass();
-        $object->property = $test;
+        $object->property1 = $property1;
+        $object->property2 = $property2;
         return $object;
     }
 

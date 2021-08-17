@@ -144,10 +144,7 @@ class BeanFactoryConfiguration
     {
         $proxyManagerConfiguration = new Configuration();
         $proxyManagerConfiguration->setProxiesTargetDir($this->proxyTargetDir);
-
-        if ($this->proxyWriterGenerator instanceof GeneratorStrategyInterface) {
-            $proxyManagerConfiguration->setGeneratorStrategy($this->proxyWriterGenerator);
-        }
+        $proxyManagerConfiguration->setGeneratorStrategy($this->proxyWriterGenerator);
 
         if ($this->proxyAutoloader instanceof AutoloaderInterface) {
             $proxyManagerConfiguration->setProxyAutoloader($this->proxyAutoloader);

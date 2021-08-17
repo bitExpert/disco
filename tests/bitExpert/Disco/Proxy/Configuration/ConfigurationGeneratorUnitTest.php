@@ -21,6 +21,7 @@ use bitExpert\Disco\Config\InvalidConfiguration;
 use bitExpert\Disco\Config\MissingBeanAnnotationConfiguration;
 use bitExpert\Disco\Config\MissingReturnTypeConfiguration;
 use bitExpert\Disco\Config\NonExistentReturnTypeConfiguration;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ProxyManager\Exception\InvalidProxiedClassException;
 use Laminas\Code\Generator\ClassGenerator;
@@ -36,7 +37,7 @@ class ConfigurationGeneratorUnitTest extends TestCase
     private $configGenerator;
 
     /**
-     * @var ClassGenerator&\PHPUnit\Framework\MockObject\MockObject
+     * @var ClassGenerator&MockObject
      */
     private $classGenerator;
 
@@ -48,9 +49,7 @@ class ConfigurationGeneratorUnitTest extends TestCase
         parent::setUp();
 
         $this->configGenerator = new ConfigurationGenerator();
-        /** @var ClassGenerator&\PHPUnit\Framework\MockObject\MockObject $mock */
-        $mock = $this->createMock(ClassGenerator::class);
-        $this->classGenerator = $mock;
+        $this->classGenerator = $this->createMock(ClassGenerator::class);
     }
 
     /**
@@ -127,9 +126,6 @@ class ConfigurationGeneratorUnitTest extends TestCase
         $this->expectException(InvalidProxiedClassException::class);
         $this->expectExceptionMessageMatches('/#\[Configuration\] attribute missing!/');
 
-        /**
-         * @foo
-         */
         $configObject = new class
         {
             public function foo(): string

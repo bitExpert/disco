@@ -32,14 +32,13 @@ class AnnotationBeanFactory implements BeanFactory
      *
      * @param class-string<Object> $configClassName
      * @param array<string, mixed> $parameters
-     * @param BeanFactoryConfiguration $config
+     * @param BeanFactoryConfiguration|null $config
      */
     public function __construct(
         string                   $configClassName,
         array                    $parameters = [],
         BeanFactoryConfiguration $config = null
-    )
-    {
+    ) {
         if ($config === null) {
             $config = new BeanFactoryConfiguration(sys_get_temp_dir());
         }

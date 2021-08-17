@@ -32,9 +32,10 @@ class ParameterAwareMethodGenerator extends MethodGenerator
         array $methodParameters,
         GetParameter $parameterValuesMethod
     ): string {
-        $parameters = [];
+        $positionalArgs = [];
+        $namedArgs = [];
+
         foreach ($methodParameters as $methodParameter) {
-            /** @var Parameter $methodParameter */
             $defaultValue = $methodParameter->getDefaultValue();
             switch (\gettype($defaultValue)) {
                 case 'string':
@@ -50,12 +51,32 @@ class ParameterAwareMethodGenerator extends MethodGenerator
                     break;
             }
 
-            $template = ($defaultValue === '') ? '$this->%s("%s", %s)' : '$this->%s("%s", %s, %s)';
             $required = $methodParameter->isRequired() ? 'true' : 'false';
             $methodName = $parameterValuesMethod->getName();
-            $parameters[] = \sprintf($template, $methodName, $methodParameter->getKey(), $required, $defaultValue);
+            $argName = $methodParameter->getName();
+
+            if (null === $argName) {
+                $template = ($defaultValue === '') ? '$this->%s("%s", %s)' : '$this->%s("%s", %s, %s)';
+                $positionalArgs[] = \sprintf(
+                    $template,
+                    $methodName,
+                    $methodParameter->getKey(),
+                    $required,
+                    $defaultValue
+                );
+            } else {
+                $template = ($defaultValue === '') ? '%s: $this->%s("%s", %s)' : '%s: $this->%s("%s", %s, %s)';
+                $namedArgs[] = \sprintf(
+                    $template,
+                    $argName,
+                    $methodName,
+                    $methodParameter->getKey(),
+                    $required,
+                    $defaultValue
+                );
+            }
         }
 
-        return \implode(', ', $parameters);
+        return \implode(', ', [...$positionalArgs, ...$namedArgs]);
     }
 }

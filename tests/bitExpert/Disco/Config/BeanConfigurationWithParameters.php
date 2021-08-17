@@ -21,7 +21,7 @@ use bitExpert\Disco\Helper\SampleService;
 class BeanConfigurationWithParameters
 {
     #[Bean(singleton: false)]
-    #[Parameter(name: 'test', key: 'test')]
+    #[Parameter(name: 'test', key: 'configKey')]
     public function sampleServiceWithParam($test = ''): SampleService
     {
         $service = new SampleService();
@@ -30,7 +30,40 @@ class BeanConfigurationWithParameters
     }
 
     #[Bean(singleton: false)]
-    #[Parameter(name: 'test', key: 'test', default: null)]
+    #[Parameter('configKey1')]
+    #[Parameter('configKey2')]
+    public function sampleServiceWithPositionalParams($test = '', $anotherTest = ''): SampleService
+    {
+        $service = new SampleService();
+        $service->setTest($test);
+        $service->setAnotherTest($anotherTest);
+        return $service;
+    }
+
+    #[Bean(singleton: false)]
+    #[Parameter(key: 'configKey2', name: 'anotherTest')]
+    #[Parameter(key: 'configKey1', name: 'test')]
+    public function sampleServiceWithNamedParams($test = '', $anotherTest = ''): SampleService
+    {
+        $service = new SampleService();
+        $service->setTest($test);
+        $service->setAnotherTest($anotherTest);
+        return $service;
+    }
+
+    #[Bean(singleton: false)]
+    #[Parameter(key: 'configKey2', name: 'anotherTest')]
+    #[Parameter(key: 'configKey1')]
+    public function sampleServiceWithMixedPositionalAndNamedParams($test = '', $anotherTest = ''): SampleService
+    {
+        $service = new SampleService();
+        $service->setTest($test);
+        $service->setAnotherTest($anotherTest);
+        return $service;
+    }
+
+    #[Bean(singleton: false)]
+    #[Parameter(name: 'test', key: 'configKey', default: null)]
     public function sampleServiceWithParamNull($test = ''): SampleService
     {
         $service = new SampleService();
@@ -39,7 +72,7 @@ class BeanConfigurationWithParameters
     }
 
     #[Bean(singleton: false)]
-    #[Parameter(name: 'test', key: 'test', default: true)]
+    #[Parameter(name: 'test', key: 'configKey', default: true)]
     public function sampleServiceWithParamBool($test = ''): SampleService
     {
         $service = new SampleService();
@@ -48,7 +81,7 @@ class BeanConfigurationWithParameters
     }
 
     #[Bean(singleton: false)]
-    #[Parameter(name: 'test', key: 'test', default: 0)]
+    #[Parameter(name: 'test', key: 'configKey', default: 0)]
     public function sampleServiceWithParamEmpty($test = ''): SampleService
     {
         $service = new SampleService();
@@ -57,7 +90,7 @@ class BeanConfigurationWithParameters
     }
 
     #[Bean(singleton: false)]
-    #[Parameter(name: 'test', key: 'test.nested.key')]
+    #[Parameter(name: 'test', key: 'config.nested.key')]
     public function sampleServiceWithNestedParamKey($test = ''): SampleService
     {
         $service = new SampleService();
@@ -66,7 +99,7 @@ class BeanConfigurationWithParameters
     }
 
     #[Bean(singleton: false)]
-    #[Parameter(name: 'test', key: 'test', default: 'myDefaultValue')]
+    #[Parameter(name: 'test', key: 'configKey', default: 'myDefaultValue')]
     public function sampleServiceWithParamDefaultValue($test = ''): SampleService
     {
         $service = new SampleService();
@@ -75,7 +108,7 @@ class BeanConfigurationWithParameters
     }
 
     #[Bean(singleton: false)]
-    #[Parameter(name: 'test', key: 'test', required: false)]
+    #[Parameter(name: 'test', key: 'configKey', required: false)]
     public function sampleServiceWithoutRequiredParam($test = ''): SampleService
     {
         $service = new SampleService();

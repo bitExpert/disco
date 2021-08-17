@@ -2,10 +2,16 @@
 
 Bean instances can be parameterized by a given configuration. To access the configuration add a `#[Parameter]` attribute to your Bean method.
 
-The `#[Parameter(name: 'paramName', key: 'config.key')]` attribute requires at least the `param` (which must match a param name of the Bean method) and the `key` which will be used to look for in the configuration array.
+Configuration parameters can be passed to the Bean configuration method as [named](https://www.php.net/manual/en/functions.arguments.php#functions.named-arguments) 
+or as positional arguments. A `Parameter` will be used as a named argument when the `name` argument is set.
 
-In the following example the value of configuration key `configKey` gets passed to the bean configuation for the argument named `$test`.
-Configuration parameters are passed to the bean configuration method using [named arguments](https://www.php.net/manual/en/functions.arguments.php#functions.named-arguments):
+So `#[Parameter(name: 'argName', key: 'config.key)]` is a named parameter whereas `#[Parameter(key: 'config.key')]` is a positional parameter.
+As one might expect, the order of the positional parameters matter. Therefore, the recommended way of configuring parameters is using named parameters.
+Named and positional parameters can be mixed.
+
+The `#[Parameter]` attribute requires at least `key` which will be used to look for in the configuration array.
+
+In the following example the value of configuration key `configKey` gets passed to the Bean configuration for the argument named `$test`.
 
 ```php
 <?php
@@ -19,11 +25,22 @@ use bitExpert\Disco\Helper\SampleService;
 class MyConfiguration
 {
     #[Bean]
-    #[Parameter(name: 'test', key: 'configKey')]
+    #[Parameter(name: 'test', key: 'configKey1')]
     public function mySampleService(string $test = '') : SampleService
     {
         $service = new SampleService();
         $service->setTest($test);
+        return $service;
+    }
+
+    #[Bean]
+    #[Parameter(name: 'anotherTest', key: 'configKey2')]
+    #[Parameter(key: 'configKey1')]
+    public function mySampleService(string $test = '', string $anotherTest = '') : SampleService
+    {
+        $service = new SampleService();
+        $service->setTest($test);
+        $service->setAnotherTest($anotherTest);
         return $service;
     }
 }
@@ -34,7 +51,7 @@ The configuration array gets passed to the `\bitExpert\Disco\AnnotationBeanFacto
 ```php
 <?php
 
-$parameters = ['configKey' => 'This is a test.'];
+$parameters = ['configKey1' => 'This is a test.' 'configKey2' => 'This is another test.'];
 
 $beanFactory = new \bitExpert\Disco\AnnotationBeanFactory(
   MyConfiguration::class,
@@ -45,6 +62,7 @@ $beanFactory = new \bitExpert\Disco\AnnotationBeanFactory(
 $sampleService = $beanFactory->get('mySampleService');
 
 echo $sampleService->test; // Output: This is a test.
+echo $sampleService->anotherTest; // Output: This is another test.
 ```
 
 ## Default Parameter Values

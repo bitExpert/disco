@@ -28,7 +28,7 @@ class ParameterUnitTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new Parameter('', 'myParam');
+        new Parameter(key: 'myParam', name: '');
     }
 
     /**
@@ -38,7 +38,7 @@ class ParameterUnitTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new Parameter('name', '');
+        new Parameter(key: '');
     }
 
     /**
@@ -46,9 +46,9 @@ class ParameterUnitTest extends TestCase
      */
     public function nameIsSet(): void
     {
-        $parameter = new Parameter(name: 'paramName', key: 'key');
+        $parameter = new Parameter(name: 'argName', key: 'key');
 
-        self::assertSame('paramName', $parameter->getName());
+        self::assertSame('argName', $parameter->getName());
     }
 
     /**
@@ -56,7 +56,7 @@ class ParameterUnitTest extends TestCase
      */
     public function keyIsSet(): void
     {
-        $parameter = new Parameter(name: 'paramName', key: 'key');
+        $parameter = new Parameter(name: 'argName', key: 'key');
 
         self::assertSame('key', $parameter->getKey());
     }
@@ -78,7 +78,7 @@ class ParameterUnitTest extends TestCase
      */
     public function defaultValueIsParsed(mixed $defaultValue): void
     {
-        $parameter = new Parameter(name: 'paramName', key: 'myParam', default: $defaultValue);
+        $parameter = new Parameter(name: 'argName', key: 'myParam', default: $defaultValue);
 
         self::assertSame($defaultValue, $parameter->getDefaultValue());
     }
@@ -88,7 +88,7 @@ class ParameterUnitTest extends TestCase
      */
     public function requireDefaultsToTrue(): void
     {
-        $parameter = new Parameter(name: 'paramName', key: 'myParam');
+        $parameter = new Parameter(name: 'argName', key: 'myParam');
 
         self::assertTrue($parameter->isRequired());
     }
@@ -100,7 +100,7 @@ class ParameterUnitTest extends TestCase
      */
     public function requireIsParsed(bool $requireValue): void
     {
-        $parameter = new Parameter(name: 'paramName', key: 'myParam', required: $requireValue);
+        $parameter = new Parameter(name: 'argName', key: 'myParam', required: $requireValue);
 
         self::assertSame($requireValue, $parameter->isRequired());
     }

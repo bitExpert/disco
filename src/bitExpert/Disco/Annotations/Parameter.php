@@ -24,37 +24,37 @@ use Webmozart\Assert\Assert;
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Parameter
 {
-    private string $name;
-
     private string $key;
+
+    private ?string $name;
 
     private mixed $defaultValue;
 
     private bool $required;
 
     /**
-     * @param string $name
      * @param string $key
      * @param bool $required
-     * @param mixed|null $default
+     * @param mixed $default
+     * @param string|null $name
      */
-    public function __construct(string $name, string $key, bool $required = true, mixed $default = null)
+    public function __construct(string $key, bool $required = true, mixed $default = null, ?string $name = null)
     {
-        Assert::minLength($name, 1);
         Assert::minLength($key, 1);
+        Assert::nullOrMinLength($name, 1);
 
-        $this->name = $name;
         $this->key = $key;
+        $this->name = $name;
         $this->defaultValue = $default;
         $this->required = $required;
     }
 
     /**
-     * Return the name of the parameter
+     * Return the name of the argument or null in case of a positioned argument
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
