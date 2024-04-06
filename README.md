@@ -4,6 +4,7 @@ This package provides a [PSR-11](http://www.php-fig.org/psr/psr-11/) compatible,
 
 [![Build Status](https://github.com/bitExpert/disco/workflows/ci/badge.svg?branch=master)](https://github.com/bitExpert/disco/actions)
 [![Coverage Status](https://coveralls.io/repos/github/bitExpert/disco/badge.svg?branch=master)](https://coveralls.io/github/bitExpert/disco?branch=master)
+![Mastodon Follow](https://img.shields.io/mastodon/follow/109408681246972700?domain=https://rheinneckar.social)
 
 ## Installation
 
