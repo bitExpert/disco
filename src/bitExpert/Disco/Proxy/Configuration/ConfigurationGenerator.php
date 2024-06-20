@@ -12,10 +12,13 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Proxy\Configuration;
 
+use Attribute;
+use bitExpert\Disco\Annotations\Alias;
 use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\BeanPostProcessor;
 use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\Annotations\Parameters;
+use bitExpert\Disco\Annotations\Parameter;
+use bitExpert\Disco\Annotations\TypeAlias;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanMethod;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\BeanPostProcessorMethod;
 use bitExpert\Disco\Proxy\Configuration\MethodGenerator\Constructor;
@@ -30,9 +33,8 @@ use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanPostProcessorsProp
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ForceLazyInitProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\ParameterValuesProperty;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\SessionBeansProperty;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Exception;
+use Laminas\Code\Reflection\ClassReflection;
 use ProxyManager\Exception\InvalidProxiedClassException;
 use ProxyManager\ProxyGenerator\Assertion\CanProxyAssertion;
 use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
@@ -41,25 +43,14 @@ use ReflectionMethod;
 use Laminas\Code\Generator\ClassGenerator;
 use Laminas\Code\Generator\Exception\InvalidArgumentException;
 use Laminas\Code\Reflection\MethodReflection;
+use ReflectionNamedType;
+use ReflectionUnionType;
 
 /**
  * Generator for configuration classes.
  */
 class ConfigurationGenerator implements ProxyGeneratorInterface
 {
-    /**
-     * Creates a new {@link \bitExpert\Disco\Proxy\Configuration\ConfigurationGenerator}.
-     */
-    public function __construct()
-    {
-        // registers all required annotations
-        AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Bean.php');
-        AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Alias.php');
-        AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/BeanPostProcessor.php');
-        AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Configuration.php');
-        AnnotationRegistry::registerFile(__DIR__ . '/../../Annotations/Parameter.php');
-    }
-
     /**
      * {@inheritDoc}
      * @param ReflectionClass $originalClass
@@ -72,7 +63,6 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
     {
         CanProxyAssertion::assertClassCanBeProxied($originalClass, false);
 
-        $annotation = null;
         $forceLazyInitProperty = new ForceLazyInitProperty();
         $sessionBeansProperty = new SessionBeansProperty();
         $postProcessorsProperty = new BeanPostProcessorsProperty();
@@ -82,17 +72,12 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $getParameterMethod = new GetParameter($parameterValuesProperty);
         $wrapBeanAsLazyMethod = new WrapBeanAsLazy($beanFactoryConfigurationProperty);
 
-        try {
-            $reader = new AnnotationReader();
-            $annotation = $reader->getClassAnnotation($originalClass, Configuration::class);
-        } catch (Exception $e) {
-            throw new InvalidProxiedClassException($e->getMessage(), $e->getCode(), $e);
-        }
+        $configurationAttribute = $originalClass->getAttributes(Configuration::class)[0] ?? null;
 
-        if (null === $annotation) {
+        if (null === $configurationAttribute) {
             throw new InvalidProxiedClassException(
                 sprintf(
-                    '"%s" seems not to be a valid configuration class. @Configuration annotation missing!',
+                    '"%s" seems not to be a valid configuration class. #[Configuration] attribute missing!',
                     $originalClass->name
                 )
             );
@@ -112,22 +97,38 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
         $localAliases = [];
         $methods = $originalClass->getMethods(ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED);
         foreach ($methods as $method) {
-            $methodReflection = new MethodReflection(
+            /** @var null|ReflectionUnionType|ReflectionNamedType $returnTypeRefl */
+            $returnTypeRefl = $method->getReturnType();
+            if ($returnTypeRefl instanceof ReflectionUnionType) {
+                throw new InvalidProxiedClassException(
+                    sprintf(
+                        'Method "%s" on "%s" uses the unsupported union type.',
+                        $method->name,
+                        $originalClass->name
+                    )
+                );
+            }
+
+            $reflectionMethod = new MethodReflection(
                 $method->class,
                 $method->name
             );
 
-            /** @var \bitExpert\Disco\Annotations\Bean|null $beanAnnotation */
-            $beanAnnotation = $reader->getMethodAnnotation($method, Bean::class);
-            if (null === $beanAnnotation) {
-                /** @var \bitExpert\Disco\Annotations\BeanPostProcessor|null $beanAnnotation */
-                $beanAnnotation = $reader->getMethodAnnotation($method, BeanPostProcessor::class);
-                if ($beanAnnotation instanceof BeanPostProcessor) {
+            /** @var Bean|null $beanAttribute */
+            $beanAttribute = ($reflectionMethod->getAttributes(Bean::class)[0] ?? null)?->newInstance();
+            /** @var Parameter[] $parameterAttributes */
+            $parameterAttributes = \array_map(
+                fn($attributeRefl) => $attributeRefl->newInstance(),
+                $reflectionMethod->getAttributes(Parameter::class)
+            );
+            if (null === $beanAttribute) {
+                $postProcessorAttribute = $reflectionMethod->getAttributes(BeanPostProcessor::class)[0] ?? null;
+                if (null !== $postProcessorAttribute) {
                     $postProcessorMethods[] = $method->name;
 
                     $proxyMethod = BeanPostProcessorMethod::generateMethod(
-                        $methodReflection,
-                        $beanAnnotation,
+                        $reflectionMethod,
+                        $parameterAttributes,
                         $getParameterMethod
                     );
                     $classGenerator->addMethodFromGenerator($proxyMethod);
@@ -138,32 +139,58 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                     continue;
                 }
 
-                // every method needs either @Bean or @PostPostprocessor annotation
+                // every method needs either #[Bean] or #[PostPostprocessor] attribute
                 throw new InvalidProxiedClassException(
                     sprintf(
-                        'Method "%s" on "%s" is missing the @Bean annotation!',
+                        'Method "%s" on "%s" is missing the #[Bean] (or #[BeanPostProcessor]) attribute '
+                        . 'or its scope must be protected!',
                         $method->name,
                         $originalClass->name
                     )
                 );
             }
 
-            foreach ($beanAnnotation->getAliases() as $beanAlias) {
-                $alias = $beanAlias->isTypeAlias() ? (string) $method->getReturnType() : $beanAlias->getName();
+            $beanAliases = [];
 
-                $hasAlias = '';
+            /** @var TypeAlias|null $returnTypeAlias */
+            $returnTypeAlias = ($reflectionMethod->getAttributes(TypeAlias::class)[0] ?? null)
+                ?->newInstance();
+            if (null !== $returnTypeAlias) {
+                if (null === $returnTypeRefl || $returnTypeRefl->allowsNull() || $returnTypeRefl->isBuiltin()) {
+                    throw new InvalidProxiedClassException(
+                        sprintf(
+                            'Cannot use #[ReturnTypeAlias] on method "%s" on "%s" because it\'s returning a '
+                            . 'builtin type ("%s").',
+                            $method->name,
+                            $originalClass->name,
+                            $returnTypeRefl === null || $returnTypeRefl->allowsNull()
+                                ? 'null'
+                                : $returnTypeRefl->getName()
+                        )
+                    );
+                }
+
+                $beanAliases[] = $returnTypeRefl->getName();
+            }
+
+            $beanAliases = [...$beanAliases, ...\array_map(
+                /** @phpstan-ignore-next-line */
+                fn($attr) => $attr->newInstance()->getName(),
+                $reflectionMethod->getAttributes(Alias::class)
+            )];
+
+            foreach ($beanAliases as $beanAlias) {
                 if ($method->getDeclaringClass()->name === $originalClass->name) {
-                    $hasAlias = $localAliases[$alias] ?? '';
+                    $hasAlias = $localAliases[$beanAlias] ?? '';
                 } else {
-                    $hasAlias= $parentAliases[$alias] ?? '';
+                    $hasAlias = $parentAliases[$beanAlias] ?? '';
                 }
 
                 if ($hasAlias !== '') {
                     throw new InvalidProxiedClassException(
                         sprintf(
-                            'Alias "%s" of method "%s" on "%s" is already used by method "%s" of another Bean!'
-                            . ' Did you use a type alias twice?',
-                            $alias,
+                            'Alias "%s" of method "%s" on "%s" is already used by method "%s" of another Bean!',
+                            $beanAlias,
                             $method->name,
                             $originalClass->name,
                             $hasAlias
@@ -172,16 +199,17 @@ class ConfigurationGenerator implements ProxyGeneratorInterface
                 }
 
                 if ($method->getDeclaringClass()->name === $originalClass->name) {
-                    $localAliases[$alias] = $method->name;
+                    $localAliases[$beanAlias] = $method->name;
                 } else {
-                    $parentAliases[$alias] = $method->name;
+                    $parentAliases[$beanAlias] = $method->name;
                 }
             }
 
             $proxyMethod = BeanMethod::generateMethod(
-                $methodReflection,
-                $beanAnnotation,
-                $method->getReturnType(),
+                $reflectionMethod,
+                $beanAttribute,
+                $parameterAttributes,
+                $returnTypeRefl,
                 $forceLazyInitProperty,
                 $sessionBeansProperty,
                 $postProcessorsProperty,

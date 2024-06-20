@@ -12,38 +12,24 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Config;
 
-use bitExpert\Disco\Annotations\Alias;
 use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
+use bitExpert\Disco\Annotations\TypeAlias;
 use bitExpert\Disco\Helper\SampleService;
 use bitExpert\Disco\Helper\SampleServiceInterface;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class BeanConfigurationWithConflictingAliases
 {
-    /**
-     * @Bean({
-     *   "aliases"={
-     *     @Alias({"type"=true})
-     *   }
-     * })
-     * @return SampleServiceInterface
-     */
+    #[Bean]
+    #[TypeAlias]
     public function sampleService1(): SampleServiceInterface
     {
         return new SampleService();
     }
 
-    /**
-     * @Bean({
-     *   "aliases"={
-     *     @Alias({"type"=true})
-     *   }
-     * })
-     * @return SampleServiceInterface
-     */
+    #[Bean]
+    #[TypeAlias]
     public function sampleService2(): SampleServiceInterface
     {
         return new SampleService();

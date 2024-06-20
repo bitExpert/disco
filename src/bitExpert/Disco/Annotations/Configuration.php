@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
+use Attribute;
+
 /**
- * @Annotation
- * @Target({"CLASS"})
+ * Non-repeatable Attribute to mark a class a Beans or BeanPostProcessors provider.
  */
+#[Attribute(Attribute::TARGET_CLASS)]
 final class Configuration
 {
 }

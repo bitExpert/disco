@@ -20,23 +20,17 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class ParentConfig
 {
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function mySampleService() : SampleService
     {
         return new SampleService();
     }
 }
 
-/**
- * @Configuration
- */
+#[Configuration]
 class ChildConfig extends ParentConfig
 {
 }
@@ -61,23 +55,17 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 trait SampleServiceConfig
 {
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function mySampleService() : SampleService
     {
         return new SampleService();
     }
 }
 
-/**
- * @Configuration
- */
+#[Configuration]
 class Config
 {
     use SampleServiceConfig;

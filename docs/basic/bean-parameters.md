@@ -1,10 +1,17 @@
 # Bean Parameters
 
-Bean instances can be parameterized by a given configuration. To access the configuration add a `parameters` attribute to your bean configuration method, which holds a collection of `@Parameter` annotations.
+Bean instances can be parameterized by a given configuration. To access the configuration add a `#[Parameter]` attribute to your Bean method.
 
-The `@Parameter` annotation requires at least a name which will be used as key to look for in the configuration array.
+Configuration parameters can be passed to the Bean configuration method as [named](https://www.php.net/manual/en/functions.arguments.php#functions.named-arguments) 
+or as positional arguments. A `Parameter` will be used as a named argument when the `name` argument is set.
 
-In the following example the value of configuration key `test` gets passed to the bean configuration method as method parameter. The configuration parameters are passed in the same order as noted to the bean configuration method:
+So `#[Parameter(name: 'argName', key: 'config.key)]` is a named parameter whereas `#[Parameter(key: 'config.key')]` is a positional parameter.
+As one might expect, the order of the positional parameters matter. Therefore, the recommended way of configuring parameters is using named parameters.
+Named and positional parameters can be mixed.
+
+The `#[Parameter]` attribute requires at least `key` which will be used to look for in the configuration array.
+
+In the following example the value of configuration key `configKey` gets passed to the Bean configuration for the argument named `$test`.
 
 ```php
 <?php
@@ -14,22 +21,26 @@ use bitExpert\Disco\Annotations\Parameter;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
-    /**
-     * @Bean({
-     *   "parameters"={
-     *      @Parameter({"name" = "test"})
-     *   }
-     * })
-     */
-    public function mySampleService($test = '') : SampleService
+    #[Bean]
+    #[Parameter(name: 'test', key: 'configKey1')]
+    public function mySampleService(string $test = '') : SampleService
     {
         $service = new SampleService();
         $service->setTest($test);
+        return $service;
+    }
+
+    #[Bean]
+    #[Parameter(name: 'anotherTest', key: 'configKey2')]
+    #[Parameter(key: 'configKey1')]
+    public function mySampleService(string $test = '', string $anotherTest = '') : SampleService
+    {
+        $service = new SampleService();
+        $service->setTest($test);
+        $service->setAnotherTest($anotherTest);
         return $service;
     }
 }
@@ -40,13 +51,18 @@ The configuration array gets passed to the `\bitExpert\Disco\AnnotationBeanFacto
 ```php
 <?php
 
-$parameters = ['test' => 'This is a test.'];
+$parameters = ['configKey1' => 'This is a test.' 'configKey2' => 'This is another test.'];
 
 $beanFactory = new \bitExpert\Disco\AnnotationBeanFactory(
   MyConfiguration::class,
   $parameters
 );
 \bitExpert\Disco\BeanFactoryRegistry::register($beanFactory);
+
+$sampleService = $beanFactory->get('mySampleService');
+
+echo $sampleService->test; // Output: This is a test.
+echo $sampleService->anotherTest; // Output: This is another test.
 ```
 
 ## Default Parameter Values
@@ -61,25 +77,30 @@ use bitExpert\Disco\Annotations\Parameter;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
-    /**
-     * @Bean({
-     *   "parameters"={
-     *      @Parameter({"name" = "test", "default" = "Some default value"})
-     *   }
-     * })
-     */
-    public function mySampleService($test = '') : SampleService
+    #[Bean]
+    #[Parameter(name: 'test', key: 'configKey', default: 'Some default value')]
+    public function mySampleService(string $test = '') : SampleService
     {
         $service = new SampleService();
         $service->setTest($test);
         return $service;
     }
 }
+
+$parameters = []; // empty
+
+$beanFactory = new \bitExpert\Disco\AnnotationBeanFactory(
+  MyConfiguration::class,
+  $parameters
+);
+\bitExpert\Disco\BeanFactoryRegistry::register($beanFactory);
+
+$sampleService = $beanFactory->get('mySampleService');
+
+echo $sampleService->test; // Output: Some default value.
 ```
 
 ## Default Bean Configuration Method Parameter Values
@@ -113,19 +134,12 @@ use bitExpert\Disco\Annotations\Parameter;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
-    /**
-     * @Bean({
-     *   "parameters"={
-     *      @Parameter({"name" = "nested.key"})
-     *   }
-     * })
-     */
-    public function mySampleService($test = '') : SampleService
+    #[Bean]
+    #[Parameter(name: 'test', key: 'nested.key')]
+    public function mySampleService(string $test = '') : SampleService
     {
         $service = new SampleService();
         $service->setTest($test);

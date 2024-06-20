@@ -12,30 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
-use Doctrine\Common\Annotations\Annotation\Attribute;
-use Doctrine\Common\Annotations\Annotation\Attributes;
-use Doctrine\Common\Annotations\AnnotationException;
+use Attribute;
 
 /**
- * @Annotation
- * @Target({"METHOD"})
- * @Attributes({
- *   @Attribute("parameters", type = "array<\bitExpert\Disco\Annotations\Parameter>")
- * })
+ * Non-repeatable Attribute to declare a method as a BeanPostProcessor factory.
  */
-final class BeanPostProcessor extends ParameterAwareAnnotation
+#[Attribute(Attribute::TARGET_METHOD)]
+final class BeanPostProcessor
 {
-    /**
-     * Creates a new {@link \bitExpert\Disco\Annotations\BeanPostProcessor}.
-     *
-     * @param array<string, array<string, mixed>> $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct();
-
-        if (isset($attributes['value']['parameters']) && \is_array($attributes['value']['parameters'])) {
-            $this->setParameters(...$attributes['value']['parameters']);
-        }
-    }
 }

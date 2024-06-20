@@ -18,19 +18,11 @@ use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 use bitExpert\Disco\Helper\SampleServiceInterface;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class BeanConfigurationWithConflictingAliasesInParentClass extends BeanConfigurationWithConflictingAliases
 {
-    /**
-     * @Bean({
-     *   "aliases"={
-     *     @Alias({"name"="SampleService3Alias"})
-     *   }
-     * })
-     * @return SampleServiceInterface
-     */
+    #[Bean]
+    #[NameAlias(name: 'SampleService3Alias')]
     public function sampleService3(): SampleServiceInterface
     {
         return new SampleService();

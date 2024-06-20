@@ -35,9 +35,7 @@ Next up you need to create a configuration class `MyConfiguration` and document 
 
 use bitExpert\Disco\Annotations\Configuration;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
 }
@@ -53,14 +51,10 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
-    /**
-     * @Bean
-     */
+     #[Bean]
     public function mySampleService() : SampleService
     {
         return new SampleService();

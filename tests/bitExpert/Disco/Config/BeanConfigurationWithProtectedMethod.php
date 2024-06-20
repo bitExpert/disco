@@ -17,38 +17,28 @@ use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\MasterService;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class BeanConfigurationWithProtectedMethod
 {
-    /**
-     * @Bean({"singleton"=false})
-     */
+    #[Bean(singleton: false)]
     public function masterServiceWithSingletonDependency(): MasterService
     {
         return new MasterService($this->singletonDependency());
     }
 
-    /**
-     * @Bean({"singleton"=true})
-     */
+    #[Bean(singleton: true)]
     protected function singletonDependency(): SampleService
     {
         return new SampleService();
     }
 
-    /**
-     * @Bean({"singleton"=false})
-     */
+    #[Bean(singleton: false)]
     public function masterServiceWithNonSingletonDependency(): MasterService
     {
         return new MasterService($this->nonSingletonDependency());
     }
 
-    /**
-     * @Bean({"singleton"=false})
-     */
+    #[Bean(singleton: false)]
     protected function nonSingletonDependency(): SampleService
     {
         return new SampleService();

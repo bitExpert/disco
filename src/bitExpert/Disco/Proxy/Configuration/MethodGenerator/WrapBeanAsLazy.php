@@ -15,7 +15,6 @@ namespace bitExpert\Disco\Proxy\Configuration\MethodGenerator;
 use bitExpert\Disco\Proxy\Configuration\PropertyGenerator\BeanFactoryConfigurationProperty;
 use ProxyManager\Generator\MethodGenerator;
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
-use ReflectionClass;
 use Laminas\Code\Generator\ParameterGenerator;
 
 /**

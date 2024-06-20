@@ -12,72 +12,61 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
-use Doctrine\Common\Annotations\Annotation\Attribute;
-use Doctrine\Common\Annotations\Annotation\Attributes;
-use Doctrine\Common\Annotations\AnnotationException;
+use Attribute;
+use Webmozart\Assert\Assert;
 
 /**
- * @Annotation
- * @Target({"ANNOTATION"})
- * @Attributes({
- *   @Attribute("name", type = "string"),
- *   @Attribute("default", type = "string"),
- *   @Attribute("required", type = "bool")
- * })
+ * Repeatable Attribute to declare a "configuration key to parameter mapping" of a Bean or BeanPostProcessor factory
+ * method.
+ *
+ * Used in conjunction with the #[Bean] or #[BeanPostProcessor] attribute.
  */
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Parameter
 {
-    /**
-     * @var string
-     */
-    private $name;
-    /**
-     * @var mixed
-     */
-    private $defaultValue;
-    /**
-     * @var bool
-     */
-    private $required;
+    private string $key;
+
+    private ?string $name;
+
+    private mixed $defaultValue;
+
+    private bool $required;
 
     /**
-     * Creates a new {@link \bitExpert\Disco\Annotations\Parameter}.
-     *
-     * @param array<string, array<string, mixed>> $attributes
-     * @throws AnnotationException
+     * @param string $key
+     * @param bool $required
+     * @param mixed $default
+     * @param string|null $name
      */
-    public function __construct(array $attributes = [])
+    public function __construct(string $key, bool $required = true, mixed $default = null, ?string $name = null)
     {
-        $this->required = true;
-        $this->name = '';
+        Assert::minLength($key, 1);
+        Assert::nullOrMinLength($name, 1);
 
-        if (isset($attributes['value'])) {
-            if (isset($attributes['value']['name'])) {
-                $this->name = $attributes['value']['name'];
-            }
-
-            if (isset($attributes['value']['default'])) {
-                $this->defaultValue = $attributes['value']['default'];
-            }
-
-            if (isset($attributes['value']['required'])) {
-                $this->required = AnnotationAttributeParser::parseBooleanValue($attributes['value']['required']);
-            }
-        }
-
-        if ($this->name === '') {
-            throw new AnnotationException('name attribute missing!');
-        }
+        $this->key = $key;
+        $this->name = $name;
+        $this->defaultValue = $default;
+        $this->required = $required;
     }
 
     /**
-     * Returns the name of the configuration value to use.
+     * Return the name of the argument or null in case of a positioned argument
+     *
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Returns the key of the configuration value to use.
      *
      * @return string
      */
-    public function getName(): string
+    public function getKey(): string
     {
-        return $this->name;
+        return $this->key;
     }
 
     /**

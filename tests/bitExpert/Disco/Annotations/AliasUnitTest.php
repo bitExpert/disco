@@ -12,11 +12,12 @@ declare(strict_types=1);
 
 namespace bitExpert\Disco\Annotations;
 
-use Doctrine\Common\Annotations\AnnotationException;
+use bitExpert\Disco\Annotations\Alias;
 use PHPUnit\Framework\TestCase;
+use Webmozart\Assert\InvalidArgumentException;
 
 /**
- * Unit tests for {@link \bitExpert\Disco\Annotations\Alias}.
+ * Unit tests for {@link \bitExpert\Disco\Annotations\NameAlias}.
  */
 class AliasUnitTest extends TestCase
 {
@@ -25,70 +26,18 @@ class AliasUnitTest extends TestCase
      */
     public function aliasCanBeNamedAlias(): void
     {
-        $namedAlias = new Alias(['value' => ['name' => 'someAliasName']]);
+        $namedAlias = new Alias(name: 'someAliasName');
 
         self::assertSame('someAliasName', $namedAlias->getName());
-        self::assertFalse($namedAlias->isTypeAlias());
     }
 
     /**
      * @test
      */
-    public function aliasCannotBeNamedAliasAndTypeAlias(): void
+    public function aliasNameCannotBeEmpty(): void
     {
-        $this->expectException(AnnotationException::class);
-        $this->expectExceptionMessage('Type alias should not have a name!');
+        $this->expectException(InvalidArgumentException::class);
 
-        new Alias(['value' => ['name' => 'someAliasName', 'type' => true]]);
-    }
-
-    /**
-     * @test
-     */
-    public function aliasCanBeTypeAlias(): void
-    {
-        $typeAlias = new Alias(['value' => ['type' => true]]);
-
-        self::assertTrue($typeAlias->isTypeAlias());
-        self::assertNull($typeAlias->getName());
-    }
-
-    /**
-     * @test
-     */
-    public function aliasShouldBeNamedOrTypeAlias(): void
-    {
-        $this->expectException(AnnotationException::class);
-        $this->expectExceptionMessage('Alias should either be a named alias or a type alias!');
-
-        new Alias();
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidNameProvider
-     * @param mixed $name
-     */
-    public function aliasNameCannotBeEmpty(mixed $name): void
-    {
-        $this->expectException(AnnotationException::class);
-        $this->expectExceptionMessage('Alias should either be a named alias or a type alias!');
-
-        new Alias(['value' => ['name' => $name, 'type' => false]]);
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function invalidNameProvider(): array
-    {
-        return [
-            [''],
-            [0],
-            [0.0],
-            [false],
-            [null],
-            [[]],
-        ];
+        new Alias(name: '');
     }
 }

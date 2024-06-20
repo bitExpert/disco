@@ -15,35 +15,25 @@ namespace bitExpert\Disco\Config;
 use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\BeanPostProcessor;
 use bitExpert\Disco\Annotations\Configuration;
-use bitExpert\Disco\BeanFactoryPostProcessor;
-use bitExpert\Disco\Helper\BeanFactoryAwareService;
 use bitExpert\Disco\Helper\SampleService;
 use bitExpert\Disco\Helper\SampleServiceBeanPostProcessor;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class BeanConfigurationWithPostProcessor
 {
-    /**
-     * @BeanPostProcessor
-     */
+    #[BeanPostProcessor]
     public function sampleServiceBeanPostProcessor(): SampleServiceBeanPostProcessor
     {
         return new SampleServiceBeanPostProcessor();
     }
 
-    /**
-     * @Bean
-     */
+    #[Bean]
     public function nonSingletonNonLazyRequestBean(): SampleService
     {
         return new SampleService();
     }
 
-    /**
-     * @Bean({"lazy"=true})
-     */
+    #[Bean(lazy: true)]
     public function nonSingletonLazyRequestBean(): SampleService
     {
         return new SampleService();

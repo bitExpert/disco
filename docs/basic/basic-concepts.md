@@ -1,29 +1,27 @@
 # Basic concepts
 
-## @Bean and @Configuration
+## #[Bean] and #[Configuration]
 
-The central artifacts used in Disco's PHP based configuration language are `@Configuration`-annotated classes and `@Bean`-annotated methods.
+The central artifacts used in Disco's PHP based configuration language are `#[Configuration]`-attributed classes and `#[Bean]`-attributed methods.
 
-The `@Bean` annotation is used to indicate that a method instantiates, configures and initializes a new object which is managed by Disco.
+The `#[Bean]` attribute is used to indicate that a method instantiates, configures and initializes a new object which is managed by Disco.
 
-Annotating a class with `@Configuration` indicates that its primary purpose is as a source of bean definitions. The simplest possible `@Configuration` class would read as follows:
+Attributing a class with `#[Configuration]` indicates that its primary purpose is as a source of bean definitions. The simplest possible `#[Configuration]` class would read as follows:
 
 ```php
 <?php
 
 use bitExpert\Disco\Annotations\Configuration;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
 }
 ```
 
-## Using the @Bean Annotation
+## Using the #[Bean] attribute
 
-To declare a bean, simply annotate a method with the `@Bean` annotation. You use this method to register a bean instance within Disco of the type specified as the method’s return value. The bean identifier is the method name. The following is a simple example of a `@Bean` method declaration:
+To declare a bean, simply attribute a method with `#[Bean]`. You use this method to register a bean instance within Disco of the type specified as the method’s return value. The bean identifier is the method name. The following is a simple example of a `#[Bean]` method declaration:
 
 ```php
 <?php
@@ -32,14 +30,10 @@ use bitExpert\Disco\Annotations\Bean;
 use bitExpert\Disco\Annotations\Configuration;
 use bitExpert\Disco\Helper\SampleService;
 
-/**
- * @Configuration
- */
+#[Configuration]
 class MyConfiguration
 {
-    /**
-     * @Bean
-     */
+     #[Bean]
     public function mySampleService() : SampleService
     {
         return new SampleService();
@@ -49,31 +43,37 @@ class MyConfiguration
 
 Beans with a `public` visibility can be retrieved via the `\bitExpert\Disco\AnnotationBeanFactory`. Beans with a `protected` visibility are so-called internal dependencies and thus cannot be retrieved via the `\bitExpert\Disco\AnnotationBeanFactory`.
 
-Public methods of the configuration class have to while protected classes may be marked with the `@Bean` annotation. The `\bitExpert\Disco\AnnotationBeanFactory` will throw an exception when public methods without a `@Bean` annotation are found.
+Public methods of the configuration class have to while protected classes may be marked with the `#[Bean]` attribute. The `\bitExpert\Disco\AnnotationBeanFactory` will throw an exception when public methods without a `#[Bean]` annotation are found.
 
 ## PSR-11
 
-Disco implements the [PSR-11](http://www.php-fig.org/psr/psr-11/) interface. That means you can use Disco in any application that can deal with PSR-11 containers, e.g., [zend-expressive](https://github.com/zendframework/zend-expressive).
+Disco implements the [PSR-11](http://www.php-fig.org/psr/psr-11/) interface. That means you can use Disco in any application that can deal with PSR-11 containers, e.g., [Mezzio](https://docs.mezzio.dev/).
 
 In a nutshell the container-interop project provides a interface for DI containers that consists of two methods: `get()` & `has()`.
 
 ```php
 <?php
 
+declare(strict_types=1);
+
 namespace Psr\Container;
 
+/**
+ * Describes the interface of a container that exposes methods to read its entries.
+ */
 interface ContainerInterface
 {
     /**
      * Finds an entry of the container by its identifier and returns it.
      *
      * @param string $id Identifier of the entry to look for.
+     *
      * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
      * @throws ContainerExceptionInterface Error while retrieving the entry.
      *
      * @return mixed Entry.
      */
-    public function get($id);
+    public function get(string $id);
 
     /**
      * Returns true if the container can return an entry for the given identifier.
@@ -83,9 +83,10 @@ interface ContainerInterface
      * It does however mean that `get($id)` will not throw a `NotFoundExceptionInterface`.
      *
      * @param string $id Identifier of the entry to look for.
+     *
      * @return bool
      */
-    public function has($id);
+    public function has(string $id): bool;
 }
 ```
 
